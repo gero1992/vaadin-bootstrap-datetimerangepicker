@@ -1,44 +1,46 @@
 package org.vaadin.addons.type;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class DateTimeRange {
+public class DateTimeRange implements Serializable {
 
-	private Date from;
-	private Date to;
+    private static final long serialVersionUID = 1L;
 
-	public DateTimeRange() {
-		this(null, null);
-	}
+    private Date from;
+    private Date to;
 
-	public DateTimeRange(Date date) {
-		this(date, date);
-	}
+    public DateTimeRange() {
+        this(null, null);
+    }
 
-	public DateTimeRange(Date from, Date to) {
-		this.from = from;
-		this.to = to;
-	}
+    public DateTimeRange(final Date date) {
+        this(date, date);
+    }
 
-	public Date getFrom() {
-		return this.from;
-	}
+    public DateTimeRange(final Date from, final Date to) {
+        this.from = from;
+        this.to = to;
+    }
 
-	public void setFrom(Date from) {
-		this.from = from;
-	}
+    public Date getFrom() {
+        return this.from;
+    }
 
-	public Date getTo() {
-		return this.to;
-	}
+    public void setFrom(final Date from) {
+        this.from = from;
+    }
 
-	public void setTo(Date to) {
-		this.to = to;
-	}
+    public Date getTo() {
+        return this.to;
+    }
 
-	@Override
-	public String toString() {
-		return "from: " + (this.from == null ? "(empty)" : this.from.toString()) + ", to: "
-				+ (this.to == null ? "(empty)" : this.to.toString());
-	}
+    public void setTo(final Date to) {
+        this.to = to;
+    }
+
+    @Override
+    public String toString() {
+        return "from: " + (this.from == null ? "(empty)" : this.from.toString()) + ", to: " + (this.to == null ? "(empty)" : this.to.toString());
+    }
 }

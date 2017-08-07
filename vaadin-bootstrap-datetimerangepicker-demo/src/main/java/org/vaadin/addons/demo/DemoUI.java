@@ -14,9 +14,11 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Notification;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 
 @Theme("valo")
 @Title("MyComponent Add-on Demo")
@@ -25,36 +27,96 @@ import com.vaadin.ui.VerticalLayout;
 public class DemoUI extends UI {
 
     @WebServlet(
-        value = "/*",
-        asyncSupported = true)
+            value = "/*",
+            asyncSupported = true)
     @VaadinServletConfiguration(
-        productionMode = false,
-        ui = DemoUI.class)
+            productionMode = false,
+            ui = DemoUI.class)
     public static class Servlet extends VaadinServlet {
     }
+
+    // UI Components
+
+    // Initialize our new UI component
+    private DateTimeRangeField dateRangeField = new DateTimeRangeField.DateTimeRangeFieldBuilder().build();
+
+    private CheckBox checkSingleDatePicker = null;
+    private CheckBox checkAutoApply = null;
+    private Button btnBuildUI = null;
 
     @Override
     protected void init(final VaadinRequest request) {
 
-        // Initialize our new UI component
-        final DateTimeRangeField dateRangeField = new DateTimeRangeField();
-        dateRangeField.setAutoApply(false);
-
         final BeanFieldGroup<SomeBean> fieldGroup = new BeanFieldGroup<>(SomeBean.class);
         fieldGroup.setBuffered(false);
         fieldGroup.setItemDataSource(new SomeBean());
-        fieldGroup.bind(dateRangeField, "dateRange");
+        fieldGroup.bind(this.dateRangeField, "dateRange");
+
+        // Checkbox singleDatePicker
+
+        this.checkSingleDatePicker = new CheckBox("singleDatePicker");
+        this.checkSingleDatePicker.setValue(false);
+        // this.checkSingleDatePicker.addValueChangeListener(new ValueChangeListener() {
+        //
+        // @Override
+        // public void valueChange(final ValueChangeEvent event) {
+        // checkSingleDatePickerthis.dateRangeField.setAutoApply(checkAutoApply.getValue());
+        // }
+        // });
+
+        // Checkbox autoApply
+
+        this.checkAutoApply = new CheckBox("autoApply");
+        this.checkAutoApply.setValue(false);
+        // this.checkAutoApply.addValueChangeListener(new ValueChangeListener() {
+        //
+        // @Override
+        // public void valueChange(final ValueChangeEvent event) {
+        // setAutodateRangeField.setAutoApply(checkAutoApply.getValue());
+        // }
+        // });
+
+        // Button buildUI
+
+        this.btnBuildUI = new Button("buildUI");
+        this.btnBuildUI.addClickListener(new ClickListener() {
+
+            @Override
+            public void buttonClick(final ClickEvent event) {
+                DemoUI.this.dateRangeField = new DateTimeRangeField.DateTimeRangeFieldBuilder().singleDtePicker(DemoUI.this.checkSingleDatePicker.getValue())
+                        .autoApply(DemoUI.this.checkAutoApply.getValue())
+                        .build();
+            }
+        });
+
+        // Button show
 
         final Button button = new Button("show");
-        button.addClickListener(event -> Notification.show(fieldGroup.getItemDataSource()
-            .getBean()
-            .getDateRange()
-            .toString()));
+        button.addClickListener(new ClickListener() {
+
+            @Override
+            public void buttonClick(final ClickEvent event) {
+                fieldGroup.getItemDataSource()
+                        .getBean()
+                        .getDateRange()
+                        .toString();
+            }
+        });
 
         final VerticalLayout elementsLayout = new VerticalLayout();
         elementsLayout.setSpacing(true);
-        elementsLayout.addComponent(dateRangeField);
-        elementsLayout.setComponentAlignment(dateRangeField, Alignment.MIDDLE_CENTER);
+
+        elementsLayout.addComponent(this.checkSingleDatePicker);
+        elementsLayout.setComponentAlignment(this.checkSingleDatePicker, Alignment.MIDDLE_CENTER);
+        elementsLayout.addComponent(this.checkAutoApply);
+        elementsLayout.setComponentAlignment(this.checkAutoApply, Alignment.MIDDLE_CENTER);
+        elementsLayout.addComponent(this.checkAutoApply);
+        elementsLayout.setComponentAlignment(this.checkAutoApply, Alignment.MIDDLE_CENTER);
+        elementsLayout.addComponent(this.btnBuildUI);
+        elementsLayout.setComponentAlignment(this.btnBuildUI, Alignment.MIDDLE_CENTER);
+
+        elementsLayout.addComponent(this.dateRangeField);
+        elementsLayout.setComponentAlignment(this.dateRangeField, Alignment.MIDDLE_CENTER);
         elementsLayout.addComponent(button);
         elementsLayout.setComponentAlignment(button, Alignment.MIDDLE_CENTER);
 

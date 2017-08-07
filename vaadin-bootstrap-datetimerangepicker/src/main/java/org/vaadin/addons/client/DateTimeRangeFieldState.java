@@ -9,21 +9,23 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private static final long serialVersionUID = 1L;
 
     //
-    private boolean showDropdowns = true;
-    private boolean showWeekNumbers = true;
-    private boolean showISOWeekNumbers = true;
-    private boolean singleDatePicker = true;
-    private boolean timePicker = true;
-    private boolean timePicker24Hour = true;
+    private boolean showDropdowns = false;
+    private boolean showWeekNumbers = false;
+    private boolean showISOWeekNumbers = false;
+    private boolean singleDatePicker = false;
+    private boolean timePicker = false;
+    private boolean timePicker24Hour = false;
     //
     private int timePickerIncrement = -1;
     //
-    private boolean timePickerSeconds = true;
+    private boolean timePickerSeconds = false;
     private int dateLimit = 7;
     private Locale locale = null;
     private boolean autoApply = true;
-    private boolean linkedCalendars = true;
-    private boolean autoUpdateInput = true;
+    private boolean linkedCalendars = false;
+    private boolean autoUpdateInput = false;
+
+    private boolean toggleStateChanged = false;
 
     public boolean isShowWeekNumbers() {
         return this.showWeekNumbers;
@@ -127,5 +129,9 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     public void setShowDropdowns(final boolean showDropDowns) {
         this.showDropdowns = showDropDowns;
+    }
+
+    public void toggleStateChanged() {
+        this.toggleStateChanged = !this.toggleStateChanged;
     }
 }

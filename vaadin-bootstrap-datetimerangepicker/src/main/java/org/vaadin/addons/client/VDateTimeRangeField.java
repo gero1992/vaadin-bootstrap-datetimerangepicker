@@ -4,10 +4,13 @@ import com.google.gwt.core.client.JsDate;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
 // Extend any GWT Widget
 public class VDateTimeRangeField extends TextBoxBase {
+
+    public final boolean autoApply = true;
 
     private DateRangeFieldClientUpdateValueHandler updateValueHandler;
 
@@ -30,17 +33,20 @@ public class VDateTimeRangeField extends TextBoxBase {
 
     private native void init(Element node) /*-{
                                            var _this = this;
-                                           
+
+                                           self.alert(_this)
+
+
                                            $wnd.$(node).daterangepicker({
-                                           	autoUpdateInput: false,
-                                           	autoApply: false
+                                           autoUpdateInput: false,
+                                           autoApply: this.autoApply
                                            },
                                            function(start, end, label) {
-                                           	_this.@org.vaadin.addons.client.VDateTimeRangeField::onUpdateValue(Lcom/google/gwt/core/client/JsDate;Lcom/google/gwt/core/client/JsDate;)(start.toDate(),end.toDate());
+                                           _this.@org.vaadin.addons.client.VDateTimeRangeField::onUpdateValue(Lcom/google/gwt/core/client/JsDate;Lcom/google/gwt/core/client/JsDate;)(start.toDate(),end.toDate());
                                            });
-                                           
+
                                            $wnd.$(node).on('apply.daterangepicker', function(ev, picker) {
-                                           	$wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                                           $wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
                                            });
                                            }-*/;
 
@@ -53,8 +59,15 @@ public class VDateTimeRangeField extends TextBoxBase {
     }
 
     public void setAutoApply(final boolean autoApply) {
-        setAutoApply(getElement(), autoApply);
+        Window.alert("Window.alert");
+        setAutoApplyKGW(getElement(), autoApply);
     }
+
+    private native void setAutoApplyKGW(Element node, boolean autoApply) /*-{
+                                                                         self.alert('Hallo Soeren')
+                                                                         $wnd.$(node).data('daterangepicker').setStartDate('08/01/2017');
+                                                                         self.alert('Hallo Soeren2')
+                                                                         }-*/;
 
     private native void setAutoApply(Element node, boolean autoApply) /*-{
                                                                       $wnd.$(node).data('daterangepicker').autoApply = autoApply;

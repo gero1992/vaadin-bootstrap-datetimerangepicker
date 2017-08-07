@@ -10,16 +10,22 @@ import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractField;
 
 // This is the server-side UI component that provides public API
-// for MyComponent
 @JavaScript({ "js/jquery.min.js", "js/moment.min.js", "js/daterangepicker.js" })
 public class DateTimeRangeField extends AbstractField<DateTimeRange> {
+
+    private static final long serialVersionUID = 1L;
 
     // To process events from the client, we implement ServerRpc
     private final DateTimeRangeFieldServerRpc rpc = (from, to) -> setValue(new DateTimeRange(from, to));
 
-    public DateTimeRangeField() {
+    public DateTimeRangeField(final DateTimeRangeFieldBuilder builder) {
         // To receive events from the client, we register ServerRpc
         registerRpc(this.rpc);
+
+        setSingleDatePicker(builder.singleDatePicker);
+        setAutoApply(builder.autoApply);
+
+        toggleStateChanged();
     }
 
     // We must override getState() to cast the state to MyComponentState
@@ -78,6 +84,10 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         getState().setLocale(locale);
     }
 
+    public boolean isAutoApply() {
+        return getState().isAutoApply();
+    }
+
     public void setAutoApply(final boolean autoApply) {
         getState().setAutoApply(autoApply);
     }
@@ -88,5 +98,35 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     public void setAutoUpdateInput(final boolean autoUpdateInput) {
         getState().setAutoApply(autoUpdateInput);
+    }
+
+    public void toggleStateChanged() {
+        getState().toggleStateChanged();
+    }
+
+    //
+    // DateTimeRangeFieldBuilder
+    //
+    public static class DateTimeRangeFieldBuilder {
+
+        private boolean autoApply = false;
+        private boolean singleDatePicker = false;
+
+        public DateTimeRangeFieldBuilder() {
+        }
+
+        public DateTimeRangeFieldBuilder singleDtePicker(final boolean singleDatePicker) {
+            this.singleDatePicker = singleDatePicker;
+            return this;
+        }
+
+        public DateTimeRangeFieldBuilder autoApply(final boolean autoApply) {
+            this.autoApply = autoApply;
+            return this;
+        }
+
+        public DateTimeRangeField build() {
+            return new DateTimeRangeField(this);
+        }
     }
 }

@@ -3,7 +3,10 @@ package org.vaadin.addons.client;
 import java.util.Date;
 
 import org.vaadin.addons.DateTimeRangeField;
+import org.vaadin.addons.client.VDateTimeRangeField.DateRangeFieldClientUpdateValueHandler;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsDate;
 import com.google.gwt.user.client.Window;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
@@ -30,12 +33,15 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
             }
         });
 
-        getWidget().setUpdateValueHandler((start, end) -> {
-            final Date startDate = new Date((long) start.getTime());
-            final Date endDate = new Date((long) end.getTime());
-            DateTimeRangeFieldConnector.this.rpc.valueChanged(startDate, endDate);
-        });
+        getWidget().setUpdateValueHandler(new DateRangeFieldClientUpdateValueHandler() {
 
+            @Override
+            public void onUpdateValue(final JsDate start, final JsDate end) {
+                final Date startDate = new Date((long) start.getTime());
+                final Date endDate = new Date((long) end.getTime());
+                DateTimeRangeFieldConnector.this.rpc.valueChanged(startDate, endDate);
+            }
+        });
     }
 
     // We must implement getWidget() to cast to correct type
@@ -54,14 +60,21 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
     // Whenever the state changes in the server-side, this method is called
     @Override
     public void onStateChanged(final StateChangeEvent stateChangeEvent) {
+        com.google.gwt.core.shared.GWT.log("--- onStateChanged 0");
+
         super.onStateChanged(stateChangeEvent);
+
+        GWT.log("--- onStateChanged 1");
 
         // State is directly readable in the client after it is set in server
         // final String text = getState().text;
         // getWidget().setText(text);
-        if (stateChangeEvent.hasPropertyChanged("autoApply")) {
-            getWidget().setAutoApply(getState().autoApply);
-        }
+        // if (stateChangeEvent.hasPropertyChanged("autoApply")) {
+
+        GWT.log("--- onStateChanged 2");
+
+        getWidget().setAutoApply(getState().isAutoApply());
+        // }
 
     }
 }
