@@ -10,8 +10,6 @@ import com.google.gwt.user.client.ui.TextBoxBase;
 // Extend any GWT Widget
 public class VDateTimeRangeField extends TextBoxBase {
 
-    public final boolean autoApply = true;
-
     private DateRangeFieldClientUpdateValueHandler updateValueHandler;
 
     /*
@@ -24,31 +22,33 @@ public class VDateTimeRangeField extends TextBoxBase {
     protected VDateTimeRangeField(final Element node) {
         super(node);
         setStyleName("vaadin-bootstrap-datetimerangepicker");
-        init(getElement());
+        init(getElement(), false, false, false, false);
     }
 
     public void setUpdateValueHandler(final DateRangeFieldClientUpdateValueHandler updateValueHandler) {
         this.updateValueHandler = updateValueHandler;
     }
 
-    private native void init(Element node) /*-{
-                                           var _this = this;
+    private native void init(Element node, boolean timePicker, boolean singleDatePicker, boolean autoApply, boolean linkedCalendars) /*-{
+                                                                                                                                     var _this = this;
 
-                                           self.alert(_this)
+                                                                                                                                     alert("init linkedCalendars: " + linkedCalendars)
 
+                                                                                                                                     $wnd.$(node).daterangepicker({
+                                                                                                                                     singleDatePicker: singleDatePicker,
+                                                                                                                                     timePicker: timePicker,
+                                                                                                                                     autoApply: autoApply,
+                                                                                                                                     linkedCalendars: linkedCalendars,
+                                                                                                                                     autoUpdateInput: false,
+                                                                                                                                     },
+                                                                                                                                     function(start, end, label) {
+                                                                                                                                     _this.@org.vaadin.addons.client.VDateTimeRangeField::onUpdateValue(Lcom/google/gwt/core/client/JsDate;Lcom/google/gwt/core/client/JsDate;)(start.toDate(),end.toDate());
+                                                                                                                                     });
 
-                                           $wnd.$(node).daterangepicker({
-                                           autoUpdateInput: false,
-                                           autoApply: this.autoApply
-                                           },
-                                           function(start, end, label) {
-                                           _this.@org.vaadin.addons.client.VDateTimeRangeField::onUpdateValue(Lcom/google/gwt/core/client/JsDate;Lcom/google/gwt/core/client/JsDate;)(start.toDate(),end.toDate());
-                                           });
-
-                                           $wnd.$(node).on('apply.daterangepicker', function(ev, picker) {
-                                           $wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-                                           });
-                                           }-*/;
+                                                                                                                                     $wnd.$(node).on('apply.daterangepicker', function(ev, picker) {
+                                                                                                                                     $wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                                                                                                                                     });
+                                                                                                                                     }-*/;
 
     private void onUpdateValue(final JsDate start, final JsDate end) {
         this.updateValueHandler.onUpdateValue(start, end);
@@ -60,17 +60,20 @@ public class VDateTimeRangeField extends TextBoxBase {
 
     public void setAutoApply(final boolean autoApply) {
         Window.alert("Window.alert");
-        setAutoApplyKGW(getElement(), autoApply);
+        // setAutoApplyKGW(getElement(), autoApply);
     }
 
-    private native void setAutoApplyKGW(Element node, boolean autoApply) /*-{
-                                                                         self.alert('Hallo Soeren')
-                                                                         $wnd.$(node).data('daterangepicker').setStartDate('08/01/2017');
-                                                                         self.alert('Hallo Soeren2')
+    public void refresh(final boolean timePicker, final boolean singleDatePicker, final boolean autoApply, final boolean linkedCalendars) {
+        init(getElement(), timePicker, singleDatePicker, autoApply, linkedCalendars);
+    }
+
+    private native void init2(Element node, boolean autoApply) /*-{
+                                                                         self.alert("init2 autoApply: " + autoApply)
+
                                                                          }-*/;
 
-    private native void setAutoApply(Element node, boolean autoApply) /*-{
-                                                                      $wnd.$(node).data('daterangepicker').autoApply = autoApply;
-                                                                      }-*/;
+    // private native void setAutoApply(Element node, boolean autoApply) /*-{
+    // $wnd.$(node).data('daterangepicker').autoApply = autoApply;
+    // }-*/;
 
 }

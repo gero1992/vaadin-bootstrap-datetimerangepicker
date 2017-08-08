@@ -5,7 +5,6 @@ import java.util.Date;
 import org.vaadin.addons.DateTimeRangeField;
 import org.vaadin.addons.client.VDateTimeRangeField.DateRangeFieldClientUpdateValueHandler;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsDate;
 import com.google.gwt.user.client.Window;
 import com.vaadin.client.communication.RpcProxy;
@@ -64,17 +63,13 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
 
         super.onStateChanged(stateChangeEvent);
 
-        GWT.log("--- onStateChanged 1");
-
         // State is directly readable in the client after it is set in server
         // final String text = getState().text;
         // getWidget().setText(text);
         // if (stateChangeEvent.hasPropertyChanged("autoApply")) {
 
-        GWT.log("--- onStateChanged 2");
-
-        getWidget().setAutoApply(getState().isAutoApply());
+        // if (stateChangeEvent.hasPropertyChanged("toggleState")) {
+        getWidget().refresh(getState().isTimePicker(), getState().isSingleDatePicker(), getState().isAutoApply(), getState().isLinkedCalendars());
         // }
-
     }
 }

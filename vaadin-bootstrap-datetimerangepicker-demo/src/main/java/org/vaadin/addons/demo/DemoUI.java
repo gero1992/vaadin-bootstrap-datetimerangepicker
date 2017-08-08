@@ -15,6 +15,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
@@ -38,54 +39,54 @@ public class DemoUI extends UI {
     // UI Components
 
     // Initialize our new UI component
-    private DateTimeRangeField dateRangeField = new DateTimeRangeField.DateTimeRangeFieldBuilder().build();
+    private DateTimeRangeField dateRangeField;
 
-    private CheckBox checkSingleDatePicker = null;
-    private CheckBox checkAutoApply = null;
-    private Button btnBuildUI = null;
+    private CheckBox checkTimePicker;
+    private CheckBox checkSingleDatePicker;
+    private CheckBox checkAutoApply;
+    private CheckBox checkLinkedCalendars;
+
+    private Button btnRefreshUI;
 
     @Override
     protected void init(final VaadinRequest request) {
+
+        // Initialize our new UI component
+        this.dateRangeField = new DateTimeRangeField();
 
         final BeanFieldGroup<SomeBean> fieldGroup = new BeanFieldGroup<>(SomeBean.class);
         fieldGroup.setBuffered(false);
         fieldGroup.setItemDataSource(new SomeBean());
         fieldGroup.bind(this.dateRangeField, "dateRange");
 
-        // Checkbox singleDatePicker
+        // Checkbox timePicker
+        this.checkTimePicker = new CheckBox("timePicker");
+        this.checkTimePicker.setValue(false);
 
+        // Checkbox singleDatePicker
         this.checkSingleDatePicker = new CheckBox("singleDatePicker");
         this.checkSingleDatePicker.setValue(false);
-        // this.checkSingleDatePicker.addValueChangeListener(new ValueChangeListener() {
-        //
-        // @Override
-        // public void valueChange(final ValueChangeEvent event) {
-        // checkSingleDatePickerthis.dateRangeField.setAutoApply(checkAutoApply.getValue());
-        // }
-        // });
 
         // Checkbox autoApply
-
         this.checkAutoApply = new CheckBox("autoApply");
         this.checkAutoApply.setValue(false);
-        // this.checkAutoApply.addValueChangeListener(new ValueChangeListener() {
-        //
-        // @Override
-        // public void valueChange(final ValueChangeEvent event) {
-        // setAutodateRangeField.setAutoApply(checkAutoApply.getValue());
-        // }
-        // });
+
+        // Checkbox linkedCalendars
+        this.checkLinkedCalendars = new CheckBox("linkedCalendars");
+        this.checkLinkedCalendars.setValue(false);
 
         // Button buildUI
 
-        this.btnBuildUI = new Button("buildUI");
-        this.btnBuildUI.addClickListener(new ClickListener() {
+        this.btnRefreshUI = new Button("refreshUI");
+        this.btnRefreshUI.addClickListener(new ClickListener() {
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                DemoUI.this.dateRangeField = new DateTimeRangeField.DateTimeRangeFieldBuilder().singleDtePicker(DemoUI.this.checkSingleDatePicker.getValue())
+                DemoUI.this.dateRangeField.timePicker(DemoUI.this.checkTimePicker.getValue())
+                        .singleDatePicker(DemoUI.this.checkSingleDatePicker.getValue())
                         .autoApply(DemoUI.this.checkAutoApply.getValue())
-                        .build();
+                        .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
+                        .refresh();
             }
         });
 
@@ -96,10 +97,10 @@ public class DemoUI extends UI {
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                fieldGroup.getItemDataSource()
+                Notification.show(fieldGroup.getItemDataSource()
                         .getBean()
                         .getDateRange()
-                        .toString();
+                        .toString());
             }
         });
 
@@ -108,12 +109,24 @@ public class DemoUI extends UI {
 
         elementsLayout.addComponent(this.checkSingleDatePicker);
         elementsLayout.setComponentAlignment(this.checkSingleDatePicker, Alignment.MIDDLE_CENTER);
+
+        elementsLayout.addComponent(this.checkTimePicker);
+        elementsLayout.setComponentAlignment(this.checkTimePicker, Alignment.MIDDLE_CENTER);
+
         elementsLayout.addComponent(this.checkAutoApply);
         elementsLayout.setComponentAlignment(this.checkAutoApply, Alignment.MIDDLE_CENTER);
-        elementsLayout.addComponent(this.checkAutoApply);
-        elementsLayout.setComponentAlignment(this.checkAutoApply, Alignment.MIDDLE_CENTER);
-        elementsLayout.addComponent(this.btnBuildUI);
-        elementsLayout.setComponentAlignment(this.btnBuildUI, Alignment.MIDDLE_CENTER);
+
+        elementsLayout.addComponent(this.checkLinkedCalendars);
+        elementsLayout.setComponentAlignment(this.checkLinkedCalendars, Alignment.MIDDLE_CENTER);
+
+        // ---
+
+        elementsLayout.addComponent(this.btnRefreshUI);
+        elementsLayout.setComponentAlignment(this.btnRefreshUI, Alignment.MIDDLE_CENTER);
+
+        //
+        // DateRangeField
+        //
 
         elementsLayout.addComponent(this.dateRangeField);
         elementsLayout.setComponentAlignment(this.dateRangeField, Alignment.MIDDLE_CENTER);

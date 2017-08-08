@@ -18,14 +18,9 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     // To process events from the client, we implement ServerRpc
     private final DateTimeRangeFieldServerRpc rpc = (from, to) -> setValue(new DateTimeRange(from, to));
 
-    public DateTimeRangeField(final DateTimeRangeFieldBuilder builder) {
+    public DateTimeRangeField() {
         // To receive events from the client, we register ServerRpc
         registerRpc(this.rpc);
-
-        setSingleDatePicker(builder.singleDatePicker);
-        setAutoApply(builder.autoApply);
-
-        toggleStateChanged();
     }
 
     // We must override getState() to cast the state to MyComponentState
@@ -39,94 +34,77 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return DateTimeRange.class;
     }
 
-    public void setShowDropdowns(final boolean showDropdowns) {
-        getState().setShowDropdowns(showDropdowns);
-    }
-
-    public void setShowWeekNumbers(final boolean showWeekNumbers) {
-        getState().setShowWeekNumbers(showWeekNumbers);
-    }
-
-    public void setShowISOWeekNumbers(final boolean showISOWeekNumbers) {
-        getState().setShowISOWeekNumbers(showISOWeekNumbers);
-    }
-
-    public void setSingleDatePicker(final boolean singleDatePicker) {
-        getState().setSingleDatePicker(singleDatePicker);
-    }
-
-    public void setTimePicker(final boolean timePicker) {
-        getState().setTimePicker(timePicker);
-    }
-
-    public void setTimePicker24Hour(final boolean timePicker24Hour) {
-        getState().setTimePicker24Hour(timePicker24Hour);
-    }
-
-    // in minutes
-
-    public void setTimePickerIncrement(final int timePickerIncrement) {
-        getState().setTimePickerIncrement(timePickerIncrement);
-    }
-
-    //
-
-    public void setTimePickerSeconds(final boolean timePickerSeconds) {
-        getState().setTimePickerSeconds(timePickerSeconds);
-    }
-
-    public void setDateLimit(final int dateLimit) {
-        getState().setDateLimit(dateLimit);
-    }
-
     @Override
     public void setLocale(final Locale locale) {
         getState().setLocale(locale);
     }
 
-    public boolean isAutoApply() {
-        return getState().isAutoApply();
+    public DateTimeRangeField showDropdowns(final boolean showDropdowns) {
+        getState().setShowDropdowns(showDropdowns);
+        return this;
     }
 
-    public void setAutoApply(final boolean autoApply) {
+    public DateTimeRangeField showWeekNumbers(final boolean showWeekNumbers) {
+        getState().setShowWeekNumbers(showWeekNumbers);
+        return this;
+    }
+
+    public DateTimeRangeField showISOWeekNumbers(final boolean showISOWeekNumbers) {
+        getState().setShowISOWeekNumbers(showISOWeekNumbers);
+        return this;
+    }
+
+    public DateTimeRangeField singleDatePicker(final boolean singleDatePicker) {
+        getState().setSingleDatePicker(singleDatePicker);
+        return this;
+    }
+
+    public DateTimeRangeField timePicker(final boolean timePicker) {
+        getState().setTimePicker(timePicker);
+        return this;
+    }
+
+    public DateTimeRangeField timePicker24Hour(final boolean timePicker24Hour) {
+        getState().setTimePicker24Hour(timePicker24Hour);
+        return this;
+    }
+
+    // in minutes
+
+    public DateTimeRangeField timePickerIncrement(final int timePickerIncrement) {
+        getState().setTimePickerIncrement(timePickerIncrement);
+        return this;
+    }
+
+    //
+
+    public DateTimeRangeField timePickerSeconds(final boolean timePickerSeconds) {
+        getState().setTimePickerSeconds(timePickerSeconds);
+        return this;
+    }
+
+    public DateTimeRangeField dateLimit(final int dateLimit) {
+        getState().setDateLimit(dateLimit);
+        return this;
+    }
+
+    public DateTimeRangeField autoApply(final boolean autoApply) {
         getState().setAutoApply(autoApply);
+        return this;
     }
 
-    public void setLinkedCalendars(final boolean linkedCalendars) {
+    public DateTimeRangeField linkedCalendars(final boolean linkedCalendars) {
         getState().setLinkedCalendars(linkedCalendars);
+        return this;
     }
 
-    public void setAutoUpdateInput(final boolean autoUpdateInput) {
+    public DateTimeRangeField autoUpdateInput(final boolean autoUpdateInput) {
         getState().setAutoApply(autoUpdateInput);
+        return this;
     }
 
-    public void toggleStateChanged() {
-        getState().toggleStateChanged();
-    }
-
-    //
-    // DateTimeRangeFieldBuilder
-    //
-    public static class DateTimeRangeFieldBuilder {
-
-        private boolean autoApply = false;
-        private boolean singleDatePicker = false;
-
-        public DateTimeRangeFieldBuilder() {
-        }
-
-        public DateTimeRangeFieldBuilder singleDtePicker(final boolean singleDatePicker) {
-            this.singleDatePicker = singleDatePicker;
-            return this;
-        }
-
-        public DateTimeRangeFieldBuilder autoApply(final boolean autoApply) {
-            this.autoApply = autoApply;
-            return this;
-        }
-
-        public DateTimeRangeField build() {
-            return new DateTimeRangeField(this);
-        }
+    public DateTimeRangeField refresh() {
+        getState().toggleState();
+        return this;
     }
 }

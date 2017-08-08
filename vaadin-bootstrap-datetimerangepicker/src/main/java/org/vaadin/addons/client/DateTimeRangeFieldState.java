@@ -21,11 +21,11 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private boolean timePickerSeconds = false;
     private int dateLimit = 7;
     private Locale locale = null;
-    private boolean autoApply = true;
+    private boolean autoApply = false;
     private boolean linkedCalendars = false;
     private boolean autoUpdateInput = false;
 
-    private boolean toggleStateChanged = false;
+    private boolean toggleState = false;
 
     public boolean isShowWeekNumbers() {
         return this.showWeekNumbers;
@@ -131,7 +131,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         this.showDropdowns = showDropDowns;
     }
 
-    public void toggleStateChanged() {
-        this.toggleStateChanged = !this.toggleStateChanged;
+    public void toggleState() {
+        this.toggleState = !this.toggleState;
     }
 }
