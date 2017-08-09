@@ -1,5 +1,6 @@
 package org.vaadin.addons;
 
+import java.util.Date;
 import java.util.Locale;
 
 import org.vaadin.addons.client.DateTimeRangeFieldServerRpc;
@@ -37,6 +38,26 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     @Override
     public void setLocale(final Locale locale) {
         getState().setLocale(locale);
+    }
+
+    public DateTimeRangeField startDate(final Date startDate) {
+        getState().setStartDate(startDate);
+        return this;
+    }
+
+    public DateTimeRangeField endDate(final Date endDate) {
+        getState().setEndDate(endDate);
+        return this;
+    }
+
+    public DateTimeRangeField opens(final String opens) {
+        getState().setOpens(opens);
+        return this;
+    }
+
+    public DateTimeRangeField drops(final String drops) {
+        getState().setDrops(drops);
+        return this;
     }
 
     public DateTimeRangeField showDropdowns(final boolean showDropdowns) {
@@ -99,7 +120,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     public DateTimeRangeField autoUpdateInput(final boolean autoUpdateInput) {
-        getState().setAutoApply(autoUpdateInput);
+        getState().setAutoUpdateInput(autoUpdateInput);
         return this;
     }
 

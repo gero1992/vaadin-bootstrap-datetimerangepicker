@@ -18,6 +18,8 @@ import com.vaadin.shared.ui.Connect;
 @Connect(DateTimeRangeField.class)
 public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
 
+    private static final long serialVersionUID = 1L;
+
     // ServerRpc is used to send events to server. Communication implementation
     // is automatically created here
     DateTimeRangeFieldServerRpc rpc = RpcProxy.create(DateTimeRangeFieldServerRpc.class, this);
@@ -69,7 +71,10 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
         // if (stateChangeEvent.hasPropertyChanged("autoApply")) {
 
         // if (stateChangeEvent.hasPropertyChanged("toggleState")) {
-        getWidget().refresh(getState().isTimePicker(), getState().isSingleDatePicker(), getState().isAutoApply(), getState().isLinkedCalendars());
+        getWidget().refresh(getState().getStartDate(), getState().getEndDate(), getState().isShowDropdowns(), getState().isShowWeekNumbers(),
+                            getState().isShowISOWeekNumbers(), getState().isSingleDatePicker(), getState().isTimePicker(), getState().isTimePicker24Hour(),
+                            getState().getTimePickerIncrement(), getState().isTimePickerSeconds(), getState().isAutoApply(), getState().isLinkedCalendars(),
+                            getState().isAutoUpdateInput(), getState().getOpens(), getState().getDrops());
         // }
     }
 }

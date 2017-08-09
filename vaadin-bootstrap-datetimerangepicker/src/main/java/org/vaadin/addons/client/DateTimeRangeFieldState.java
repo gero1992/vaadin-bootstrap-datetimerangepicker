@@ -1,5 +1,6 @@
 package org.vaadin.addons.client;
 
+import java.util.Date;
 import java.util.Locale;
 
 import com.vaadin.shared.AbstractFieldState;
@@ -7,6 +8,9 @@ import com.vaadin.shared.AbstractFieldState;
 public class DateTimeRangeFieldState extends AbstractFieldState {
 
     private static final long serialVersionUID = 1L;
+
+    private Date startDate;
+    private Date endDate;
 
     //
     private boolean showDropdowns = false;
@@ -16,7 +20,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private boolean timePicker = false;
     private boolean timePicker24Hour = false;
     //
-    private int timePickerIncrement = -1;
+    private int timePickerIncrement = 1;
     //
     private boolean timePickerSeconds = false;
     private int dateLimit = 7;
@@ -25,7 +29,45 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private boolean linkedCalendars = false;
     private boolean autoUpdateInput = false;
 
+    // Default values
+    private String opens = "right";
+    private String drops = "down";
+
     private boolean toggleState = false;
+
+    public Date getStartDate() {
+        return this.startDate;
+    }
+
+    public void setStartDate(final Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return this.endDate;
+    }
+
+    public void setEndDate(final Date endDate) {
+        this.endDate = endDate;
+    }
+
+    // Allowed values ("right" | "left" | "center") 
+    public void setOpens(final String opens) {
+        this.opens = opens;
+    }
+
+    public String getOpens() {
+        return this.opens;
+    }
+
+    // Allowed values ("down" | "up") 
+    public void setDrops(final String drops) {
+        this.drops = drops;
+    }
+
+    public String getDrops() {
+        return this.drops;
+    }
 
     public boolean isShowWeekNumbers() {
         return this.showWeekNumbers;
