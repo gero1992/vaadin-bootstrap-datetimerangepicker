@@ -8,8 +8,15 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     private static final long serialVersionUID = 1L;
 
+    private String buttonClasses = "btn btn-sm";
+    private String applyClass = "btn-success";
+    private String cancelClass = "btn-default";
+
     private String startDate;
     private String endDate;
+
+    private String minDate;
+    private String maxDate;
 
     private String language = "en";
 
@@ -63,6 +70,30 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         this.cancelLabel = cancelLabel;
     }
 
+    public String getButtonClasses() {
+        return this.buttonClasses;
+    }
+
+    public void setButtonClasses(String buttonClasses) {
+        this.buttonClasses = buttonClasses;
+    }
+
+    public String getApplyClass() {
+        return this.applyClass;
+    }
+
+    public void setApplyClass(String applyClass) {
+        this.applyClass = applyClass;
+    }
+
+    public String getCancelClass() {
+        return this.cancelClass;
+    }
+
+    public void setCancelClass(String cancelClass) {
+        this.cancelClass = cancelClass;
+    }
+
     public String getStartDate() {
         return this.startDate;
     }
@@ -77,6 +108,22 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     public void setEndDate(final String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getMinDate() {
+        return this.minDate;
+    }
+
+    public void setMinDate(final String minDate) {
+        this.minDate = minDate;
+    }
+
+    public String getMaxDate() {
+        return this.maxDate;
+    }
+
+    public void setMaxDate(final String maxDate) {
+        this.maxDate = maxDate;
     }
 
     // Allowed values ("right" | "left" | "center")

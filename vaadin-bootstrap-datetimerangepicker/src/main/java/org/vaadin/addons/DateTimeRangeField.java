@@ -65,13 +65,38 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return this;
     }
 
+    public DateTimeRangeField buttonClasses(final String buttonClasses) {
+        getState().setButtonClasses(buttonClasses);
+        return this;
+    }
+
+    public DateTimeRangeField applyClass(final String applyClass) {
+        getState().setApplyClass(applyClass);
+        return this;
+    }
+
+    public DateTimeRangeField cancelClass(final String cancelClass) {
+        getState().setCancelClass(cancelClass);
+        return this;
+    }
+
     public DateTimeRangeField startDate(final Date startDate) {
-        getState().setStartDate(getDateFormatter().format(startDate));
+        getState().setStartDate(formatDateToString(startDate));
         return this;
     }
 
     public DateTimeRangeField endDate(final Date endDate) {
-        getState().setEndDate(getDateFormatter().format(endDate));
+        getState().setEndDate(formatDateToString(endDate));
+        return this;
+    }
+
+    public DateTimeRangeField minDate(final Date minDate) {
+        getState().setMinDate(formatDateToString(minDate));
+        return this;
+    }
+
+    public DateTimeRangeField maxDate(final Date maxDate) {
+        getState().setMaxDate(formatDateToString(maxDate));
         return this;
     }
 
@@ -161,5 +186,10 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     public Format getDateFormatter() {
         return this.dateFormatter;
+    }
+
+    private String formatDateToString(final Date date) {
+        final String result = (date != null ? getDateFormatter().format(date) : "");
+        return result;
     }
 }

@@ -23,6 +23,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -96,6 +97,10 @@ public class DemoUI extends UI {
 
     private Button btnRefreshUI;
 
+    private TextField textButtonClasses;
+    private TextField textApplyClass;
+    private TextField textCancelClass;
+
     @Override
     protected void init(final VaadinRequest request) {
 
@@ -124,7 +129,7 @@ public class DemoUI extends UI {
         this.minDateField.setLocale(DemoUI.LOCALE);
 
         // MaxDate
-        this.maxDateField = new DateField("minDate");
+        this.maxDateField = new DateField("maxDate");
         this.maxDateField.setLocale(DemoUI.LOCALE);
 
         // Combobox opens
@@ -187,6 +192,18 @@ public class DemoUI extends UI {
         this.checkAutoUpdateInput = new CheckBox("autoUpdateInput");
         this.checkAutoUpdateInput.setValue(false);
 
+        // Textfield buttonClasses
+        this.textButtonClasses = new TextField("buttonClasses");
+        this.textButtonClasses.setValue("btn btn-sm");
+
+        // Textfield applyClass
+        this.textApplyClass = new TextField("applyClass");
+        this.textApplyClass.setValue("btn-success");
+
+        // Textfield cancelClass
+        this.textCancelClass = new TextField("cancelClass");
+        this.textCancelClass.setValue("btn-default");
+
         // Button buildUI
 
         this.btnRefreshUI = new Button("refreshUI");
@@ -196,7 +213,8 @@ public class DemoUI extends UI {
             public void buttonClick(final ClickEvent event) {
                 DemoUI.this.dateRangeField.startDate(DemoUI.this.startDateField.getValue())
                         .endDate(DemoUI.this.endDateField.getValue())
-
+                        .minDate(DemoUI.this.minDateField.getValue())
+                        .maxDate(DemoUI.this.maxDateField.getValue())
                         .applyLabel(DemoUI.APPLY_LABEL)
                         .canelLabel(DemoUI.CANCEL_LABEL)
                         .opens(DemoUI.this.comboOpens.getValue()
@@ -215,6 +233,9 @@ public class DemoUI extends UI {
                         .autoApply(DemoUI.this.checkAutoApply.getValue())
                         .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
                         .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
+                        .buttonClasses(DemoUI.this.textButtonClasses.getValue())
+                        .applyClass(DemoUI.this.textApplyClass.getValue())
+                        .cancelClass(DemoUI.this.textCancelClass.getValue())
                         .refresh();
             }
         });
@@ -236,6 +257,8 @@ public class DemoUI extends UI {
         final VerticalLayout elementsLayout = new VerticalLayout();
         elementsLayout.setSpacing(true);
 
+        // LEFT
+
         elementsLayout.addComponent(this.startDateField);
         elementsLayout.setComponentAlignment(this.startDateField, Alignment.MIDDLE_LEFT);
 
@@ -253,6 +276,8 @@ public class DemoUI extends UI {
 
         elementsLayout.addComponent(this.comboDrops);
         elementsLayout.setComponentAlignment(this.comboDrops, Alignment.MIDDLE_LEFT);
+
+        // MIDDLE
 
         elementsLayout.addComponent(this.checkShowDropDowns);
         elementsLayout.setComponentAlignment(this.checkShowDropDowns, Alignment.MIDDLE_CENTER);
@@ -303,6 +328,17 @@ public class DemoUI extends UI {
         elementsLayout.setComponentAlignment(this.dateRangeField, Alignment.MIDDLE_CENTER);
         elementsLayout.addComponent(button);
         elementsLayout.setComponentAlignment(button, Alignment.MIDDLE_CENTER);
+
+        // RIGHT
+
+        elementsLayout.addComponent(this.textButtonClasses);
+        elementsLayout.setComponentAlignment(this.textButtonClasses, Alignment.MIDDLE_RIGHT);
+
+        elementsLayout.addComponent(this.textApplyClass);
+        elementsLayout.setComponentAlignment(this.textApplyClass, Alignment.MIDDLE_RIGHT);
+
+        elementsLayout.addComponent(this.textCancelClass);
+        elementsLayout.setComponentAlignment(this.textCancelClass, Alignment.MIDDLE_RIGHT);
 
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();
