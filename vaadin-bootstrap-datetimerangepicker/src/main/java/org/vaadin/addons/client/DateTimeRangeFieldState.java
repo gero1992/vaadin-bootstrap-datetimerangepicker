@@ -1,6 +1,5 @@
 package org.vaadin.addons.client;
 
-import java.util.Date;
 import java.util.Locale;
 
 import com.vaadin.shared.AbstractFieldState;
@@ -9,8 +8,13 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     private static final long serialVersionUID = 1L;
 
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
+
+    private String language = "en";
+
+    private String applyLabel = "Apply";
+    private String cancelLabel = "Cancel";
 
     //
     private boolean showDropdowns = false;
@@ -24,7 +28,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     //
     private boolean timePickerSeconds = false;
     private int dateLimit = 7;
-    private Locale locale = null;
+    private Locale locale;
     private boolean autoApply = false;
     private boolean linkedCalendars = false;
     private boolean autoUpdateInput = false;
@@ -35,23 +39,47 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     private boolean toggleState = false;
 
-    public Date getStartDate() {
+    public String getLanguage() {
+        return this.language;
+    }
+
+    public void setLanguage(final String language) {
+        this.language = language;
+    }
+
+    public String getApplyLabel() {
+        return this.applyLabel;
+    }
+
+    public void setApplyLabel(final String applyLabel) {
+        this.applyLabel = applyLabel;
+    }
+
+    public String getCancelLabel() {
+        return this.cancelLabel;
+    }
+
+    public void setCancelLabel(final String cancelLabel) {
+        this.cancelLabel = cancelLabel;
+    }
+
+    public String getStartDate() {
         return this.startDate;
     }
 
-    public void setStartDate(final Date startDate) {
+    public void setStartDate(final String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return this.endDate;
     }
 
-    public void setEndDate(final Date endDate) {
+    public void setEndDate(final String endDate) {
         this.endDate = endDate;
     }
 
-    // Allowed values ("right" | "left" | "center") 
+    // Allowed values ("right" | "left" | "center")
     public void setOpens(final String opens) {
         this.opens = opens;
     }
@@ -60,7 +88,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.opens;
     }
 
-    // Allowed values ("down" | "up") 
+    // Allowed values ("down" | "up")
     public void setDrops(final String drops) {
         this.drops = drops;
     }

@@ -1,9 +1,11 @@
 package org.vaadin.addons.demo;
 
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -44,16 +46,27 @@ public class DemoUI extends UI {
     public static class Servlet extends VaadinServlet {
     }
 
+    private static final Locale LOCALE = Locale.ENGLISH;
+
+    private static final String DATE_PATTERN = "MM/dd/YYYY";
+    private static final Format DATE_FORMATTER = new SimpleDateFormat(DemoUI.DATE_PATTERN);
+
+    private static final String APPLY_LABEL = "Apply";
+    private static final String CANCEL_LABEL = "Cancel";
+
+    private static final String DEFAULT_LANGUAGE = "en";
+
     // UI Components
 
     // Initialize our new UI component
     private DateTimeRangeField dateRangeField;
 
-    private static final String DATE_PATTERN = "dd-MM-yyyy";
-    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DemoUI.DATE_PATTERN);
+    private String language;
 
     private DateField startDateField;
     private DateField endDateField;
+    private DateField minDateField;
+    private DateField maxDateField;
 
     private final Date startDate = Date.from(LocalDate.now()
             .atStartOfDay(ZoneId.systemDefault())
@@ -87,22 +100,32 @@ public class DemoUI extends UI {
     protected void init(final VaadinRequest request) {
 
         // Initialize our new UI component
-        this.dateRangeField = new DateTimeRangeField();
+        this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER);
 
         final BeanFieldGroup<SomeBean> fieldGroup = new BeanFieldGroup<>(SomeBean.class);
         fieldGroup.setBuffered(false);
         fieldGroup.setItemDataSource(new SomeBean());
         fieldGroup.bind(this.dateRangeField, "dateRange");
 
+        this.language = "en";
+
         // StartDate
         this.startDateField = new DateField("startDate");
+        this.startDateField.setLocale(DemoUI.LOCALE);
         this.startDateField.setValue(this.startDate);
-        this.startDateField.setDateFormat(DemoUI.DATE_PATTERN);
 
         // EndDate
         this.endDateField = new DateField("endDate");
+        this.endDateField.setLocale(DemoUI.LOCALE);
         this.endDateField.setValue(this.endDate);
-        this.endDateField.setDateFormat(DemoUI.DATE_PATTERN);
+
+        // MinDate
+        this.minDateField = new DateField("minDate");
+        this.minDateField.setLocale(DemoUI.LOCALE);
+
+        // MaxDate
+        this.maxDateField = new DateField("minDate");
+        this.maxDateField.setLocale(DemoUI.LOCALE);
 
         // Combobox opens
         this.comboOpens = new ComboBox("opens");
@@ -171,8 +194,14 @@ public class DemoUI extends UI {
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                DemoUI.this.dateRangeField.opens(DemoUI.this.comboOpens.getValue()
-                        .toString())
+                DemoUI.this.dateRangeField.startDate(DemoUI.this.startDateField.getValue())
+                        .endDate(DemoUI.this.endDateField.getValue())
+
+                        .applyLabel(DemoUI.APPLY_LABEL)
+                        .canelLabel(DemoUI.CANCEL_LABEL)
+                        .opens(DemoUI.this.comboOpens.getValue()
+                                .toString())
+                        .language(DemoUI.DEFAULT_LANGUAGE)
                         .drops(DemoUI.this.comboDrops.getValue()
                                 .toString())
                         .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
@@ -212,6 +241,12 @@ public class DemoUI extends UI {
 
         elementsLayout.addComponent(this.endDateField);
         elementsLayout.setComponentAlignment(this.endDateField, Alignment.MIDDLE_LEFT);
+
+        elementsLayout.addComponent(this.minDateField);
+        elementsLayout.setComponentAlignment(this.minDateField, Alignment.MIDDLE_LEFT);
+
+        elementsLayout.addComponent(this.maxDateField);
+        elementsLayout.setComponentAlignment(this.maxDateField, Alignment.MIDDLE_LEFT);
 
         elementsLayout.addComponent(this.comboOpens);
         elementsLayout.setComponentAlignment(this.comboOpens, Alignment.MIDDLE_LEFT);

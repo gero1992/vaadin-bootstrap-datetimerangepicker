@@ -1,5 +1,6 @@
 package org.vaadin.addons;
 
+import java.text.Format;
 import java.util.Date;
 import java.util.Locale;
 
@@ -9,19 +10,28 @@ import org.vaadin.addons.type.DateTimeRange;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.UI;
 
 // This is the server-side UI component that provides public API
-@JavaScript({ "js/jquery.min.js", "js/moment.min.js", "js/daterangepicker.js" })
+@JavaScript({ "js/jquery.min.js", "js/moment-with-locales.min.js", "js/daterangepicker.js" })
 public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     private static final long serialVersionUID = 1L;
 
+    private Format dateFormatter = null;
+
     // To process events from the client, we implement ServerRpc
     private final DateTimeRangeFieldServerRpc rpc = (from, to) -> setValue(new DateTimeRange(from, to));
 
-    public DateTimeRangeField() {
+    public DateTimeRangeField(final Format dateFormatter) {
         // To receive events from the client, we register ServerRpc
         registerRpc(this.rpc);
+
+        getState().setLanguage(UI.getCurrent()
+                .getLocale()
+                .getLanguage());
+
+        this.dateFormatter = dateFormatter;
     }
 
     // We must override getState() to cast the state to MyComponentState
@@ -40,13 +50,28 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         getState().setLocale(locale);
     }
 
+    public DateTimeRangeField language(final String language) {
+        getState().setLanguage(language);
+        return this;
+    }
+
+    public DateTimeRangeField applyLabel(final String applyLabel) {
+        getState().setApplyLabel(applyLabel);
+        return this;
+    }
+
+    public DateTimeRangeField canelLabel(final String cancelLabel) {
+        getState().setCancelLabel(cancelLabel);
+        return this;
+    }
+
     public DateTimeRangeField startDate(final Date startDate) {
-        getState().setStartDate(startDate);
+        getState().setStartDate(getDateFormatter().format(startDate));
         return this;
     }
 
     public DateTimeRangeField endDate(final Date endDate) {
-        getState().setEndDate(endDate);
+        getState().setEndDate(getDateFormatter().format(endDate));
         return this;
     }
 
@@ -127,5 +152,14 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     public DateTimeRangeField refresh() {
         getState().toggleState();
         return this;
+    }
+
+    public DateTimeRangeField testKGW() {
+        getState().toggleState();
+        return this;
+    }
+
+    public Format getDateFormatter() {
+        return this.dateFormatter;
     }
 }
