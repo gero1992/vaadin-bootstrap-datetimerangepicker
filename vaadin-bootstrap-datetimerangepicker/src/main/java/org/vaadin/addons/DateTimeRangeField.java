@@ -28,8 +28,8 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         registerRpc(this.rpc);
 
         getState().setLanguage(UI.getCurrent()
-                .getLocale()
-                .getLanguage());
+                               .getLocale()
+                               .getLanguage());
 
         this.dateFormatter = dateFormatter;
     }
@@ -77,6 +77,16 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     public DateTimeRangeField cancelClass(final String cancelClass) {
         getState().setCancelClass(cancelClass);
+        return this;
+    }
+
+    public DateTimeRangeField alwaysShowCalendars(final boolean alwaysShowCalendars) {
+        getState().setAlwaysShowCalendars(alwaysShowCalendars);
+        return this;
+    }
+
+    public DateTimeRangeField showCustomRangeLabel(final boolean showCustomRangeLabel) {
+        getState().setShowCustomRangeLabel(showCustomRangeLabel);
         return this;
     }
 

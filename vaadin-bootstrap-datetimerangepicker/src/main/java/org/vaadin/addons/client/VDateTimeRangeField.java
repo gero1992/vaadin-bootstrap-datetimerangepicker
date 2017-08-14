@@ -10,6 +10,8 @@ import com.google.gwt.user.client.ui.TextBoxBase;
 // Extend any GWT Widget
 public class VDateTimeRangeField extends TextBoxBase {
 
+    private static final String STRING_EMPTY = "";
+
     private DateRangeFieldClientUpdateValueHandler updateValueHandler;
 
     /*
@@ -24,7 +26,7 @@ public class VDateTimeRangeField extends TextBoxBase {
         setStyleName("vaadin-bootstrap-datetimerangepicker");
 
         final int timePickerIncrement = 1;
-        init(getElement(), "de", "", "", "", "", false, false, false, false, false, false, timePickerIncrement, false, false, false, false, "rights", "down");
+        init(getElement(), "de", VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, false, false, false, false, false, false, timePickerIncrement, false, false, false, false, "rights", "down", VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, false, false);
     }
 
     public void setUpdateValueHandler(final DateRangeFieldClientUpdateValueHandler updateValueHandler) {
@@ -42,17 +44,17 @@ public class VDateTimeRangeField extends TextBoxBase {
     private native void init(Element node, String language, String startDate, String endDate, String minDate, String maxDate, boolean showDropdowns,
             boolean showWeekNumbers, boolean showISOWeekNumbers, boolean singleDatePicker, boolean timePicker, boolean timePicker24Hour,
             int timePickerIncrement, boolean timePickerSeconds, boolean autoApply, boolean linkedCalendars, boolean autoUpdateInput, String opens,
-            String drops) /*-{
+            String drops, String buttonClasses, String applyClass, String cancelClass, boolean alwaysShowCalendars, boolean showCustomRangeLabel) /*-{
                           var _this = this;
-                          
+
                           alert("init language: " + language)
-                          
+
                           $wnd.moment.locale(language);
-                          
+
                           alert("init autoApply: " + autoApply)
                           alert("init startDate: " + startDate)
                           alert("init endDate: " + endDate)
-                          
+
                           $wnd.$(node).daterangepicker({
                           showDropdowns: showDropdowns,
                           showWeekNumbers: showWeekNumbers,
@@ -69,12 +71,17 @@ public class VDateTimeRangeField extends TextBoxBase {
                           startDate: startDate,
                           endDate: endDate,
                           minDate: minDate,
-                          maxDate: maxDate
+                          maxDate: maxDate,
+                          buttonClasses: buttonClasses,
+                          applyClass: applyClass,
+                          cancelClass: cancelClass,
+                          alwaysShowCalendars: alwaysShowCalendars,
+                          showCustomRangeLabel: showCustomRangeLabel
                           },
                           function(start, end, label) {
                           _this.@org.vaadin.addons.client.VDateTimeRangeField::onUpdateValue(Lcom/google/gwt/core/client/JsDate;Lcom/google/gwt/core/client/JsDate;)(start.toDate(),end.toDate());
                           });
-                          
+
                           $wnd.$(node).on('apply.daterangepicker', function(ev, picker) {
                           $wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
                           });
@@ -108,9 +115,9 @@ public class VDateTimeRangeField extends TextBoxBase {
             final String minDate, final String maxDate, final boolean showDropdowns, final boolean showWeekNumbers, final boolean showISOWeekNumbers,
             final boolean singleDatePicker, final boolean timePicker, final boolean timePicker24Hour, final int timePickerIncrement,
             final boolean timePickerSeconds, final boolean autoApply, final boolean linkedCalendars, final boolean autoUpdateInput, final String opens,
-            final String drops) {
+            final String drops, final String buttonClasses, final String applyClass, final String cancelClass, final boolean alwaysShowCalendars, final boolean showCustomRangeLabels) {
         init(getElement(), language, startDate, endDate, minDate, maxDate, showDropdowns, showWeekNumbers, showISOWeekNumbers, singleDatePicker, timePicker,
-             timePicker24Hour, timePickerIncrement, timePickerSeconds, autoApply, linkedCalendars, autoUpdateInput, opens, drops);
+             timePicker24Hour, timePickerIncrement, timePickerSeconds, autoApply, linkedCalendars, autoUpdateInput, opens, drops, buttonClasses, applyClass, cancelClass, alwaysShowCalendars, showCustomRangeLabels);
         // init2(getElement(), applyLabel, cancelLabel);
     }
 

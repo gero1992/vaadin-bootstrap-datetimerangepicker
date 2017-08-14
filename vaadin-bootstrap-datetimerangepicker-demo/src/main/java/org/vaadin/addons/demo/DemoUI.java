@@ -23,7 +23,6 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -39,11 +38,11 @@ import com.vaadin.ui.VerticalLayout;
 public class DemoUI extends UI {
 
     @WebServlet(
-            value = "/*",
-            asyncSupported = true)
+                value = "/*",
+                asyncSupported = true)
     @VaadinServletConfiguration(
-            productionMode = false,
-            ui = DemoUI.class)
+                                productionMode = false,
+                                ui = DemoUI.class)
     public static class Servlet extends VaadinServlet {
     }
 
@@ -70,12 +69,12 @@ public class DemoUI extends UI {
     private DateField maxDateField;
 
     private final Date startDate = Date.from(LocalDate.now()
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant());
+                                             .atStartOfDay(ZoneId.systemDefault())
+                                             .toInstant());
 
     private final Date endDate = Date.from(LocalDate.now()
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant());
+                                           .atStartOfDay(ZoneId.systemDefault())
+                                           .toInstant());
 
     private ComboBox comboOpens;
     private ComboBox comboDrops;
@@ -100,6 +99,9 @@ public class DemoUI extends UI {
     private TextField textButtonClasses;
     private TextField textApplyClass;
     private TextField textCancelClass;
+
+    private CheckBox checkAlwaysShowCalendars;
+    private CheckBox checkShowCustomRangeLabel;
 
     @Override
     protected void init(final VaadinRequest request) {
@@ -204,6 +206,14 @@ public class DemoUI extends UI {
         this.textCancelClass = new TextField("cancelClass");
         this.textCancelClass.setValue("btn-default");
 
+        // Checkbox alwaysShowCalendars
+        this.checkAlwaysShowCalendars = new CheckBox("alwaysShowCalendars");
+        this.checkAlwaysShowCalendars.setValue(false);
+
+        // Checkbox showCustomRangeLabel
+        this.checkShowCustomRangeLabel = new CheckBox("showCustomRangeLabel");
+        this.checkShowCustomRangeLabel.setValue(false);
+
         // Button buildUI
 
         this.btnRefreshUI = new Button("refreshUI");
@@ -212,31 +222,33 @@ public class DemoUI extends UI {
             @Override
             public void buttonClick(final ClickEvent event) {
                 DemoUI.this.dateRangeField.startDate(DemoUI.this.startDateField.getValue())
-                        .endDate(DemoUI.this.endDateField.getValue())
-                        .minDate(DemoUI.this.minDateField.getValue())
-                        .maxDate(DemoUI.this.maxDateField.getValue())
-                        .applyLabel(DemoUI.APPLY_LABEL)
-                        .canelLabel(DemoUI.CANCEL_LABEL)
-                        .opens(DemoUI.this.comboOpens.getValue()
-                                .toString())
-                        .language(DemoUI.DEFAULT_LANGUAGE)
-                        .drops(DemoUI.this.comboDrops.getValue()
-                                .toString())
-                        .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
-                        .showWeekNumbers(DemoUI.this.checkShowWeekNumbers.getValue())
-                        .showISOWeekNumbers(DemoUI.this.checkShowISOWeekNumbers.getValue())
-                        .singleDatePicker(DemoUI.this.checkSingleDatePicker.getValue())
-                        .timePicker(DemoUI.this.checkTimePicker.getValue())
-                        .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
-                        .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
-                        .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
-                        .autoApply(DemoUI.this.checkAutoApply.getValue())
-                        .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
-                        .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
-                        .buttonClasses(DemoUI.this.textButtonClasses.getValue())
-                        .applyClass(DemoUI.this.textApplyClass.getValue())
-                        .cancelClass(DemoUI.this.textCancelClass.getValue())
-                        .refresh();
+                .endDate(DemoUI.this.endDateField.getValue())
+                .minDate(DemoUI.this.minDateField.getValue())
+                .maxDate(DemoUI.this.maxDateField.getValue())
+                .applyLabel(DemoUI.APPLY_LABEL)
+                .canelLabel(DemoUI.CANCEL_LABEL)
+                .opens(DemoUI.this.comboOpens.getValue()
+                       .toString())
+                .language(DemoUI.DEFAULT_LANGUAGE)
+                .drops(DemoUI.this.comboDrops.getValue()
+                       .toString())
+                .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
+                .showWeekNumbers(DemoUI.this.checkShowWeekNumbers.getValue())
+                .showISOWeekNumbers(DemoUI.this.checkShowISOWeekNumbers.getValue())
+                .singleDatePicker(DemoUI.this.checkSingleDatePicker.getValue())
+                .timePicker(DemoUI.this.checkTimePicker.getValue())
+                .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
+                .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
+                .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
+                .autoApply(DemoUI.this.checkAutoApply.getValue())
+                .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
+                .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
+                .buttonClasses(DemoUI.this.textButtonClasses.getValue())
+                .applyClass(DemoUI.this.textApplyClass.getValue())
+                .cancelClass(DemoUI.this.textCancelClass.getValue())
+                .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
+                .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue())
+                .refresh();
             }
         });
 
@@ -248,9 +260,9 @@ public class DemoUI extends UI {
             @Override
             public void buttonClick(final ClickEvent event) {
                 Notification.show(fieldGroup.getItemDataSource()
-                        .getBean()
-                        .getDateRange()
-                        .toString());
+                                  .getBean()
+                                  .getDateRange()
+                                  .toString());
             }
         });
 
@@ -339,6 +351,12 @@ public class DemoUI extends UI {
 
         elementsLayout.addComponent(this.textCancelClass);
         elementsLayout.setComponentAlignment(this.textCancelClass, Alignment.MIDDLE_RIGHT);
+
+        elementsLayout.addComponent(this.checkAlwaysShowCalendars);
+        elementsLayout.setComponentAlignment(this.checkAlwaysShowCalendars, Alignment.MIDDLE_RIGHT);
+
+        elementsLayout.addComponent(this.checkShowCustomRangeLabel);
+        elementsLayout.setComponentAlignment(this.checkShowCustomRangeLabel, Alignment.MIDDLE_RIGHT);
 
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();

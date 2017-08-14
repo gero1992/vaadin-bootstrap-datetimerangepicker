@@ -12,6 +12,9 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private String applyClass = "btn-success";
     private String cancelClass = "btn-default";
 
+    private boolean alwaysShowCalendars = false;
+    private boolean showCustomRangeLabel = false;
+
     private String startDate;
     private String endDate;
 
@@ -74,7 +77,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.buttonClasses;
     }
 
-    public void setButtonClasses(String buttonClasses) {
+    public void setButtonClasses(final String buttonClasses) {
         this.buttonClasses = buttonClasses;
     }
 
@@ -82,7 +85,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.applyClass;
     }
 
-    public void setApplyClass(String applyClass) {
+    public void setApplyClass(final String applyClass) {
         this.applyClass = applyClass;
     }
 
@@ -90,8 +93,24 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.cancelClass;
     }
 
-    public void setCancelClass(String cancelClass) {
+    public void setCancelClass(final String cancelClass) {
         this.cancelClass = cancelClass;
+    }
+
+    public boolean isAlwaysShowCalendars() {
+        return this.alwaysShowCalendars;
+    }
+
+    public void setAlwaysShowCalendars(boolean alwaysShowCalendars) {
+        this.alwaysShowCalendars = alwaysShowCalendars;
+    }
+
+    public boolean isShowCustomRangeLabel() {
+        return this.showCustomRangeLabel;
+    }
+
+    public void setShowCustomRangeLabel(boolean showCustomRangeLabel) {
+        this.showCustomRangeLabel = showCustomRangeLabel;
     }
 
     public String getStartDate() {

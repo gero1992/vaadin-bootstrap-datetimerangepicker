@@ -75,7 +75,7 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
                             getState().getEndDate(), getState().getMinDate(), getState().getMaxDate(), getState().isShowDropdowns(),
                             getState().isShowWeekNumbers(), getState().isShowISOWeekNumbers(), getState().isSingleDatePicker(), getState().isTimePicker(),
                             getState().isTimePicker24Hour(), getState().getTimePickerIncrement(), getState().isTimePickerSeconds(), getState().isAutoApply(),
-                            getState().isLinkedCalendars(), getState().isAutoUpdateInput(), getState().getOpens(), getState().getDrops());
+                            getState().isLinkedCalendars(), getState().isAutoUpdateInput(), getState().getOpens(), getState().getDrops(), getState().getButtonClasses(), getState().getApplyClass(), getState().getCancelClass(), getState().isAlwaysShowCalendars(), getState().isShowCustomRangeLabel());
         // }
     }
 }
