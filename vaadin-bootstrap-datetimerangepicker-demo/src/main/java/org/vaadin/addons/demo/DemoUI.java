@@ -26,6 +26,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -61,8 +62,6 @@ public class DemoUI extends UI {
     // Initialize our new UI component
     private DateTimeRangeField dateRangeField;
 
-    private String language;
-
     private DateField startDateField;
     private DateField endDateField;
     private DateField minDateField;
@@ -87,6 +86,7 @@ public class DemoUI extends UI {
     private CheckBox checkTimePicker;
     private CheckBox checkTimePicker24Hour;
 
+    private TextField textParentEl;
     private TextField textTimePickerIncrement;
 
     private CheckBox checkTimePickerSeconds;
@@ -103,6 +103,8 @@ public class DemoUI extends UI {
     private CheckBox checkAlwaysShowCalendars;
     private CheckBox checkShowCustomRangeLabel;
 
+    private int row = 0;
+
     @Override
     protected void init(final VaadinRequest request) {
 
@@ -114,7 +116,9 @@ public class DemoUI extends UI {
         fieldGroup.setItemDataSource(new SomeBean());
         fieldGroup.bind(this.dateRangeField, "dateRange");
 
-        this.language = "en";
+        // ParentEl
+
+        this.textParentEl = new TextField("parentEl");
 
         // StartDate
         this.startDateField = new DateField("startDate");
@@ -175,7 +179,7 @@ public class DemoUI extends UI {
         this.checkTimePicker24Hour = new CheckBox("timePicker24Hour");
         this.checkTimePicker24Hour.setValue(false);
 
-        this.textTimePickerIncrement = new TextField();
+        this.textTimePickerIncrement = new TextField("timePickerIncrement (in minutes)");
         this.textTimePickerIncrement.setValue(String.valueOf(1));
 
         // Checkbox timePickerSeconds
@@ -221,7 +225,8 @@ public class DemoUI extends UI {
 
             @Override
             public void buttonClick(final ClickEvent event) {
-                DemoUI.this.dateRangeField.startDate(DemoUI.this.startDateField.getValue())
+                DemoUI.this.dateRangeField.parentEl(DemoUI.this.textParentEl.getValue())
+                .startDate(DemoUI.this.startDateField.getValue())
                 .endDate(DemoUI.this.endDateField.getValue())
                 .minDate(DemoUI.this.minDateField.getValue())
                 .maxDate(DemoUI.this.maxDateField.getValue())
@@ -240,6 +245,7 @@ public class DemoUI extends UI {
                 .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
                 .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
                 .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
+                .dateLimit("days", 7)
                 .autoApply(DemoUI.this.checkAutoApply.getValue())
                 .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
                 .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
@@ -269,101 +275,53 @@ public class DemoUI extends UI {
         final VerticalLayout elementsLayout = new VerticalLayout();
         elementsLayout.setSpacing(true);
 
-        // LEFT
+        final GridLayout grid = new GridLayout(3, 14);
 
-        elementsLayout.addComponent(this.startDateField);
-        elementsLayout.setComponentAlignment(this.startDateField, Alignment.MIDDLE_LEFT);
+        // Column Left
 
-        elementsLayout.addComponent(this.endDateField);
-        elementsLayout.setComponentAlignment(this.endDateField, Alignment.MIDDLE_LEFT);
+        grid.addComponent(this.textParentEl, 0, 0);
+        grid.addComponent(this.startDateField, 0, 1);
+        grid.addComponent(this.endDateField, 0, 2);
+        grid.addComponent(this.minDateField, 0, 3);
+        grid.addComponent(this.maxDateField, 0, 4);
+        grid.addComponent(this.comboOpens, 0, 5);
+        grid.addComponent(this.comboDrops, 0, 6);
 
-        elementsLayout.addComponent(this.minDateField);
-        elementsLayout.setComponentAlignment(this.minDateField, Alignment.MIDDLE_LEFT);
+        // Column Middle
 
-        elementsLayout.addComponent(this.maxDateField);
-        elementsLayout.setComponentAlignment(this.maxDateField, Alignment.MIDDLE_LEFT);
-
-        elementsLayout.addComponent(this.comboOpens);
-        elementsLayout.setComponentAlignment(this.comboOpens, Alignment.MIDDLE_LEFT);
-
-        elementsLayout.addComponent(this.comboDrops);
-        elementsLayout.setComponentAlignment(this.comboDrops, Alignment.MIDDLE_LEFT);
-
-        // MIDDLE
-
-        elementsLayout.addComponent(this.checkShowDropDowns);
-        elementsLayout.setComponentAlignment(this.checkShowDropDowns, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkShowDropDowns);
-        elementsLayout.setComponentAlignment(this.checkShowDropDowns, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkShowWeekNumbers);
-        elementsLayout.setComponentAlignment(this.checkShowWeekNumbers, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkShowISOWeekNumbers);
-        elementsLayout.setComponentAlignment(this.checkShowISOWeekNumbers, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkSingleDatePicker);
-        elementsLayout.setComponentAlignment(this.checkSingleDatePicker, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkTimePicker);
-        elementsLayout.setComponentAlignment(this.checkTimePicker, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkTimePicker24Hour);
-        elementsLayout.setComponentAlignment(this.checkTimePicker24Hour, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.textTimePickerIncrement);
-        elementsLayout.setComponentAlignment(this.textTimePickerIncrement, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkTimePickerSeconds);
-        elementsLayout.setComponentAlignment(this.checkTimePickerSeconds, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkAutoApply);
-        elementsLayout.setComponentAlignment(this.checkAutoApply, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkLinkedCalendars);
-        elementsLayout.setComponentAlignment(this.checkLinkedCalendars, Alignment.MIDDLE_CENTER);
-
-        elementsLayout.addComponent(this.checkAutoUpdateInput);
-        elementsLayout.setComponentAlignment(this.checkAutoUpdateInput, Alignment.MIDDLE_CENTER);
-
-        // ---
-
-        elementsLayout.addComponent(this.btnRefreshUI);
-        elementsLayout.setComponentAlignment(this.btnRefreshUI, Alignment.MIDDLE_CENTER);
+        grid.addComponent(this.checkShowDropDowns, 1, 0);
+        grid.addComponent(this.checkShowWeekNumbers, 1, 1);
+        grid.addComponent(this.checkShowISOWeekNumbers, 1, 2);
+        grid.addComponent(this.checkSingleDatePicker, 1, 3);
+        grid.addComponent(this.checkTimePicker, 1, 4);
+        grid.addComponent(this.checkTimePicker24Hour, 1, 5);
+        grid.addComponent(this.textTimePickerIncrement, 1, 6);
+        grid.addComponent(this.checkTimePickerSeconds, 1, 7);
+        grid.addComponent(this.checkAutoApply, 1, 8);
+        grid.addComponent(this.checkLinkedCalendars, 1, 9);
+        grid.addComponent(this.checkAutoUpdateInput, 1, 10);
+        grid.addComponent(this.btnRefreshUI, 1, 11);
 
         //
         // DateRangeField
         //
+        grid.addComponent(this.dateRangeField, 1, 12);
+        grid.addComponent(button, 1, 13);
 
-        elementsLayout.addComponent(this.dateRangeField);
-        elementsLayout.setComponentAlignment(this.dateRangeField, Alignment.MIDDLE_CENTER);
-        elementsLayout.addComponent(button);
-        elementsLayout.setComponentAlignment(button, Alignment.MIDDLE_CENTER);
+        // Column Right
 
-        // RIGHT
-
-        elementsLayout.addComponent(this.textButtonClasses);
-        elementsLayout.setComponentAlignment(this.textButtonClasses, Alignment.MIDDLE_RIGHT);
-
-        elementsLayout.addComponent(this.textApplyClass);
-        elementsLayout.setComponentAlignment(this.textApplyClass, Alignment.MIDDLE_RIGHT);
-
-        elementsLayout.addComponent(this.textCancelClass);
-        elementsLayout.setComponentAlignment(this.textCancelClass, Alignment.MIDDLE_RIGHT);
-
-        elementsLayout.addComponent(this.checkAlwaysShowCalendars);
-        elementsLayout.setComponentAlignment(this.checkAlwaysShowCalendars, Alignment.MIDDLE_RIGHT);
-
-        elementsLayout.addComponent(this.checkShowCustomRangeLabel);
-        elementsLayout.setComponentAlignment(this.checkShowCustomRangeLabel, Alignment.MIDDLE_RIGHT);
+        grid.addComponent(this.textButtonClasses, 2, 0);
+        grid.addComponent(this.textApplyClass, 2, 1);
+        grid.addComponent(this.textCancelClass, 2, 2);
+        grid.addComponent(this.checkAlwaysShowCalendars, 2, 3);
+        grid.addComponent(this.checkShowCustomRangeLabel, 2, 4);
 
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();
         layout.setStyleName("demoContentLayout");
         layout.setSizeFull();
-        layout.addComponent(elementsLayout);
-        layout.setComponentAlignment(elementsLayout, Alignment.MIDDLE_CENTER);
+        layout.addComponent(grid);
+        layout.setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
 
         setContent(layout);
     }

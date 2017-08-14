@@ -4,9 +4,14 @@ import java.util.Locale;
 
 import com.vaadin.shared.AbstractFieldState;
 
+//
+// @see http://www.daterangepicker.com/#config
+//
 public class DateTimeRangeFieldState extends AbstractFieldState {
 
     private static final long serialVersionUID = 1L;
+
+    private static final String EMPTY_STRING = "";
 
     private String buttonClasses = "btn btn-sm";
     private String applyClass = "btn-success";
@@ -14,6 +19,8 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     private boolean alwaysShowCalendars = false;
     private boolean showCustomRangeLabel = false;
+
+    private String parentEl = "body";
 
     private String startDate;
     private String endDate;
@@ -37,7 +44,6 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private int timePickerIncrement = 1;
     //
     private boolean timePickerSeconds = false;
-    private int dateLimit = 7;
     private Locale locale;
     private boolean autoApply = false;
     private boolean linkedCalendars = false;
@@ -46,6 +52,10 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     // Default values
     private String opens = "right";
     private String drops = "down";
+
+    // dateLimit: (object) The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
+    private String dateLimitSpanMoment = "days";
+    private int dateLimitSpanValue = 7;
 
     private boolean toggleState = false;
 
@@ -219,14 +229,6 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         this.timePickerSeconds = timePickerSeconds;
     }
 
-    public int getDateLimit() {
-        return this.dateLimit;
-    }
-
-    public void setDateLimit(final int dateLimit) {
-        this.dateLimit = dateLimit;
-    }
-
     public Locale getLocale() {
         return this.locale;
     }
@@ -265,6 +267,23 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     public void setShowDropdowns(final boolean showDropDowns) {
         this.showDropdowns = showDropDowns;
+    }
+
+    public String getParentEl() {
+        return this.parentEl;
+    }
+
+    public void setParentEl(String parentEl) {
+        this.parentEl = parentEl;
+    }
+
+    public void setDateLimit(String dateLimitSpanMoment, int dateLimitSpanValue) {
+        this.dateLimitSpanMoment = dateLimitSpanMoment;
+        this.dateLimitSpanValue = dateLimitSpanValue;
+    }
+
+    public String getDateLimit() {
+        return "dateLimit: {" + this.dateLimitSpanMoment + ": " + this.dateLimitSpanValue + "},";
     }
 
     public void toggleState() {

@@ -90,6 +90,17 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return this;
     }
 
+    public DateTimeRangeField parentEl(final String parentEl) {
+        getState().setParentEl(parentEl);
+        return this;
+    }
+
+
+    public DateTimeRangeField dateLimit(final String dateLimitSpanMoment, final int dateLimitSpanValue) {
+        getState().setDateLimit(dateLimitSpanMoment, dateLimitSpanValue);
+        return this;
+    }
+
     public DateTimeRangeField startDate(final Date startDate) {
         getState().setStartDate(formatDateToString(startDate));
         return this;
@@ -164,11 +175,6 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return this;
     }
 
-    public DateTimeRangeField dateLimit(final int dateLimit) {
-        getState().setDateLimit(dateLimit);
-        return this;
-    }
-
     public DateTimeRangeField autoApply(final boolean autoApply) {
         getState().setAutoApply(autoApply);
         return this;
@@ -185,11 +191,6 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     public DateTimeRangeField refresh() {
-        getState().toggleState();
-        return this;
-    }
-
-    public DateTimeRangeField testKGW() {
         getState().toggleState();
         return this;
     }

@@ -71,10 +71,10 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
         // if (stateChangeEvent.hasPropertyChanged("autoApply")) {
 
         // if (stateChangeEvent.hasPropertyChanged("toggleState")) {
-        getWidget().refresh(getState().getLanguage(), getState().getApplyLabel(), getState().getCancelLabel(), getState().getStartDate(),
+        getWidget().refresh(getState().getLanguage(), getState().getApplyLabel(), getState().getCancelLabel(), getState().getParentEl(), getState().getStartDate(),
                             getState().getEndDate(), getState().getMinDate(), getState().getMaxDate(), getState().isShowDropdowns(),
                             getState().isShowWeekNumbers(), getState().isShowISOWeekNumbers(), getState().isSingleDatePicker(), getState().isTimePicker(),
-                            getState().isTimePicker24Hour(), getState().getTimePickerIncrement(), getState().isTimePickerSeconds(), getState().isAutoApply(),
+                            getState().isTimePicker24Hour(), getState().getTimePickerIncrement(), getState().isTimePickerSeconds(), getState().getDateLimit(), getState().isAutoApply(),
                             getState().isLinkedCalendars(), getState().isAutoUpdateInput(), getState().getOpens(), getState().getDrops(), getState().getButtonClasses(), getState().getApplyClass(), getState().getCancelClass(), getState().isAlwaysShowCalendars(), getState().isShowCustomRangeLabel());
         // }
     }
