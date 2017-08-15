@@ -10,8 +10,9 @@ import com.vaadin.shared.AbstractFieldState;
 public class DateTimeRangeFieldState extends AbstractFieldState {
 
     private static final long serialVersionUID = 1L;
-
     private static final String EMPTY_STRING = "";
+
+    // Default values
 
     private String buttonClasses = "btn btn-sm";
     private String applyClass = "btn-success";
@@ -49,13 +50,12 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private boolean linkedCalendars = false;
     private boolean autoUpdateInput = false;
 
-    // Default values
     private String opens = "right";
     private String drops = "down";
 
     // dateLimit: (object) The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
-    private String dateLimitSpanMoment = "days";
-    private int dateLimitSpanValue = 7;
+    private String dateLimitSpanMoment = DateTimeRangeFieldState.EMPTY_STRING;
+    private int dateLimitSpanValue = 0;
 
     private boolean toggleState = false;
 
@@ -277,13 +277,20 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         this.parentEl = parentEl;
     }
 
-    public void setDateLimit(String dateLimitSpanMoment, int dateLimitSpanValue) {
+    public void setDateLimitSpanMoment(String dateLimitSpanMoment) {
         this.dateLimitSpanMoment = dateLimitSpanMoment;
-        this.dateLimitSpanValue = dateLimitSpanValue;
     }
 
-    public String getDateLimit() {
-        return "dateLimit: {" + this.dateLimitSpanMoment + ": " + this.dateLimitSpanValue + "},";
+    public String getDateLimitSpanMoment() {
+        return this.dateLimitSpanMoment;
+    }
+
+    public int getDateLimitSpanValue() {
+        return this.dateLimitSpanValue;
+    }
+
+    public void setDateLimitSpanValue(int dateLimitSpanValue) {
+        this.dateLimitSpanValue = dateLimitSpanValue;
     }
 
     public void toggleState() {

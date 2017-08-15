@@ -57,6 +57,10 @@ public class DemoUI extends UI {
 
     private static final String DEFAULT_LANGUAGE = "en";
 
+    private static final String DATE_LIMIT_SPAN_MOMENT = "days";
+    private static final int DATE_LIMIT_SPAN_VALUE = 7;
+
+
     // UI Components
 
     // Initialize our new UI component
@@ -90,6 +94,7 @@ public class DemoUI extends UI {
     private TextField textTimePickerIncrement;
 
     private CheckBox checkTimePickerSeconds;
+    private CheckBox checkDateLimit;
     private CheckBox checkAutoApply;
     private CheckBox checkLinkedCalendars;
     private CheckBox checkAutoUpdateInput;
@@ -186,6 +191,10 @@ public class DemoUI extends UI {
         this.checkTimePickerSeconds = new CheckBox("timePickerSeconds");
         this.checkTimePickerSeconds.setValue(false);
 
+        // Checkbox dateRange
+        this.checkDateLimit = new CheckBox("dateLimit");
+        this.checkDateLimit.setValue(false);
+
         // Checkbox autoApply
         this.checkAutoApply = new CheckBox("autoApply");
         this.checkAutoApply.setValue(false);
@@ -225,6 +234,13 @@ public class DemoUI extends UI {
 
             @Override
             public void buttonClick(final ClickEvent event) {
+                // DateLimit
+                DateTimeRangeField.DateLimit dateLimit = null;
+                if (DemoUI.this.checkDateLimit.getValue()) {
+                    dateLimit = DemoUI.this.buildDateLimit(DemoUI.DATE_LIMIT_SPAN_MOMENT, DemoUI.DATE_LIMIT_SPAN_VALUE);
+                }
+
+                // Others
                 DemoUI.this.dateRangeField.parentEl(DemoUI.this.textParentEl.getValue())
                 .startDate(DemoUI.this.startDateField.getValue())
                 .endDate(DemoUI.this.endDateField.getValue())
@@ -245,7 +261,7 @@ public class DemoUI extends UI {
                 .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
                 .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
                 .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
-                .dateLimit("days", 7)
+                .dateLimit(dateLimit)
                 .autoApply(DemoUI.this.checkAutoApply.getValue())
                 .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
                 .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
@@ -275,7 +291,7 @@ public class DemoUI extends UI {
         final VerticalLayout elementsLayout = new VerticalLayout();
         elementsLayout.setSpacing(true);
 
-        final GridLayout grid = new GridLayout(3, 14);
+        final GridLayout grid = new GridLayout(3, 15);
 
         // Column Left
 
@@ -297,16 +313,17 @@ public class DemoUI extends UI {
         grid.addComponent(this.checkTimePicker24Hour, 1, 5);
         grid.addComponent(this.textTimePickerIncrement, 1, 6);
         grid.addComponent(this.checkTimePickerSeconds, 1, 7);
-        grid.addComponent(this.checkAutoApply, 1, 8);
-        grid.addComponent(this.checkLinkedCalendars, 1, 9);
-        grid.addComponent(this.checkAutoUpdateInput, 1, 10);
-        grid.addComponent(this.btnRefreshUI, 1, 11);
+        grid.addComponent(this.checkDateLimit, 1, 8);
+        grid.addComponent(this.checkAutoApply, 1, 9);
+        grid.addComponent(this.checkLinkedCalendars, 1, 10);
+        grid.addComponent(this.checkAutoUpdateInput, 1, 11);
+        grid.addComponent(this.btnRefreshUI, 1, 12);
 
         //
         // DateRangeField
         //
-        grid.addComponent(this.dateRangeField, 1, 12);
-        grid.addComponent(button, 1, 13);
+        grid.addComponent(this.dateRangeField, 1, 13);
+        grid.addComponent(button, 1, 14);
 
         // Column Right
 
@@ -325,4 +342,20 @@ public class DemoUI extends UI {
 
         setContent(layout);
     }
+
+    /**
+     *
+     * Builds dateLimit with given date range span.
+     *
+     * @param dateLimitSpanMoment
+     * @param dateLimitSpanValue
+     * @return {@link DateTimeRangeField.DateLimit}
+     */
+    private DateTimeRangeField.DateLimit buildDateLimit(String dateLimitSpanMoment, int dateLimitSpanValue) {
+        DateTimeRangeField.DateLimit dateLimit = DemoUI.this.dateRangeField.new DateLimit(dateLimitSpanMoment, dateLimitSpanValue);
+        return dateLimit;
+    }
+
+
+
 }

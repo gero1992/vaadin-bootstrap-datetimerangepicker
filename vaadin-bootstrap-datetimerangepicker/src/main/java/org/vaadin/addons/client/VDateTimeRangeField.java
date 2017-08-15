@@ -4,13 +4,12 @@ import com.google.gwt.core.client.JsDate;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
 // Extend any GWT Widget
 public class VDateTimeRangeField extends TextBoxBase {
 
-    private static final String STRING_EMPTY = "";
+    private static final String EMPTY_STRING = "";
 
     private DateRangeFieldClientUpdateValueHandler updateValueHandler;
 
@@ -26,7 +25,8 @@ public class VDateTimeRangeField extends TextBoxBase {
         setStyleName("vaadin-bootstrap-datetimerangepicker");
 
         final int timePickerIncrement = 1;
-        init(getElement(), "de", "body", VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, false, false, false, false, false, false, timePickerIncrement, false, VDateTimeRangeField.STRING_EMPTY, false, false, false, "rights", "down", VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, VDateTimeRangeField.STRING_EMPTY, false, false);
+        final String dateLimit = "{}";
+        init(getElement(), "de", "body", VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, false, false, false, false, false, false, timePickerIncrement, false, dateLimit, false, false, false, "rights", "down", VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, false, false);
     }
 
     public void setUpdateValueHandler(final DateRangeFieldClientUpdateValueHandler updateValueHandler) {
@@ -54,34 +54,39 @@ public class VDateTimeRangeField extends TextBoxBase {
                           alert("init autoApply: " + autoApply)
                           alert("init startDate: " + startDate)
                           alert("init endDate: " + endDate)
-                          alert("init dateLimit: " + dateLimit)
+                          alert("init dateLimit: " + JSON.parse(dateLimit))
 
-                          $wnd.$(node).daterangepicker({
-                          showDropdowns: showDropdowns,
-                          showWeekNumbers: showWeekNumbers,
-                          showISOWeekNumbers: showISOWeekNumbers,
-                          singleDatePicker: singleDatePicker,
-                          timePicker: timePicker,
-                          timePicker24Hour: timePicker24Hour,
-                          timePickerIncrement: timePickerIncrement,
-                          timePickerSeconds: timePickerSeconds,
-                          dateLimit: dateLimit,
-                          autoApply: autoApply,
-                          linkedCalendars: linkedCalendars,
-                          autoUpdateInput: autoUpdateInput,
-                          opens: opens,
-                          drops: drops,
-                          parentEl: parentEl,
-                          startDate: startDate,
-                          endDate: endDate,
-                          minDate: minDate,
-                          maxDate: maxDate,
-                          buttonClasses: buttonClasses,
-                          applyClass: applyClass,
-                          cancelClass: cancelClass,
-                          alwaysShowCalendars: alwaysShowCalendars,
-                          showCustomRangeLabel: showCustomRangeLabel
-                          },
+                          configString = '{' +
+                              '"showDropdowns": ' + showDropdowns + ',' +
+                              '"showWeekNumbers": ' + showWeekNumbers + ',' +
+                              '"showISOWeekNumbers": ' + showISOWeekNumbers + ',' +
+                              '"singleDatePicker": ' + singleDatePicker + ',' +
+                              '"timePicker": ' + timePicker + ',' +
+                              '"timePicker24Hour": ' + timePicker24Hour + ',' +
+                              '"timePickerIncrement": ' + timePickerIncrement + ',' +
+                              '"timePickerSeconds": ' + timePickerSeconds + ',' +
+                              '"dateLimit": ' + dateLimit + ',' +
+                              '"autoApply": ' + autoApply + ',' +
+                              '"linkedCalendars": ' + linkedCalendars + ',' +
+                              '"autoUpdateInput": ' + autoUpdateInput + ',' +
+                              '"opens": "' + opens + '",' +
+                              '"drops": "' + drops + '",' +
+                              '"parentEl": "' + parentEl + '",' +
+                              (typeof(startDate) === 'undefined' ? '' : '"startDate": "' + startDate + '",') +
+                              (typeof(endDate) === 'undefined' ? '' : '"endDate": "' + endDate + '",') +
+                              (typeof(minDate) === 'undefined' || minDate.length == 0 ? '' : '"minDate": "' + minDate + '",') +
+                              (typeof(maxDate) === 'undefined' || maxDate.length == 0 ? '' : '"maxDate": "' + maxDate + '",') +
+                              '"buttonClasses": "' + buttonClasses + '",' +
+                              '"applyClass": "' + applyClass + '",' +
+                              '"cancelClass": "' + cancelClass + '",' +
+                              '"alwaysShowCalendars": ' + alwaysShowCalendars + ',' +
+                              '"showCustomRangeLabel": ' + showCustomRangeLabel +
+                          '}';
+
+                          console.log(configString);
+                          console.log(JSON.parse(configString));
+
+                          $wnd.$(node).daterangepicker(JSON.parse(configString),
                           function(start, end, label) {
                           _this.@org.vaadin.addons.client.VDateTimeRangeField::onUpdateValue(Lcom/google/gwt/core/client/JsDate;Lcom/google/gwt/core/client/JsDate;)(start.toDate(),end.toDate());
                           });
@@ -110,28 +115,19 @@ public class VDateTimeRangeField extends TextBoxBase {
         void onUpdateValue(JsDate start, JsDate end);
     }
 
-    public void setAutoApply(final boolean autoApply) {
-        Window.alert("Window.alert");
-        // setAutoApplyKGW(getElement(), autoApply);
-    }
-
     public void refresh(final String language, final String applyLabel, final String cancelLabel, final String parentEl, final String startDate, final String endDate,
             final String minDate, final String maxDate, final boolean showDropdowns, final boolean showWeekNumbers, final boolean showISOWeekNumbers,
             final boolean singleDatePicker, final boolean timePicker, final boolean timePicker24Hour, final int timePickerIncrement,
-            final boolean timePickerSeconds, final String dateLimit, final boolean autoApply, final boolean linkedCalendars, final boolean autoUpdateInput, final String opens,
+            final boolean timePickerSeconds, final String dateLimitSpanMoment, final int dateLimitSpanValue, final boolean autoApply, final boolean linkedCalendars, final boolean autoUpdateInput, final String opens,
             final String drops, final String buttonClasses, final String applyClass, final String cancelClass, final boolean alwaysShowCalendars, final boolean showCustomRangeLabels) {
+
+
+        String dateLimit = "{}";
+        if (dateLimitSpanMoment != null && !dateLimitSpanMoment.equals(VDateTimeRangeField.EMPTY_STRING)) {
+            dateLimit = new StringBuilder().append("{ \"").append(dateLimitSpanMoment).append("\": ").append(dateLimitSpanValue).append(" }").toString();
+        }
+
         init(getElement(), language, parentEl, startDate, endDate, minDate, maxDate, showDropdowns, showWeekNumbers, showISOWeekNumbers, singleDatePicker, timePicker,
              timePicker24Hour, timePickerIncrement, timePickerSeconds, dateLimit, autoApply, linkedCalendars, autoUpdateInput, opens, drops, buttonClasses, applyClass, cancelClass, alwaysShowCalendars, showCustomRangeLabels);
-        // init2(getElement(), applyLabel, cancelLabel);
     }
-
-    private native void testKGW(Element node, boolean abc) /*-{
-                                                                        alert("testKGW : abc" + abc)
-
-                                                                        }-*/;
-
-    // private native void setAutoApply(Element node, boolean autoApply) /*-{
-    // $wnd.$(node).data('daterangepicker').autoApply = autoApply;
-    // }-*/;
-
 }

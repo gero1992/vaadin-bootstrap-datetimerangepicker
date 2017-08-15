@@ -18,10 +18,13 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String EMPTY_STRING = "";
+
     private Format dateFormatter = null;
 
     // To process events from the client, we implement ServerRpc
     private final DateTimeRangeFieldServerRpc rpc = (from, to) -> setValue(new DateTimeRange(from, to));
+
 
     public DateTimeRangeField(final Format dateFormatter) {
         // To receive events from the client, we register ServerRpc
@@ -50,8 +53,43 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         getState().setLocale(locale);
     }
 
+
+
     public DateTimeRangeField language(final String language) {
         getState().setLanguage(language);
+        return this;
+    }
+
+    /*
+     * The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
+     */
+    public class DateLimit {
+        private String dateLimitSpanMoment; // moment object, i.e days, month
+        private int dateLimitSpanValue;
+
+        public DateLimit(final String dateLimitSpanMoment, final int dateLimitSpanValue) {
+            this.dateLimitSpanMoment = dateLimitSpanMoment;
+            this.dateLimitSpanValue = dateLimitSpanValue;
+        }
+
+        public String getDateLimitSpanMoment() {
+            return this.dateLimitSpanMoment;
+        }
+
+        public int getDateLimitSpanValue() {
+            return this.dateLimitSpanValue;
+        }
+    }
+
+    public DateTimeRangeField dateLimit(DateLimit dateLimit) {
+        if (dateLimit != null) {
+            getState().setDateLimitSpanMoment(dateLimit.getDateLimitSpanMoment());
+            getState().setDateLimitSpanValue(dateLimit.getDateLimitSpanValue());
+        } else {
+            // Reset values
+            getState().setDateLimitSpanMoment(DateTimeRangeField.EMPTY_STRING);
+            getState().setDateLimitSpanValue(0);
+        }
         return this;
     }
 
@@ -92,12 +130,6 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     public DateTimeRangeField parentEl(final String parentEl) {
         getState().setParentEl(parentEl);
-        return this;
-    }
-
-
-    public DateTimeRangeField dateLimit(final String dateLimitSpanMoment, final int dateLimitSpanValue) {
-        getState().setDateLimit(dateLimitSpanMoment, dateLimitSpanValue);
         return this;
     }
 
@@ -200,7 +232,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     private String formatDateToString(final Date date) {
-        final String result = (date != null ? getDateFormatter().format(date) : "");
+        final String result = (date != null ? getDateFormatter().format(date) : DateTimeRangeField.EMPTY_STRING);
         return result;
     }
 }
