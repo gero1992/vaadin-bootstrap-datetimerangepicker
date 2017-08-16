@@ -1,6 +1,8 @@
 package org.vaadin.addons.client;
 
+import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
 
 import com.vaadin.shared.AbstractFieldState;
 
@@ -10,7 +12,7 @@ import com.vaadin.shared.AbstractFieldState;
 public class DateTimeRangeFieldState extends AbstractFieldState {
 
     private static final long serialVersionUID = 1L;
-    private static final String EMPTY_STRING = "";
+    static final String EMPTY_STRING = "";
 
     // Default values
 
@@ -47,8 +49,8 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private boolean timePickerSeconds = false;
     private Locale locale;
     private boolean autoApply = false;
-    private boolean linkedCalendars = false;
-    private boolean autoUpdateInput = false;
+    private boolean linkedCalendars = true;
+    private boolean autoUpdateInput = true;
 
     private String opens = "right";
     private String drops = "down";
@@ -56,6 +58,8 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     // dateLimit: (object) The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
     private String dateLimitSpanMoment = DateTimeRangeFieldState.EMPTY_STRING;
     private int dateLimitSpanValue = 0;
+
+    private Map<String, DateRange> dateRanges = new Hashtable<>();
 
     private boolean toggleState = false;
 
@@ -295,5 +299,13 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     public void toggleState() {
         this.toggleState = !this.toggleState;
+    }
+
+    public Map<String, DateRange> getDateRanges() {
+        return this.dateRanges;
+    }
+
+    public void setDateRanges(Map<String, DateRange> dateRanges) {
+        this.dateRanges = dateRanges;
     }
 }

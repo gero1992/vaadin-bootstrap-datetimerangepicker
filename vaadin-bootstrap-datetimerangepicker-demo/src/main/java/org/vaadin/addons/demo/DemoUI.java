@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -57,9 +59,13 @@ public class DemoUI extends UI {
 
     private static final String DEFAULT_LANGUAGE = "en";
 
+    // DateLimit Constants
     private static final String DATE_LIMIT_SPAN_MOMENT = "days";
     private static final int DATE_LIMIT_SPAN_VALUE = 7;
 
+    // Range Constants
+    private static final String RANGE_LIMIT_TODAY = "Today";
+    private static final String RANGE_LIMIT_YESTERDAY = "Yesterday";
 
     // UI Components
 
@@ -105,16 +111,17 @@ public class DemoUI extends UI {
     private TextField textApplyClass;
     private TextField textCancelClass;
 
+    private CheckBox checkRanges;
     private CheckBox checkAlwaysShowCalendars;
     private CheckBox checkShowCustomRangeLabel;
-
-    private int row = 0;
 
     @Override
     protected void init(final VaadinRequest request) {
 
         // Initialize our new UI component
-        this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER);
+        boolean linkedCalendars = true;
+        boolean autoUpdateInput = true;
+        this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput);
 
         final BeanFieldGroup<SomeBean> fieldGroup = new BeanFieldGroup<>(SomeBean.class);
         fieldGroup.setBuffered(false);
@@ -192,7 +199,7 @@ public class DemoUI extends UI {
         this.checkTimePickerSeconds.setValue(false);
 
         // Checkbox dateRange
-        this.checkDateLimit = new CheckBox("dateLimit");
+        this.checkDateLimit = new CheckBox("dateLimit (with example date range span)");
         this.checkDateLimit.setValue(false);
 
         // Checkbox autoApply
@@ -201,11 +208,11 @@ public class DemoUI extends UI {
 
         // Checkbox linkedCalendars
         this.checkLinkedCalendars = new CheckBox("linkedCalendars");
-        this.checkLinkedCalendars.setValue(false);
+        this.checkLinkedCalendars.setValue(true);
 
         // Checkbox autoUpdateInput
         this.checkAutoUpdateInput = new CheckBox("autoUpdateInput");
-        this.checkAutoUpdateInput.setValue(false);
+        this.checkAutoUpdateInput.setValue(true);
 
         // Textfield buttonClasses
         this.textButtonClasses = new TextField("buttonClasses");
@@ -218,6 +225,10 @@ public class DemoUI extends UI {
         // Textfield cancelClass
         this.textCancelClass = new TextField("cancelClass");
         this.textCancelClass.setValue("btn-default");
+
+        // Checkbox checkRanges
+        this.checkRanges = new CheckBox("ranges (with example predefined ranges)");
+        this.checkRanges.setValue(false);
 
         // Checkbox alwaysShowCalendars
         this.checkAlwaysShowCalendars = new CheckBox("alwaysShowCalendars");
@@ -238,6 +249,14 @@ public class DemoUI extends UI {
                 DateTimeRangeField.DateLimit dateLimit = null;
                 if (DemoUI.this.checkDateLimit.getValue()) {
                     dateLimit = DemoUI.this.buildDateLimit(DemoUI.DATE_LIMIT_SPAN_MOMENT, DemoUI.DATE_LIMIT_SPAN_VALUE);
+                }
+                // Ranges
+                Map<String, DateTimeRangeField.Range> ranges = new Hashtable();
+                if (DemoUI.this.checkRanges.getValue()) {
+                    DateTimeRangeField.Range rangeToday = DemoUI.this.buildRange(DemoUI.this.startDate, DemoUI.this.endDate);
+                    ranges.put(DemoUI.RANGE_LIMIT_TODAY, rangeToday);
+                    DateTimeRangeField.Range rangeYesterday = DemoUI.this.buildRange(DemoUI.this.startDate, DemoUI.this.endDate);
+                    ranges.put(DemoUI.RANGE_LIMIT_YESTERDAY, rangeYesterday);
                 }
 
                 // Others
@@ -268,6 +287,7 @@ public class DemoUI extends UI {
                 .buttonClasses(DemoUI.this.textButtonClasses.getValue())
                 .applyClass(DemoUI.this.textApplyClass.getValue())
                 .cancelClass(DemoUI.this.textCancelClass.getValue())
+                .ranges(ranges)
                 .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
                 .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue())
                 .refresh();
@@ -330,21 +350,21 @@ public class DemoUI extends UI {
         grid.addComponent(this.textButtonClasses, 2, 0);
         grid.addComponent(this.textApplyClass, 2, 1);
         grid.addComponent(this.textCancelClass, 2, 2);
-        grid.addComponent(this.checkAlwaysShowCalendars, 2, 3);
-        grid.addComponent(this.checkShowCustomRangeLabel, 2, 4);
+        grid.addComponent(this.checkRanges, 2, 3);
+        grid.addComponent(this.checkAlwaysShowCalendars, 2, 4);
+        grid.addComponent(this.checkShowCustomRangeLabel, 2, 5);
 
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();
         layout.setStyleName("demoContentLayout");
         layout.setSizeFull();
         layout.addComponent(grid);
-        layout.setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
+        layout.setComponentAlignment(grid, Alignment.TOP_CENTER);
 
         setContent(layout);
     }
 
     /**
-     *
      * Builds dateLimit with given date range span.
      *
      * @param dateLimitSpanMoment
@@ -356,6 +376,16 @@ public class DemoUI extends UI {
         return dateLimit;
     }
 
-
-
+    /**
+     * Builds ranges with given range.
+     *
+     * @param label Label for the range
+     * @param from
+     * @param to
+     * @return {@link DateTimeRangeField.Range}
+     */
+    private DateTimeRangeField.Range buildRange(Date from, Date to) {
+        DateTimeRangeField.Range range = DemoUI.this.dateRangeField.new Range(from, to);
+        return range;
+    }
 }

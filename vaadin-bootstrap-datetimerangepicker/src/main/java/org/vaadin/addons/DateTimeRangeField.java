@@ -2,8 +2,12 @@ package org.vaadin.addons;
 
 import java.text.Format;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.vaadin.addons.client.DateRange;
 import org.vaadin.addons.client.DateTimeRangeFieldServerRpc;
 import org.vaadin.addons.client.DateTimeRangeFieldState;
 import org.vaadin.addons.type.DateTimeRange;
@@ -22,17 +26,61 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     private Format dateFormatter = null;
 
+    /**
+     * The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
+     */
+    public class DateLimit {
+        private String dateLimitSpanMoment; // moment object, i.e days, month
+        private int dateLimitSpanValue;
+
+        public DateLimit(final String dateLimitSpanMoment, final int dateLimitSpanValue) {
+            this.dateLimitSpanMoment = dateLimitSpanMoment;
+            this.dateLimitSpanValue = dateLimitSpanValue;
+        }
+
+        public String getDateLimitSpanMoment() {
+            return this.dateLimitSpanMoment;
+        }
+
+        public int getDateLimitSpanValue() {
+            return this.dateLimitSpanValue;
+        }
+    }
+
+    /**
+     * Set predefined date ranges the user can select from. Each key is the label for the range, and its value an array with two dates representing the bounds of the range
+     */
+    public class Range {
+        private Date from, to;
+
+        public Range(final Date from, final Date to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        public Date getFrom() {
+            return this.from;
+        }
+        public Date getTo() {
+            return this.to;
+        }
+    }
+
     // To process events from the client, we implement ServerRpc
     private final DateTimeRangeFieldServerRpc rpc = (from, to) -> setValue(new DateTimeRange(from, to));
 
-
-    public DateTimeRangeField(final Format dateFormatter) {
+    //
+    // Constructor
+    //
+    public DateTimeRangeField(final Format dateFormatter, boolean linkedCalendars, boolean autoUpdateInput) {
         // To receive events from the client, we register ServerRpc
         registerRpc(this.rpc);
 
         getState().setLanguage(UI.getCurrent()
                                .getLocale()
                                .getLanguage());
+        getState().setLinkedCalendars(linkedCalendars);
+        getState().setAutoUpdateInput(autoUpdateInput);
 
         this.dateFormatter = dateFormatter;
     }
@@ -60,27 +108,6 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return this;
     }
 
-    /*
-     * The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
-     */
-    public class DateLimit {
-        private String dateLimitSpanMoment; // moment object, i.e days, month
-        private int dateLimitSpanValue;
-
-        public DateLimit(final String dateLimitSpanMoment, final int dateLimitSpanValue) {
-            this.dateLimitSpanMoment = dateLimitSpanMoment;
-            this.dateLimitSpanValue = dateLimitSpanValue;
-        }
-
-        public String getDateLimitSpanMoment() {
-            return this.dateLimitSpanMoment;
-        }
-
-        public int getDateLimitSpanValue() {
-            return this.dateLimitSpanValue;
-        }
-    }
-
     public DateTimeRangeField dateLimit(DateLimit dateLimit) {
         if (dateLimit != null) {
             getState().setDateLimitSpanMoment(dateLimit.getDateLimitSpanMoment());
@@ -90,6 +117,20 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
             getState().setDateLimitSpanMoment(DateTimeRangeField.EMPTY_STRING);
             getState().setDateLimitSpanValue(0);
         }
+        return this;
+    }
+
+    public DateTimeRangeField ranges(Map<String, Range> ranges) {
+        Map<String, DateRange> dateRanges = new Hashtable<>();
+
+        for (Entry<String, Range> entry: ranges.entrySet()) {
+            String rangeLabel = entry.getKey();
+            String dateFromAsString = formatDateToString(entry.getValue().getFrom());
+            String dateToAsString = formatDateToString(entry.getValue().getTo());
+
+            dateRanges.put(rangeLabel, new DateRange(dateFromAsString, dateToAsString));
+        }
+        getState().setDateRanges(dateRanges);
         return this;
     }
 
@@ -199,8 +240,6 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         getState().setTimePickerIncrement(timePickerIncrement);
         return this;
     }
-
-    //
 
     public DateTimeRangeField timePickerSeconds(final boolean timePickerSeconds) {
         getState().setTimePickerSeconds(timePickerSeconds);
