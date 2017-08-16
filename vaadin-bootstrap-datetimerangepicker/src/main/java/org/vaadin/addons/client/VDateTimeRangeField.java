@@ -1,5 +1,6 @@
 package org.vaadin.addons.client;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.JsDate;
@@ -28,7 +29,7 @@ public class VDateTimeRangeField extends TextBoxBase {
 
         final int timePickerIncrement = 1;
         final String dateLimit = "{}";
-        final String ranges = "{}";
+        final String ranges = "";
         init(getElement(), "de", "body", VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING,
              VDateTimeRangeField.EMPTY_STRING, false, false, false, false, false, false, timePickerIncrement, false, dateLimit, false, false, false, "rights",
              "down", VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, ranges, false, false);
@@ -55,7 +56,6 @@ public class VDateTimeRangeField extends TextBoxBase {
                                           alert("init dateLimitAsString: " + dateLimit)
                                           alert("init dateLimitAsJSon: " + JSON.parse(dateLimit))
                                           alert("init rangesAsString: " + ranges)
-                                          alert("init rangesAsJSon: " + JSON.parse(ranges))
 
                                           configString = '{' +
                                           '"showDropdowns": ' + showDropdowns + ',' +
@@ -79,6 +79,7 @@ public class VDateTimeRangeField extends TextBoxBase {
                                           '"buttonClasses": "' + buttonClasses + '",' +
                                           '"applyClass": "' + applyClass + '",' +
                                           '"cancelClass": "' + cancelClass + '",' +
+                                          (typeof(ranges) === 'undefined' || ranges.length == 0 ? '' : '"ranges": ' + ranges + ',') +
                                           '"alwaysShowCalendars": ' + alwaysShowCalendars + ',' +
                                           '"showCustomRangeLabel": ' + showCustomRangeLabel +
                                           '}';
@@ -109,7 +110,7 @@ public class VDateTimeRangeField extends TextBoxBase {
             final boolean showISOWeekNumbers, final boolean singleDatePicker, final boolean timePicker, final boolean timePicker24Hour,
             final int timePickerIncrement, final boolean timePickerSeconds, final String dateLimitSpanMoment, final int dateLimitSpanValue,
             final boolean autoApply, final boolean linkedCalendars, final boolean autoUpdateInput, final String opens, final String drops,
-            final String buttonClasses, final String applyClass, final String cancelClass, final Map<String, DateRange> dateRanges, final boolean alwaysShowCalendars,
+            final String buttonClasses, final String applyClass, final String cancelClass, final Map<String, List<String>> dateRanges, final boolean alwaysShowCalendars,
             final boolean showCustomRangeLabels) {
 
         // DateLimit Processing
@@ -122,19 +123,26 @@ public class VDateTimeRangeField extends TextBoxBase {
         }
 
         // Ranges Processing
-        String ranges = "{}";
-        for (Map.Entry<String, DateRange> entry : dateRanges.entrySet()) {
-            ranges += new StringBuilder().append(" \"")
-                    .append(entry.getKey())
-                    .append("\": [\"")
-                    .append(entry.getValue().getFrom())
-                    .append("\", \"")
-                    .append(entry.getValue().getTo())
-                    .append("\"],")
-                    .toString();
+        String ranges = "";
+        if (dateRanges.size() > 0) {
+            int elementCount = 0;
+            ranges = "{";
+            for (Map.Entry<String, List<String>> entry : dateRanges.entrySet()) {
+                elementCount++;
+                ranges += new StringBuilder().append(" \"")
+                        .append(entry.getKey())
+                        .append("\": [\"")
+                        .append(entry.getValue().get(0))
+                        .append("\", \"")
+                        .append(entry.getValue().get(1))
+                        .append("\"]")
+                        .toString();
+                if (elementCount < dateRanges.size()) {
+                    ranges += ",";
+                }
+            }
+            ranges += "}";
         }
-        ranges += "}";
-
         init(getElement(), language, parentEl, startDate, endDate, minDate, maxDate, showDropdowns, showWeekNumbers, showISOWeekNumbers, singleDatePicker,
              timePicker, timePicker24Hour, timePickerIncrement, timePickerSeconds, dateLimit, autoApply, linkedCalendars, autoUpdateInput, opens, drops,
              buttonClasses, applyClass, cancelClass, ranges, alwaysShowCalendars, showCustomRangeLabels);

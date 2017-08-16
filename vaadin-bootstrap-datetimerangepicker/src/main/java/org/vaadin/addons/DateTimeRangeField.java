@@ -1,13 +1,14 @@
 package org.vaadin.addons;
 
 import java.text.Format;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.vaadin.addons.client.DateRange;
 import org.vaadin.addons.client.DateTimeRangeFieldServerRpc;
 import org.vaadin.addons.client.DateTimeRangeFieldState;
 import org.vaadin.addons.type.DateTimeRange;
@@ -121,14 +122,17 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     public DateTimeRangeField ranges(Map<String, Range> ranges) {
-        Map<String, DateRange> dateRanges = new Hashtable<>();
+        Map<String, List<String>> dateRanges = new HashMap<>();
 
         for (Entry<String, Range> entry: ranges.entrySet()) {
             String rangeLabel = entry.getKey();
             String dateFromAsString = formatDateToString(entry.getValue().getFrom());
             String dateToAsString = formatDateToString(entry.getValue().getTo());
 
-            dateRanges.put(rangeLabel, new DateRange(dateFromAsString, dateToAsString));
+            List<String> dateRange = new ArrayList<>();
+            dateRange.add(dateFromAsString);
+            dateRange.add(dateToAsString);
+            dateRanges.put(rangeLabel, dateRange);
         }
         getState().setDateRanges(dateRanges);
         return this;

@@ -1,6 +1,7 @@
 package org.vaadin.addons.client;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -59,7 +60,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private String dateLimitSpanMoment = DateTimeRangeFieldState.EMPTY_STRING;
     private int dateLimitSpanValue = 0;
 
-    private Map<String, DateRange> dateRanges = new Hashtable<>();
+    private Map<String, List<String>> dateRanges = new HashMap<String, List<String>>();
 
     private boolean toggleState = false;
 
@@ -301,11 +302,11 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         this.toggleState = !this.toggleState;
     }
 
-    public Map<String, DateRange> getDateRanges() {
+    public Map<String, List<String>> getDateRanges() {
         return this.dateRanges;
     }
 
-    public void setDateRanges(Map<String, DateRange> dateRanges) {
+    public void setDateRanges(Map<String, List<String>> dateRanges) {
         this.dateRanges = dateRanges;
     }
 }

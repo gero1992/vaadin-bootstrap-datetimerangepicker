@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -251,7 +251,7 @@ public class DemoUI extends UI {
                     dateLimit = DemoUI.this.buildDateLimit(DemoUI.DATE_LIMIT_SPAN_MOMENT, DemoUI.DATE_LIMIT_SPAN_VALUE);
                 }
                 // Ranges
-                Map<String, DateTimeRangeField.Range> ranges = new Hashtable();
+                Map<String, DateTimeRangeField.Range> ranges = new HashMap<>();
                 if (DemoUI.this.checkRanges.getValue()) {
                     DateTimeRangeField.Range rangeToday = DemoUI.this.buildRange(DemoUI.this.startDate, DemoUI.this.endDate);
                     ranges.put(DemoUI.RANGE_LIMIT_TODAY, rangeToday);
