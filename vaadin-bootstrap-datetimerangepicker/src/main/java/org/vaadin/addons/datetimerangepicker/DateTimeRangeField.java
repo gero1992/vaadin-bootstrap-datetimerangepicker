@@ -1,4 +1,4 @@
-package org.vaadin.addons;
+package org.vaadin.addons.datetimerangepicker;
 
 import java.text.Format;
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.vaadin.addons.client.DateTimeRangeFieldServerRpc;
-import org.vaadin.addons.client.DateTimeRangeFieldState;
-import org.vaadin.addons.type.DateTimeRange;
+import org.vaadin.addons.datetimerangepicker.client.DateTimeRangeFieldServerRpc;
+import org.vaadin.addons.datetimerangepicker.client.DateTimeRangeFieldState;
+import org.vaadin.addons.datetimerangepicker.type.DateTimeRange;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractField;

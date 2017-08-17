@@ -1,8 +1,8 @@
-package org.vaadin.addons.demo.model;
+package org.vaadin.addons.datetimerangepicker.demo.model;
 
 import java.io.Serializable;
 
-import org.vaadin.addons.type.DateTimeRange;
+import org.vaadin.addons.datetimerangepicker.type.DateTimeRange;
 
 public class SomeBean implements Serializable {
 

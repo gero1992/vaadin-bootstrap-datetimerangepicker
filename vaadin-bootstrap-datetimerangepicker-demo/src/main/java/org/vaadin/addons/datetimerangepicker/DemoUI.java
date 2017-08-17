@@ -1,4 +1,4 @@
-package org.vaadin.addons.demo;
+package org.vaadin.addons.datetimerangepicker;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -11,9 +11,8 @@ import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
 
-import org.vaadin.addons.DateTimeRangeField;
-import org.vaadin.addons.demo.model.SomeBean;
-import org.vaadin.addons.type.DateTimeRangeEnums;
+import org.vaadin.addons.datetimerangepicker.demo.model.SomeBean;
+import org.vaadin.addons.datetimerangepicker.type.DateTimeRangeEnums;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -38,7 +37,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @Theme("valo")
 @Title("MyComponent Add-on Demo")
-@Widgetset("org.vaadin.addons.demo.DemoWidgetSet")
+@Widgetset("org.vaadin.addons.datetimerangepicker.demo.DemoWidgetSet")
 @SuppressWarnings("serial")
 public class DemoUI extends UI {
 

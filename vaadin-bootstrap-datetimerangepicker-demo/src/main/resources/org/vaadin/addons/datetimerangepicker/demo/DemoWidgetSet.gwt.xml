@@ -24,5 +24,7 @@
 
     <inherits name="com.vaadin.DefaultWidgetSet" />
 
-    <inherits name="org.vaadin.addons.WidgetSet" />
+    
+
+    <inherits name="org.vaadin.addons.datetimerangepicker.WidgetSet" />
 </module>

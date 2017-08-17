@@ -1,4 +1,4 @@
-package org.vaadin.addons.type;
+package org.vaadin.addons.datetimerangepicker.type;
 
 import java.io.Serializable;
 import java.util.Date;

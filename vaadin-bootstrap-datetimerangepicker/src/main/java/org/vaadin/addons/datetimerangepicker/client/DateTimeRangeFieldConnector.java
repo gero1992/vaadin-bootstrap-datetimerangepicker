@@ -1,9 +1,9 @@
-package org.vaadin.addons.client;
+package org.vaadin.addons.datetimerangepicker.client;
 
 import java.util.Date;
 
-import org.vaadin.addons.DateTimeRangeField;
-import org.vaadin.addons.client.VDateTimeRangeField.DateRangeFieldClientUpdateValueHandler;
+import org.vaadin.addons.datetimerangepicker.DateTimeRangeField;
+import org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField.DateRangeFieldClientUpdateValueHandler;
 
 import com.google.gwt.core.client.JsDate;
 import com.google.gwt.user.client.Window;

@@ -1,4 +1,4 @@
-package org.vaadin.addons.type;
+package org.vaadin.addons.datetimerangepicker.type;
 
 public class DateTimeRangeEnums {
 

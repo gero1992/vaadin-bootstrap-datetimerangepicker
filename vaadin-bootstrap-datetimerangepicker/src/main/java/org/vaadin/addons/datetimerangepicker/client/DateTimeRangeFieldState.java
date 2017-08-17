@@ -1,4 +1,4 @@
-package org.vaadin.addons.client;
+package org.vaadin.addons.datetimerangepicker.client;
 
 import java.util.HashMap;
 import java.util.List;

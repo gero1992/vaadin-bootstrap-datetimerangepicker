@@ -1,4 +1,4 @@
-package org.vaadin.addons.client;
+package org.vaadin.addons.datetimerangepicker.client;
 
 import java.util.List;
 import java.util.Map;
@@ -86,7 +86,7 @@ public class VDateTimeRangeField extends TextBoxBase {
 
                                           $wnd.$(node).daterangepicker(JSON.parse(configString),
                                           function(start, end, label) {
-                                          _this.@org.vaadin.addons.client.VDateTimeRangeField::onUpdateValue(Lcom/google/gwt/core/client/JsDate;Lcom/google/gwt/core/client/JsDate;)(start.toDate(),end.toDate());
+                                          _this.@org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField::onUpdateValue(Lcom/google/gwt/core/client/JsDate;Lcom/google/gwt/core/client/JsDate;)(start.toDate(),end.toDate());
                                           });
 
                                           $wnd.$(node).on('apply.daterangepicker', function(ev, picker) {
