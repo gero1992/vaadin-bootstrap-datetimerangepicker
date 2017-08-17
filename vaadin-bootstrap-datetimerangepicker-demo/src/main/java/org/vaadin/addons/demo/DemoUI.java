@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 
 import org.vaadin.addons.DateTimeRangeField;
 import org.vaadin.addons.demo.model.SomeBean;
+import org.vaadin.addons.type.DateTimeRangeEnums;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -126,7 +127,7 @@ public class DemoUI extends UI {
         // Initialize our new UI component
         boolean linkedCalendars = true;
         boolean autoUpdateInput = true;
-        this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput);
+        this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput).startDate(this.startDate).endDate(this.endDate).language(DemoUI.DEFAULT_LANGUAGE);
 
         final BeanFieldGroup<SomeBean> fieldGroup = new BeanFieldGroup<>(SomeBean.class);
         fieldGroup.setBuffered(false);
@@ -158,11 +159,9 @@ public class DemoUI extends UI {
                 .maxDate(DemoUI.this.maxDateField.getValue())
                 .applyLabel(DemoUI.APPLY_LABEL)
                 .canelLabel(DemoUI.CANCEL_LABEL)
-                .opens(DemoUI.this.comboOpens.getValue()
-                       .toString())
+                .opens(DemoUI.this.comboOpens.getValue().toString())
                 .language(DemoUI.DEFAULT_LANGUAGE)
-                .drops(DemoUI.this.comboDrops.getValue()
-                       .toString())
+                .drops(DemoUI.this.comboDrops.getValue().toString())
                 .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
                 .showWeekNumbers(DemoUI.this.checkShowWeekNumbers.getValue())
                 .showISOWeekNumbers(DemoUI.this.checkShowISOWeekNumbers.getValue())
@@ -212,21 +211,16 @@ public class DemoUI extends UI {
 
         // Combobox opens
         this.comboOpens = new ComboBox("opens");
-        final java.util.List<Object> opensList = java.util.Arrays.asList("right", "left", "center");
-        this.comboOpens.addItem(opensList.get(0));
-        this.comboOpens.addItem(opensList.get(1));
-        this.comboOpens.addItem(opensList.get(2));
+        this.comboOpens.addItems(DateTimeRangeEnums.OPENS.values());
         this.comboOpens.setNullSelectionAllowed(false);
-        this.comboOpens.setValue(opensList.get(0));
+        this.comboOpens.setValue(DateTimeRangeEnums.OPENS.RIGHT);
         this.comboOpens.addValueChangeListener(valueChangeListener);
 
         // Combobox drops
-        final java.util.List<Object> dropsList = java.util.Arrays.asList("down", "up");
         this.comboDrops = new ComboBox("drops");
-        this.comboDrops.addItem(dropsList.get(0));
-        this.comboDrops.addItem(dropsList.get(1));
+        this.comboDrops.addItems(DateTimeRangeEnums.DROPS.values());
         this.comboDrops.setNullSelectionAllowed(false);
-        this.comboDrops.setValue(dropsList.get(0));
+        this.comboDrops.setValue(DateTimeRangeEnums.DROPS.DOWN);
         this.comboDrops.addValueChangeListener(valueChangeListener);
 
         // Checkbox showDropdowns
@@ -369,6 +363,7 @@ public class DemoUI extends UI {
         HorizontalLayout settingsLayout = new HorizontalLayout();
         settingsLayout.setCaption("Settings");
         settingsLayout.setSpacing(true);
+        settingsLayout.setMargin(true);
         settingsLayout.addComponent(leftLayout);
         settingsLayout.addComponent(middleLayout);
         settingsLayout.addComponent(rightLayout);
@@ -376,6 +371,7 @@ public class DemoUI extends UI {
         VerticalLayout componentLayout = new VerticalLayout();
         componentLayout.setCaption("DateTimeRangeField");
         componentLayout.setSpacing(true);
+        componentLayout.setMargin(true);
         componentLayout.addComponent(this.dateRangeField);
         componentLayout.addComponent(button);
 
