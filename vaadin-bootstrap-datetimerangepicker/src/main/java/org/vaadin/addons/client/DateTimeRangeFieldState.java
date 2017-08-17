@@ -62,8 +62,6 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     private Map<String, List<String>> dateRanges = new HashMap<String, List<String>>();
 
-    private boolean toggleState = false;
-
     public String getLanguage() {
         return this.language;
     }
@@ -296,10 +294,6 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     public void setDateLimitSpanValue(int dateLimitSpanValue) {
         this.dateLimitSpanValue = dateLimitSpanValue;
-    }
-
-    public void toggleState() {
-        this.toggleState = !this.toggleState;
     }
 
     public Map<String, List<String>> getDateRanges() {

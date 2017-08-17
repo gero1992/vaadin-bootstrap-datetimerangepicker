@@ -265,11 +265,6 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return this;
     }
 
-    public DateTimeRangeField refresh() {
-        getState().toggleState();
-        return this;
-    }
-
     public Format getDateFormatter() {
         return this.dateFormatter;
     }

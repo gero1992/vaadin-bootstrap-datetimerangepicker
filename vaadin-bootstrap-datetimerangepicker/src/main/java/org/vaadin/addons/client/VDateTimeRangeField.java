@@ -28,11 +28,8 @@ public class VDateTimeRangeField extends TextBoxBase {
         setStyleName("vaadin-bootstrap-datetimerangepicker");
 
         final int timePickerIncrement = 1;
-        final String dateLimit = "{}";
+        final String dateLimit = "";
         final String ranges = "";
-        init(getElement(), "de", "body", VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING,
-             VDateTimeRangeField.EMPTY_STRING, false, false, false, false, false, false, timePickerIncrement, false, dateLimit, false, false, false, "rights",
-             "down", VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, VDateTimeRangeField.EMPTY_STRING, ranges, false, false);
     }
 
     public void setUpdateValueHandler(final DateRangeFieldClientUpdateValueHandler updateValueHandler) {
@@ -46,16 +43,15 @@ public class VDateTimeRangeField extends TextBoxBase {
             boolean showCustomRangeLabel) /*-{
                                           var _this = this;
 
-                                          alert("init language: " + language)
+                                          console.log("init language: " + language)
 
                                           $wnd.moment.locale(language);
 
-                                          alert("init autoApply: " + autoApply)
-                                          alert("init startDate: " + startDate)
-                                          alert("init endDate: " + endDate)
-                                          alert("init dateLimitAsString: " + dateLimit)
-                                          alert("init dateLimitAsJSon: " + JSON.parse(dateLimit))
-                                          alert("init rangesAsString: " + ranges)
+                                          console.log("init autoApply: " + autoApply)
+                                          console.log("init startDate: " + startDate)
+                                          console.log("init endDate: " + endDate)
+                                          console.log("init dateLimitAsString: " + dateLimit)
+                                          console.log("init rangesAsString: " + ranges)
 
                                           configString = '{' +
                                           '"showDropdowns": ' + showDropdowns + ',' +
@@ -66,6 +62,7 @@ public class VDateTimeRangeField extends TextBoxBase {
                                           '"timePicker24Hour": ' + timePicker24Hour + ',' +
                                           '"timePickerIncrement": ' + timePickerIncrement + ',' +
                                           '"timePickerSeconds": ' + timePickerSeconds + ',' +
+                                          (typeof(dateLimit) === 'undefined' || dateLimit.length == 0 ? '' : '"dateLimit": ' + dateLimit + ',') +
                                           '"autoApply": ' + autoApply + ',' +
                                           '"linkedCalendars": ' + linkedCalendars + ',' +
                                           '"autoUpdateInput": ' + autoUpdateInput + ',' +
@@ -114,11 +111,11 @@ public class VDateTimeRangeField extends TextBoxBase {
             final boolean showCustomRangeLabels) {
 
         // DateLimit Processing
-        String dateLimit = "{}";
+        String dateLimit = "";
         if (dateLimitSpanMoment != null && !dateLimitSpanMoment.equals(VDateTimeRangeField.EMPTY_STRING)) {
             dateLimit = new StringBuilder().append("{ \"")
-                    .append(dateLimitSpanMoment)
-                    .append("\": ).append(dateLimitSpanValue).append( }")
+                    .append(dateLimitSpanMoment).append("\": ")
+                    .append(dateLimitSpanValue).append(" }")
                     .toString();
         }
 

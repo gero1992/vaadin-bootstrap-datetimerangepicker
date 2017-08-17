@@ -70,7 +70,6 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
         // getWidget().setText(text);
         // if (stateChangeEvent.hasPropertyChanged("autoApply")) {
 
-        // if (stateChangeEvent.hasPropertyChanged("toggleState")) {
         getWidget().refresh(getState().getLanguage(), getState().getApplyLabel(), getState().getCancelLabel(), getState().getParentEl(), getState().getStartDate(),
                             getState().getEndDate(), getState().getMinDate(), getState().getMaxDate(), getState().isShowDropdowns(),
                             getState().isShowWeekNumbers(), getState().isShowISOWeekNumbers(), getState().isSingleDatePicker(), getState().isTimePicker(),

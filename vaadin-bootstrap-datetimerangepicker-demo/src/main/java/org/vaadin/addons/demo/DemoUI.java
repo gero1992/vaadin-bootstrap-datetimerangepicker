@@ -18,17 +18,18 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
-import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -77,13 +78,19 @@ public class DemoUI extends UI {
     private DateField minDateField;
     private DateField maxDateField;
 
-    private final Date startDate = Date.from(LocalDate.now()
+    private final Date startDate = Date.from(LocalDate.now().minusDays(6)
                                              .atStartOfDay(ZoneId.systemDefault())
                                              .toInstant());
 
     private final Date endDate = Date.from(LocalDate.now()
                                            .atStartOfDay(ZoneId.systemDefault())
                                            .toInstant());
+
+    private final Date yesterday = Date.from(LocalDate.now()
+                                             .minusDays(1)
+                                             .atStartOfDay(ZoneId.systemDefault())
+                                             .toInstant());
+
 
     private ComboBox comboOpens;
     private ComboBox comboDrops;
@@ -104,8 +111,6 @@ public class DemoUI extends UI {
     private CheckBox checkAutoApply;
     private CheckBox checkLinkedCalendars;
     private CheckBox checkAutoUpdateInput;
-
-    private Button btnRefreshUI;
 
     private TextField textButtonClasses;
     private TextField textApplyClass;
@@ -128,124 +133,10 @@ public class DemoUI extends UI {
         fieldGroup.setItemDataSource(new SomeBean());
         fieldGroup.bind(this.dateRangeField, "dateRange");
 
-        // ParentEl
-
-        this.textParentEl = new TextField("parentEl");
-
-        // StartDate
-        this.startDateField = new DateField("startDate");
-        this.startDateField.setLocale(DemoUI.LOCALE);
-        this.startDateField.setValue(this.startDate);
-
-        // EndDate
-        this.endDateField = new DateField("endDate");
-        this.endDateField.setLocale(DemoUI.LOCALE);
-        this.endDateField.setValue(this.endDate);
-
-        // MinDate
-        this.minDateField = new DateField("minDate");
-        this.minDateField.setLocale(DemoUI.LOCALE);
-
-        // MaxDate
-        this.maxDateField = new DateField("maxDate");
-        this.maxDateField.setLocale(DemoUI.LOCALE);
-
-        // Combobox opens
-        this.comboOpens = new ComboBox("opens");
-        final java.util.List<Object> opensList = java.util.Arrays.asList("right", "left", "center");
-        this.comboOpens.addItem(opensList.get(0));
-        this.comboOpens.addItem(opensList.get(1));
-        this.comboOpens.addItem(opensList.get(2));
-        this.comboOpens.setNullSelectionAllowed(false);
-        this.comboOpens.setValue(opensList.get(0));
-
-        // Combobox drops
-        final java.util.List<Object> dropsList = java.util.Arrays.asList("down", "up");
-        this.comboDrops = new ComboBox("drops");
-        this.comboDrops.addItem(dropsList.get(0));
-        this.comboDrops.addItem(dropsList.get(1));
-        this.comboDrops.setNullSelectionAllowed(false);
-        this.comboDrops.setValue(dropsList.get(0));
-
-        // Checkbox showDropdowns
-        this.checkShowDropDowns = new CheckBox("showDropdowns");
-        this.checkShowDropDowns.setValue(false);
-
-        // Checkbox showWeekNumbers
-        this.checkShowWeekNumbers = new CheckBox("showWeekNumbers");
-        this.checkShowWeekNumbers.setValue(false);
-
-        // Checkbox showISOWeekNumbers
-        this.checkShowISOWeekNumbers = new CheckBox("showISOWeekNumbers");
-        this.checkShowISOWeekNumbers.setValue(false);
-
-        // Checkbox singleDatePicker
-        this.checkSingleDatePicker = new CheckBox("singleDatePicker");
-        this.checkSingleDatePicker.setValue(false);
-
-        // Checkbox timePicker
-        this.checkTimePicker = new CheckBox("timePicker");
-        this.checkTimePicker.setValue(false);
-
-        // Checkbox timePicker24Hour
-        this.checkTimePicker24Hour = new CheckBox("timePicker24Hour");
-        this.checkTimePicker24Hour.setValue(false);
-
-        this.textTimePickerIncrement = new TextField("timePickerIncrement (in minutes)");
-        this.textTimePickerIncrement.setValue(String.valueOf(1));
-
-        // Checkbox timePickerSeconds
-        this.checkTimePickerSeconds = new CheckBox("timePickerSeconds");
-        this.checkTimePickerSeconds.setValue(false);
-
-        // Checkbox dateRange
-        this.checkDateLimit = new CheckBox("dateLimit (with example date range span)");
-        this.checkDateLimit.setValue(false);
-
-        // Checkbox autoApply
-        this.checkAutoApply = new CheckBox("autoApply");
-        this.checkAutoApply.setValue(false);
-
-        // Checkbox linkedCalendars
-        this.checkLinkedCalendars = new CheckBox("linkedCalendars");
-        this.checkLinkedCalendars.setValue(true);
-
-        // Checkbox autoUpdateInput
-        this.checkAutoUpdateInput = new CheckBox("autoUpdateInput");
-        this.checkAutoUpdateInput.setValue(true);
-
-        // Textfield buttonClasses
-        this.textButtonClasses = new TextField("buttonClasses");
-        this.textButtonClasses.setValue("btn btn-sm");
-
-        // Textfield applyClass
-        this.textApplyClass = new TextField("applyClass");
-        this.textApplyClass.setValue("btn-success");
-
-        // Textfield cancelClass
-        this.textCancelClass = new TextField("cancelClass");
-        this.textCancelClass.setValue("btn-default");
-
-        // Checkbox checkRanges
-        this.checkRanges = new CheckBox("ranges (with example predefined ranges)");
-        this.checkRanges.setValue(false);
-
-        // Checkbox alwaysShowCalendars
-        this.checkAlwaysShowCalendars = new CheckBox("alwaysShowCalendars");
-        this.checkAlwaysShowCalendars.setValue(false);
-
-        // Checkbox showCustomRangeLabel
-        this.checkShowCustomRangeLabel = new CheckBox("showCustomRangeLabel");
-        this.checkShowCustomRangeLabel.setValue(false);
-
-        // Button buildUI
-
-        this.btnRefreshUI = new Button("refreshUI");
-        this.btnRefreshUI.addClickListener(new ClickListener() {
+        ValueChangeListener valueChangeListener = new ValueChangeListener() {
 
             @Override
-            public void buttonClick(final ClickEvent event) {
-                // DateLimit
+            public void valueChange(ValueChangeEvent event) {
                 DateTimeRangeField.DateLimit dateLimit = null;
                 if (DemoUI.this.checkDateLimit.getValue()) {
                     dateLimit = DemoUI.this.buildDateLimit(DemoUI.DATE_LIMIT_SPAN_MOMENT, DemoUI.DATE_LIMIT_SPAN_VALUE);
@@ -253,9 +144,9 @@ public class DemoUI extends UI {
                 // Ranges
                 Map<String, DateTimeRangeField.Range> ranges = new HashMap<>();
                 if (DemoUI.this.checkRanges.getValue()) {
-                    DateTimeRangeField.Range rangeToday = DemoUI.this.buildRange(DemoUI.this.startDate, DemoUI.this.endDate);
+                    DateTimeRangeField.Range rangeToday = DemoUI.this.buildRange(DemoUI.this.startDate, DemoUI.this.startDate);
                     ranges.put(DemoUI.RANGE_LIMIT_TODAY, rangeToday);
-                    DateTimeRangeField.Range rangeYesterday = DemoUI.this.buildRange(DemoUI.this.startDate, DemoUI.this.endDate);
+                    DateTimeRangeField.Range rangeYesterday = DemoUI.this.buildRange(DemoUI.this.yesterday, DemoUI.this.yesterday);
                     ranges.put(DemoUI.RANGE_LIMIT_YESTERDAY, rangeYesterday);
                 }
 
@@ -289,14 +180,147 @@ public class DemoUI extends UI {
                 .cancelClass(DemoUI.this.textCancelClass.getValue())
                 .ranges(ranges)
                 .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
-                .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue())
-                .refresh();
+                .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
             }
-        });
+        };
+
+        // ParentEl
+        this.textParentEl = new TextField("parentEl");
+        this.textParentEl.addValueChangeListener(valueChangeListener);
+
+        // StartDate
+        this.startDateField = new DateField("startDate");
+        this.startDateField.setLocale(DemoUI.LOCALE);
+        this.startDateField.setValue(this.startDate);
+        this.startDateField.addValueChangeListener(valueChangeListener);
+
+        // EndDate
+        this.endDateField = new DateField("endDate");
+        this.endDateField.setLocale(DemoUI.LOCALE);
+        this.endDateField.setValue(this.endDate);
+        this.endDateField.addValueChangeListener(valueChangeListener);
+
+        // MinDate
+        this.minDateField = new DateField("minDate");
+        this.minDateField.setLocale(DemoUI.LOCALE);
+        this.minDateField.addValueChangeListener(valueChangeListener);
+
+        // MaxDate
+        this.maxDateField = new DateField("maxDate");
+        this.maxDateField.setLocale(DemoUI.LOCALE);
+        this.maxDateField.addValueChangeListener(valueChangeListener);
+
+        // Combobox opens
+        this.comboOpens = new ComboBox("opens");
+        final java.util.List<Object> opensList = java.util.Arrays.asList("right", "left", "center");
+        this.comboOpens.addItem(opensList.get(0));
+        this.comboOpens.addItem(opensList.get(1));
+        this.comboOpens.addItem(opensList.get(2));
+        this.comboOpens.setNullSelectionAllowed(false);
+        this.comboOpens.setValue(opensList.get(0));
+        this.comboOpens.addValueChangeListener(valueChangeListener);
+
+        // Combobox drops
+        final java.util.List<Object> dropsList = java.util.Arrays.asList("down", "up");
+        this.comboDrops = new ComboBox("drops");
+        this.comboDrops.addItem(dropsList.get(0));
+        this.comboDrops.addItem(dropsList.get(1));
+        this.comboDrops.setNullSelectionAllowed(false);
+        this.comboDrops.setValue(dropsList.get(0));
+        this.comboDrops.addValueChangeListener(valueChangeListener);
+
+        // Checkbox showDropdowns
+        this.checkShowDropDowns = new CheckBox("showDropdowns");
+        this.checkShowDropDowns.setValue(false);
+        this.checkShowDropDowns.addValueChangeListener(valueChangeListener);
+
+        // Checkbox showWeekNumbers
+        this.checkShowWeekNumbers = new CheckBox("showWeekNumbers");
+        this.checkShowWeekNumbers.setValue(false);
+        this.checkShowWeekNumbers.addValueChangeListener(valueChangeListener);
+
+        // Checkbox showISOWeekNumbers
+        this.checkShowISOWeekNumbers = new CheckBox("showISOWeekNumbers");
+        this.checkShowISOWeekNumbers.setValue(false);
+        this.checkShowISOWeekNumbers.addValueChangeListener(valueChangeListener);
+
+        // Checkbox singleDatePicker
+        this.checkSingleDatePicker = new CheckBox("singleDatePicker");
+        this.checkSingleDatePicker.setValue(false);
+        this.checkSingleDatePicker.addValueChangeListener(valueChangeListener);
+
+        // Checkbox timePicker
+        this.checkTimePicker = new CheckBox("timePicker");
+        this.checkTimePicker.setValue(false);
+        this.checkTimePicker.addValueChangeListener(valueChangeListener);
+
+        // Checkbox timePicker24Hour
+        this.checkTimePicker24Hour = new CheckBox("timePicker24Hour");
+        this.checkTimePicker24Hour.setValue(false);
+        this.checkTimePicker24Hour.addValueChangeListener(valueChangeListener);
+
+        this.textTimePickerIncrement = new TextField("timePickerIncrement (in minutes)");
+        this.textTimePickerIncrement.setValue(String.valueOf(1));
+        this.textTimePickerIncrement.addValueChangeListener(valueChangeListener);
+
+        // Checkbox timePickerSeconds
+        this.checkTimePickerSeconds = new CheckBox("timePickerSeconds");
+        this.checkTimePickerSeconds.setValue(false);
+        this.checkTimePickerSeconds.addValueChangeListener(valueChangeListener);
+
+        // Checkbox dateRange
+        this.checkDateLimit = new CheckBox("dateLimit (with example date range span)");
+        this.checkDateLimit.setValue(false);
+        this.checkDateLimit.addValueChangeListener(valueChangeListener);
+
+        // Checkbox autoApply
+        this.checkAutoApply = new CheckBox("autoApply");
+        this.checkAutoApply.setValue(false);
+        this.checkAutoApply.addValueChangeListener(valueChangeListener);
+
+        // Checkbox linkedCalendars
+        this.checkLinkedCalendars = new CheckBox("linkedCalendars");
+        this.checkLinkedCalendars.setValue(true);
+        this.checkLinkedCalendars.addValueChangeListener(valueChangeListener);
+
+        // Checkbox autoUpdateInput
+        this.checkAutoUpdateInput = new CheckBox("autoUpdateInput");
+        this.checkAutoUpdateInput.setValue(true);
+        this.checkAutoUpdateInput.addValueChangeListener(valueChangeListener);
+
+        // Textfield buttonClasses
+        this.textButtonClasses = new TextField("buttonClasses");
+        this.textButtonClasses.setValue("btn btn-sm");
+        this.textButtonClasses.addValueChangeListener(valueChangeListener);
+
+        // Textfield applyClass
+        this.textApplyClass = new TextField("applyClass");
+        this.textApplyClass.setValue("btn-success");
+        this.textApplyClass.addValueChangeListener(valueChangeListener);
+
+        // Textfield cancelClass
+        this.textCancelClass = new TextField("cancelClass");
+        this.textCancelClass.setValue("btn-default");
+        this.textCancelClass.addValueChangeListener(valueChangeListener);
+
+        // Checkbox checkRanges
+        this.checkRanges = new CheckBox("ranges (with example predefined ranges)");
+        this.checkRanges.setValue(false);
+        this.checkRanges.addValueChangeListener(valueChangeListener);
+
+        // Checkbox alwaysShowCalendars
+        this.checkAlwaysShowCalendars = new CheckBox("alwaysShowCalendars");
+        this.checkAlwaysShowCalendars.setValue(false);
+        this.checkAlwaysShowCalendars.addValueChangeListener(valueChangeListener);
+
+        // Checkbox showCustomRangeLabel
+        this.checkShowCustomRangeLabel = new CheckBox("showCustomRangeLabel");
+        this.checkShowCustomRangeLabel.setValue(false);
+        this.checkShowCustomRangeLabel.addValueChangeListener(valueChangeListener);
 
         // Button show
 
-        final Button button = new Button("show");
+        final Button button = new Button("Show value");
         button.addClickListener(new ClickListener() {
 
             @Override
@@ -308,60 +332,63 @@ public class DemoUI extends UI {
             }
         });
 
-        final VerticalLayout elementsLayout = new VerticalLayout();
-        elementsLayout.setSpacing(true);
+        VerticalLayout leftLayout = new VerticalLayout();
+        leftLayout.setSpacing(true);
+        leftLayout.addComponent(this.textParentEl);
+        leftLayout.addComponent(this.startDateField);
+        leftLayout.addComponent(this.endDateField);
+        leftLayout.addComponent(this.minDateField);
+        leftLayout.addComponent(this.maxDateField);
+        leftLayout.addComponent(this.comboOpens);
+        leftLayout.addComponent(this.comboDrops);
 
-        final GridLayout grid = new GridLayout(3, 15);
+        VerticalLayout middleLayout = new VerticalLayout();
+        middleLayout.setSpacing(true);
+        middleLayout.addComponent(this.checkShowDropDowns);
+        middleLayout.addComponent(this.checkShowWeekNumbers);
+        middleLayout.addComponent(this.checkShowISOWeekNumbers);
+        middleLayout.addComponent(this.checkSingleDatePicker);
+        middleLayout.addComponent(this.checkTimePicker);
+        middleLayout.addComponent(this.checkTimePicker24Hour);
+        middleLayout.addComponent(this.textTimePickerIncrement);
+        middleLayout.addComponent(this.checkTimePickerSeconds);
+        middleLayout.addComponent(this.checkDateLimit);
+        middleLayout.addComponent(this.checkAutoApply);
+        middleLayout.addComponent(this.checkLinkedCalendars);
+        middleLayout.addComponent(this.checkAutoUpdateInput);
 
-        // Column Left
+        VerticalLayout rightLayout = new VerticalLayout();
+        rightLayout.setSpacing(true);
+        rightLayout.addComponent(this.textButtonClasses);
+        rightLayout.addComponent(this.textApplyClass);
+        rightLayout.addComponent(this.textCancelClass);
+        rightLayout.addComponent(this.checkRanges);
+        rightLayout.addComponent(this.checkAlwaysShowCalendars);
+        rightLayout.addComponent(this.checkShowCustomRangeLabel);
 
-        grid.addComponent(this.textParentEl, 0, 0);
-        grid.addComponent(this.startDateField, 0, 1);
-        grid.addComponent(this.endDateField, 0, 2);
-        grid.addComponent(this.minDateField, 0, 3);
-        grid.addComponent(this.maxDateField, 0, 4);
-        grid.addComponent(this.comboOpens, 0, 5);
-        grid.addComponent(this.comboDrops, 0, 6);
+        HorizontalLayout settingsLayout = new HorizontalLayout();
+        settingsLayout.setCaption("Settings");
+        settingsLayout.setSpacing(true);
+        settingsLayout.addComponent(leftLayout);
+        settingsLayout.addComponent(middleLayout);
+        settingsLayout.addComponent(rightLayout);
 
-        // Column Middle
+        VerticalLayout componentLayout = new VerticalLayout();
+        componentLayout.setCaption("DateTimeRangeField");
+        componentLayout.setSpacing(true);
+        componentLayout.addComponent(this.dateRangeField);
+        componentLayout.addComponent(button);
 
-        grid.addComponent(this.checkShowDropDowns, 1, 0);
-        grid.addComponent(this.checkShowWeekNumbers, 1, 1);
-        grid.addComponent(this.checkShowISOWeekNumbers, 1, 2);
-        grid.addComponent(this.checkSingleDatePicker, 1, 3);
-        grid.addComponent(this.checkTimePicker, 1, 4);
-        grid.addComponent(this.checkTimePicker24Hour, 1, 5);
-        grid.addComponent(this.textTimePickerIncrement, 1, 6);
-        grid.addComponent(this.checkTimePickerSeconds, 1, 7);
-        grid.addComponent(this.checkDateLimit, 1, 8);
-        grid.addComponent(this.checkAutoApply, 1, 9);
-        grid.addComponent(this.checkLinkedCalendars, 1, 10);
-        grid.addComponent(this.checkAutoUpdateInput, 1, 11);
-        grid.addComponent(this.btnRefreshUI, 1, 12);
+        VerticalLayout mainLayout = new VerticalLayout();
+        mainLayout.setStyleName("demoContentLayout");
+        mainLayout.setSizeFull();
+        mainLayout.setMargin(true);
+        mainLayout.addComponent(componentLayout);
+        mainLayout.addComponent(settingsLayout);
+        mainLayout.setExpandRatio(componentLayout, 0.2f);
+        mainLayout.setExpandRatio(settingsLayout, 0.8f);
 
-        //
-        // DateRangeField
-        //
-        grid.addComponent(this.dateRangeField, 1, 13);
-        grid.addComponent(button, 1, 14);
-
-        // Column Right
-
-        grid.addComponent(this.textButtonClasses, 2, 0);
-        grid.addComponent(this.textApplyClass, 2, 1);
-        grid.addComponent(this.textCancelClass, 2, 2);
-        grid.addComponent(this.checkRanges, 2, 3);
-        grid.addComponent(this.checkAlwaysShowCalendars, 2, 4);
-        grid.addComponent(this.checkShowCustomRangeLabel, 2, 5);
-
-        // Show it in the middle of the screen
-        final VerticalLayout layout = new VerticalLayout();
-        layout.setStyleName("demoContentLayout");
-        layout.setSizeFull();
-        layout.addComponent(grid);
-        layout.setComponentAlignment(grid, Alignment.TOP_CENTER);
-
-        setContent(layout);
+        setContent(mainLayout);
     }
 
     /**
