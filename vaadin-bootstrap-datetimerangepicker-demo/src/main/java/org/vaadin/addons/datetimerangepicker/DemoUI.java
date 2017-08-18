@@ -86,6 +86,10 @@ public class DemoUI extends UI {
                                            .atStartOfDay(ZoneId.systemDefault())
                                            .toInstant());
 
+    private final Date today = Date.from(LocalDate.now()
+                                         .atStartOfDay(ZoneId.systemDefault())
+                                         .toInstant());
+
     private final Date yesterday = Date.from(LocalDate.now()
                                              .minusDays(1)
                                              .atStartOfDay(ZoneId.systemDefault())
@@ -144,7 +148,7 @@ public class DemoUI extends UI {
                 // Ranges
                 Map<String, DateTimeRangeField.Range> ranges = new HashMap<>();
                 if (DemoUI.this.checkRanges.getValue()) {
-                    DateTimeRangeField.Range rangeToday = DemoUI.this.buildRange(DemoUI.this.startDate, DemoUI.this.startDate);
+                    DateTimeRangeField.Range rangeToday = DemoUI.this.buildRange(DemoUI.this.today, DemoUI.this.today);
                     ranges.put(DemoUI.RANGE_LIMIT_TODAY, rangeToday);
                     DateTimeRangeField.Range rangeYesterday = DemoUI.this.buildRange(DemoUI.this.yesterday, DemoUI.this.yesterday);
                     ranges.put(DemoUI.RANGE_LIMIT_YESTERDAY, rangeYesterday);
