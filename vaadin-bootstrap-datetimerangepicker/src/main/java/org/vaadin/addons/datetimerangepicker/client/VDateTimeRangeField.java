@@ -16,20 +16,25 @@ public class VDateTimeRangeField extends TextBoxBase {
 
     private DateRangeFieldClientUpdateValueHandler updateValueHandler;
 
+    private final com.google.gwt.user.client.Element inputText;
+
     /*
      * Constructor. Ensures that needed html templates are added and injects a <database-visualizer> element to the page.
      */
     public VDateTimeRangeField() {
-        this(DOM.createInputText());
+        this(DOM.createDiv());
     }
 
     protected VDateTimeRangeField(final Element node) {
         super(node);
-        setStyleName("vaadin-bootstrap-datetimerangepicker");
+        this.inputText = DOM.createInputText();
+        this.inputText.addClassName("v-textfield");
+        getElement().appendChild(this.inputText);
+        com.google.gwt.user.client.Element i = DOM.createElement("i");
+        i.addClassName("glyphicon glyphicon-calendar fa fa-calendar");
+        getElement().appendChild(i);
 
-        final int timePickerIncrement = 1;
-        final String dateLimit = "";
-        final String ranges = "";
+        setStylePrimaryName("bp-datetimerangepicker");
     }
 
     public void setUpdateValueHandler(final DateRangeFieldClientUpdateValueHandler updateValueHandler) {
@@ -140,7 +145,7 @@ public class VDateTimeRangeField extends TextBoxBase {
             }
             ranges += "}";
         }
-        init(getElement(), language, parentEl, startDate, endDate, minDate, maxDate, showDropdowns, showWeekNumbers, showISOWeekNumbers, singleDatePicker,
+        init(this.inputText, language, parentEl, startDate, endDate, minDate, maxDate, showDropdowns, showWeekNumbers, showISOWeekNumbers, singleDatePicker,
              timePicker, timePicker24Hour, timePickerIncrement, timePickerSeconds, dateLimit, autoApply, linkedCalendars, autoUpdateInput, opens, drops,
              buttonClasses, applyClass, cancelClass, ranges, alwaysShowCalendars, showCustomRangeLabels);
     }

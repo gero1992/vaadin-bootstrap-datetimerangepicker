@@ -6,6 +6,7 @@
 	<inherits name="com.vaadin.DefaultWidgetSet" /> 
 
 	<!-- Widget styles in public -directory -->
+	<stylesheet src="vaadin-bootstrap-datetimerangepicker/daterangepicker.css"/>
 	<stylesheet src="vaadin-bootstrap-datetimerangepicker/styles.css"/>
 	<stylesheet src="vaadin-bootstrap-datetimerangepicker/datetimerangepicker-bootstrap.css"/>
 
