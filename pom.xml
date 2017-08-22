@@ -16,7 +16,7 @@
 		<module>vaadin-bootstrap-datetimerangepicker</module>
 		<module>vaadin-bootstrap-datetimerangepicker-demo</module>
 	</modules>
-
+	
 	<profiles>
 		<profile>
 			<!-- Vaadin pre-release repositories -->

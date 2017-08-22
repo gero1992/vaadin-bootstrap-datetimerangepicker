@@ -11,7 +11,7 @@ import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
 
-import org.vaadin.addons.datetimerangepicker.demo.model.SomeBean;
+import org.vaadin.addons.datetimerangepicker.demo.model.DateTimeRangeBean;
 import org.vaadin.addons.datetimerangepicker.type.DateTimeRangeEnums;
 
 import com.vaadin.annotations.Theme;
@@ -132,9 +132,9 @@ public class DemoUI extends UI {
         boolean autoUpdateInput = true;
         this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput).startDate(this.startDate).endDate(this.endDate).language(DemoUI.DEFAULT_LANGUAGE);
 
-        final BeanFieldGroup<SomeBean> fieldGroup = new BeanFieldGroup<>(SomeBean.class);
+        final BeanFieldGroup<DateTimeRangeBean> fieldGroup = new BeanFieldGroup<>(DateTimeRangeBean.class);
         fieldGroup.setBuffered(false);
-        fieldGroup.setItemDataSource(new SomeBean());
+        fieldGroup.setItemDataSource(new DateTimeRangeBean());
         fieldGroup.bind(this.dateRangeField, "dateRange");
 
         ValueChangeListener valueChangeListener = new ValueChangeListener() {

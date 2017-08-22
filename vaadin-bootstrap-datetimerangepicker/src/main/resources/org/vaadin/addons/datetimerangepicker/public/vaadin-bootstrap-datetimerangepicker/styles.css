@@ -6,6 +6,7 @@
 
 .bp-datetimerangepicker .glyphicon-calendar {
 	margin-left: -27px;	
+	pointer-events: none;
 }
 
 .prev .glyphicon-chevron-left:before {
@@ -21,4 +22,9 @@
 .bp-datetimerangepicker .v-textfield {
     padding-right: 35px;
     width: 240px;
+}
+
+.daterangepicker .calendar-time .fa-clock-o:before {
+	content: "\f017";	
+    font-family: ThemeIcons;
 }

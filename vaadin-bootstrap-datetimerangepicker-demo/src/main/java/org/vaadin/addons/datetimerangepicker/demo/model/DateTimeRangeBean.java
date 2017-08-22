@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.vaadin.addons.datetimerangepicker.type.DateTimeRange;
 
-public class SomeBean implements Serializable {
+public class DateTimeRangeBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
