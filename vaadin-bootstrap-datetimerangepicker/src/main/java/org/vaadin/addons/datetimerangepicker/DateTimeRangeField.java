@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import org.vaadin.addons.datetimerangepicker.client.DateTimeRangeFieldServerRpc;
 import org.vaadin.addons.datetimerangepicker.client.DateTimeRangeFieldState;
 import org.vaadin.addons.datetimerangepicker.type.DateTimeRange;
+import org.vaadin.addons.datetimerangepicker.type.DateTimeRangeEnums;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractField;
@@ -79,7 +80,8 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
      * @param linkedCalendars When enabled, the two calendars displayed will always be for two sequential months (i.e. January and February), and both will be
      *            advanced when clicking the left or right arrows above the calendars. When disabled, the two calendars can be individually advanced and display
      *            any month/year.
-     * @param autoUpdateInput Indicates whether the date range picker should automatically update the value of an <input> element it's attached to at initialization and when the selected dates change.
+     * @param autoUpdateInput Indicates whether the date range picker should automatically update the value of an input element it's attached to at
+     *            initialization and when the selected dates change.
      */
     public DateTimeRangeField(final Format dateFormatter, boolean linkedCalendars, boolean autoUpdateInput) {
         // To receive events from the client, we register ServerRpc
@@ -276,8 +278,8 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
      * @param opens Whether the picker appears aligned to the left, to the right, or centered under the HTML element it's attached to.
      * @return Instance of {@link DateTimeRangeField}
      */
-    public DateTimeRangeField opens(final String opens) {
-        getState().setOpens(opens);
+    public DateTimeRangeField opens(final DateTimeRangeEnums.OPENS opens) {
+        getState().setOpens(opens.toString());
         return this;
     }
 
@@ -285,8 +287,8 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
      * @param drops Whether the picker appears below (default) or above the HTML element it's attached to.
      * @return Instance of {@link DateTimeRangeField}
      */
-    public DateTimeRangeField drops(final String drops) {
-        getState().setDrops(drops);
+    public DateTimeRangeField drops(final DateTimeRangeEnums.DROPS drops) {
+        getState().setDrops(drops.toString());
         return this;
     }
 
@@ -364,8 +366,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     /**
-     * @param linkedCalendars Hide the apply and cancel buttons, and automatically apply a new date range as soon as two dates or a predefined range is
-     *            selected.
+     * @param autoApply Hide the apply and cancel buttons, and automatically apply a new date range as soon as two dates or a predefined range is selected.
      * @return Instance of {@link DateTimeRangeField}
      */
     public DateTimeRangeField autoApply(final boolean autoApply) {
@@ -385,7 +386,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     /**
-     * @param autoUpdateInput Indicates whether the date range picker should automatically update the value of an <input> element it's attached to at
+     * @param autoUpdateInput Indicates whether the date range picker should automatically update the value of an input element it's attached to at
      *            initialization and when the selected dates change.
      * @return Instance of {@link DateTimeRangeField}
      */
@@ -401,6 +402,10 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return this.dateFormatter;
     }
 
+    /**
+     * @param date Date to format.
+     * @return formatted date.
+     */
     private String formatDateToString(final Date date) {
         final String result = (date != null ? getDateFormatter().format(date) : DateTimeRangeField.EMPTY_STRING);
         return result;
