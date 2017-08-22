@@ -158,7 +158,6 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         this.maxDate = maxDate;
     }
 
-    // Allowed values ("right" | "left" | "center")
     public void setOpens(final String opens) {
         this.opens = opens;
     }

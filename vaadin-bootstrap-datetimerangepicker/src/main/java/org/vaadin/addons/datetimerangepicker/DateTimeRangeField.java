@@ -31,8 +31,8 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
      * The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
      */
     public class DateLimit {
-        private String dateLimitSpanMoment; // moment object, i.e days, month
-        private int dateLimitSpanValue;
+        private final String dateLimitSpanMoment; // moment object, i.e days, month
+        private final int dateLimitSpanValue;
 
         public DateLimit(final String dateLimitSpanMoment, final int dateLimitSpanValue) {
             this.dateLimitSpanMoment = dateLimitSpanMoment;
@@ -49,10 +49,11 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     /**
-     * Set predefined date ranges the user can select from. Each key is the label for the range, and its value an array with two dates representing the bounds of the range
+     * Set predefined date ranges the user can select from. Each key is the label for the range, and its value an array with two dates representing the bounds
+     * of the range
      */
     public class Range {
-        private Date from, to;
+        private final Date from, to;
 
         public Range(final Date from, final Date to) {
             this.from = from;
@@ -62,6 +63,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         public Date getFrom() {
             return this.from;
         }
+
         public Date getTo() {
             return this.to;
         }
@@ -70,9 +72,15 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     // To process events from the client, we implement ServerRpc
     private final DateTimeRangeFieldServerRpc rpc = (from, to) -> setValue(new DateTimeRange(from, to));
 
-    //
-    // Constructor
-    //
+    /**
+     * Constructor
+     *
+     * @param dateFormatter Formatter of given dates.
+     * @param linkedCalendars When enabled, the two calendars displayed will always be for two sequential months (i.e. January and February), and both will be
+     *            advanced when clicking the left or right arrows above the calendars. When disabled, the two calendars can be individually advanced and display
+     *            any month/year.
+     * @param autoUpdateInput Indicates whether the date range picker should automatically update the value of an <input> element it's attached to at initialization and when the selected dates change.
+     */
     public DateTimeRangeField(final Format dateFormatter, boolean linkedCalendars, boolean autoUpdateInput) {
         // To receive events from the client, we register ServerRpc
         registerRpc(this.rpc);
@@ -102,18 +110,25 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         getState().setLocale(locale);
     }
 
-
-
+    /**
+     * @param language Language for localization of month, day and date format.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField language(final String language) {
         getState().setLanguage(language);
         return this;
     }
 
+    /**
+     * @param dateLimit The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField dateLimit(DateLimit dateLimit) {
         if (dateLimit != null) {
             getState().setDateLimitSpanMoment(dateLimit.getDateLimitSpanMoment());
             getState().setDateLimitSpanValue(dateLimit.getDateLimitSpanValue());
-        } else {
+        }
+        else {
             // Reset values
             getState().setDateLimitSpanMoment(DateTimeRangeField.EMPTY_STRING);
             getState().setDateLimitSpanValue(0);
@@ -121,13 +136,20 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return this;
     }
 
+    /**
+     * @param ranges Set predefined date ranges the user can select from. Each key is the label for the range, and its value an array with two dates
+     *            representing the bounds of the range
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField ranges(Map<String, Range> ranges) {
         Map<String, List<String>> dateRanges = new HashMap<>();
 
-        for (Entry<String, Range> entry: ranges.entrySet()) {
+        for (Entry<String, Range> entry : ranges.entrySet()) {
             String rangeLabel = entry.getKey();
-            String dateFromAsString = formatDateToString(entry.getValue().getFrom());
-            String dateToAsString = formatDateToString(entry.getValue().getTo());
+            String dateFromAsString = formatDateToString(entry.getValue()
+                                                         .getFrom());
+            String dateToAsString = formatDateToString(entry.getValue()
+                                                       .getTo());
 
             List<String> dateRange = new ArrayList<>();
             dateRange.add(dateFromAsString);
@@ -138,133 +160,243 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return this;
     }
 
+    /**
+     * @param applyLabel Label of apply button.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField applyLabel(final String applyLabel) {
         getState().setApplyLabel(applyLabel);
         return this;
     }
 
+    /**
+     * @param cancelLabel Label of cancel button.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField canelLabel(final String cancelLabel) {
         getState().setCancelLabel(cancelLabel);
         return this;
     }
 
+    /**
+     * @param buttonClasses CSS class names that will be added to all buttons in the picker.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField buttonClasses(final String buttonClasses) {
         getState().setButtonClasses(buttonClasses);
         return this;
     }
 
+    /**
+     * @param applyClass CSS class string that will be added to the apply button.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField applyClass(final String applyClass) {
         getState().setApplyClass(applyClass);
         return this;
     }
 
+    /**
+     * @param cancelClass CSS class string that will be added to the cancel button.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField cancelClass(final String cancelClass) {
         getState().setCancelClass(cancelClass);
         return this;
     }
 
+    /**
+     * @param alwaysShowCalendars Normally, if you use the ranges option to specify pre-defined date ranges, calendars for choosing a custom date range are not
+     *            shown until the user clicks "Custom Range". When this option is set to true, the calendars for choosing a custom date range are always shown
+     *            instead.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField alwaysShowCalendars(final boolean alwaysShowCalendars) {
         getState().setAlwaysShowCalendars(alwaysShowCalendars);
         return this;
     }
 
+    /**
+     * @param showCustomRangeLabel Displays an item labeled "Custom Range" at the end of the list of predefined ranges, when the ranges option is used. This
+     *            option will be highlighted whenever the current date range selection does not match one of the predefined ranges. Clicking it will display the
+     *            calendars to select a new range.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField showCustomRangeLabel(final boolean showCustomRangeLabel) {
         getState().setShowCustomRangeLabel(showCustomRangeLabel);
         return this;
     }
 
+    /**
+     * @param parentEl JQuery selector of the parent element that the date range picker will be added to, if not provided this will be 'body'.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField parentEl(final String parentEl) {
         getState().setParentEl(parentEl);
         return this;
     }
 
+    /**
+     * @param startDate The start of the initially selected date range.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField startDate(final Date startDate) {
         getState().setStartDate(formatDateToString(startDate));
         return this;
     }
 
+    /**
+     * @param endDate The end of the initially selected date range.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField endDate(final Date endDate) {
         getState().setEndDate(formatDateToString(endDate));
         return this;
     }
 
+    /**
+     * @param minDate The earliest date a user may select.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField minDate(final Date minDate) {
         getState().setMinDate(formatDateToString(minDate));
         return this;
     }
 
+    /**
+     * @param maxDate The latest date a user may select.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField maxDate(final Date maxDate) {
         getState().setMaxDate(formatDateToString(maxDate));
         return this;
     }
 
+    /**
+     * @param opens Whether the picker appears aligned to the left, to the right, or centered under the HTML element it's attached to.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField opens(final String opens) {
         getState().setOpens(opens);
         return this;
     }
 
+    /**
+     * @param drops Whether the picker appears below (default) or above the HTML element it's attached to.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField drops(final String drops) {
         getState().setDrops(drops);
         return this;
     }
 
+    /**
+     * @param showDropdowns Show year and month select boxes above calendars to jump to a specific month and year.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField showDropdowns(final boolean showDropdowns) {
         getState().setShowDropdowns(showDropdowns);
         return this;
     }
 
+    /**
+     * @param showWeekNumbers Show localized week numbers at the start of each week on the calendars.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField showWeekNumbers(final boolean showWeekNumbers) {
         getState().setShowWeekNumbers(showWeekNumbers);
         return this;
     }
 
+    /**
+     * @param showISOWeekNumbers Show ISO week numbers at the start of each week on the calendars.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField showISOWeekNumbers(final boolean showISOWeekNumbers) {
         getState().setShowISOWeekNumbers(showISOWeekNumbers);
         return this;
     }
 
+    /**
+     * @param singleDatePicker Show only a single calendar to choose one date, instead of a range picker with two calendars; the start and end dates provided to
+     *            your callback will be the same single date chosen.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField singleDatePicker(final boolean singleDatePicker) {
         getState().setSingleDatePicker(singleDatePicker);
         return this;
     }
 
+    /**
+     * @param timePicker Allow selection of dates with times, not just dates.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField timePicker(final boolean timePicker) {
         getState().setTimePicker(timePicker);
         return this;
     }
 
+    /**
+     * @param timePicker24Hour Use 24-hour instead of 12-hour times, removing the AM/PM selection.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField timePicker24Hour(final boolean timePicker24Hour) {
         getState().setTimePicker24Hour(timePicker24Hour);
         return this;
     }
 
-    // in minutes
-
+    /**
+     * @param timePickerIncrement Increment of the minutes selection list for times (i.e. 30 to allow only selection of times ending in 0 or 30).
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField timePickerIncrement(final int timePickerIncrement) {
         getState().setTimePickerIncrement(timePickerIncrement);
         return this;
     }
 
+    /**
+     * @param timePickerSeconds Show seconds in the timePicker.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField timePickerSeconds(final boolean timePickerSeconds) {
         getState().setTimePickerSeconds(timePickerSeconds);
         return this;
     }
 
+    /**
+     * @param linkedCalendars Hide the apply and cancel buttons, and automatically apply a new date range as soon as two dates or a predefined range is
+     *            selected.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField autoApply(final boolean autoApply) {
         getState().setAutoApply(autoApply);
         return this;
     }
 
+    /**
+     * @param linkedCalendars When enabled, the two calendars displayed will always be for two sequential months (i.e. January and February), and both will be
+     *            advanced when clicking the left or right arrows above the calendars. When disabled, the two calendars can be individually advanced and display
+     *            any month/year.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField linkedCalendars(final boolean linkedCalendars) {
         getState().setLinkedCalendars(linkedCalendars);
         return this;
     }
 
+    /**
+     * @param autoUpdateInput Indicates whether the date range picker should automatically update the value of an <input> element it's attached to at
+     *            initialization and when the selected dates change.
+     * @return Instance of {@link DateTimeRangeField}
+     */
     public DateTimeRangeField autoUpdateInput(final boolean autoUpdateInput) {
         getState().setAutoUpdateInput(autoUpdateInput);
         return this;
     }
 
+    /**
+     * @return DateFormatter, used formatting given data parameters.
+     */
     public Format getDateFormatter() {
         return this.dateFormatter;
     }
