@@ -56,6 +56,8 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private String opens = "right";
     private String drops = "down";
 
+    private String datePattern = "MM/dd/YYYY";
+
     // dateLimit: (object) The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
     private String dateLimitSpanMoment = DateTimeRangeFieldState.EMPTY_STRING;
     private int dateLimitSpanValue = 0;
@@ -301,5 +303,13 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
 
     public void setDateRanges(Map<String, List<String>> dateRanges) {
         this.dateRanges = dateRanges;
+    }
+
+    public String getDatePattern() {
+        return this.datePattern;
+    }
+
+    public void setDatePattern(String datePattern) {
+        this.datePattern = datePattern;
     }
 }

@@ -1,6 +1,7 @@
 package org.vaadin.addons.datetimerangepicker;
 
 import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -99,6 +100,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
                                .getLanguage());
         getState().setLinkedCalendars(linkedCalendars);
         getState().setAutoUpdateInput(autoUpdateInput);
+        getState().setDatePattern(((SimpleDateFormat)dateFormatter).toPattern());
 
         this.dateFormatter = dateFormatter;
     }

@@ -45,7 +45,7 @@ public class VDateTimeRangeField extends TextBoxBase {
             boolean showDropdowns, boolean showWeekNumbers, boolean showISOWeekNumbers, boolean singleDatePicker, boolean timePicker, boolean timePicker24Hour,
             int timePickerIncrement, boolean timePickerSeconds, String dateLimit, boolean autoApply, boolean linkedCalendars, boolean autoUpdateInput,
             String opens, String drops, String buttonClasses, String applyClass, String cancelClass, String ranges, boolean alwaysShowCalendars,
-            boolean showCustomRangeLabel, String applyLabel, String cancelLabel) /*-{
+            boolean showCustomRangeLabel, String applyLabel, String cancelLabel, String datePattern) /*-{
                                           var _this = this;
 
                                           $wnd.moment.locale(language);
@@ -77,8 +77,11 @@ public class VDateTimeRangeField extends TextBoxBase {
                                           '"alwaysShowCalendars": ' + alwaysShowCalendars + ',' +
                                           '"showCustomRangeLabel": ' + showCustomRangeLabel + ',' +
                                           '"locale": { "applyLabel": "' + applyLabel + '",' +
-                                              '"cancelLabel": "' + cancelLabel + '"}' +
+                                              '"cancelLabel": "' + cancelLabel + '"}' + ',' +
+                                          '"format": "' + datePattern + '"' +
                                           '}';
+
+                                          console.log(configString)
 
                                           $wnd.$(node).daterangepicker(JSON.parse(configString),
                                           function(start, end, label) {
@@ -104,7 +107,7 @@ public class VDateTimeRangeField extends TextBoxBase {
             final int timePickerIncrement, final boolean timePickerSeconds, final String dateLimitSpanMoment, final int dateLimitSpanValue,
             final boolean autoApply, final boolean linkedCalendars, final boolean autoUpdateInput, final String opens, final String drops,
             final String buttonClasses, final String applyClass, final String cancelClass, final Map<String, List<String>> dateRanges, final boolean alwaysShowCalendars,
-            final boolean showCustomRangeLabels) {
+            final boolean showCustomRangeLabels, final String datePattern) {
 
         // DateLimit Processing
         String dateLimit = "";
@@ -138,6 +141,6 @@ public class VDateTimeRangeField extends TextBoxBase {
         }
         init(this.inputText, language, parentEl, startDate, endDate, minDate, maxDate, showDropdowns, showWeekNumbers, showISOWeekNumbers, singleDatePicker,
              timePicker, timePicker24Hour, timePickerIncrement, timePickerSeconds, dateLimit, autoApply, linkedCalendars, autoUpdateInput, opens, drops,
-             buttonClasses, applyClass, cancelClass, ranges, alwaysShowCalendars, showCustomRangeLabels, applyLabel, cancelLabel);
+             buttonClasses, applyClass, cancelClass, ranges, alwaysShowCalendars, showCustomRangeLabels, applyLabel, cancelLabel, datePattern);
     }
 }
