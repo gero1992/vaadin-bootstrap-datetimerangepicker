@@ -75,7 +75,9 @@ public class VDateTimeRangeField extends TextBoxBase {
                                           '"cancelClass": "' + cancelClass + '",' +
                                           (typeof(ranges) === 'undefined' || ranges.length == 0 ? '' : '"ranges": ' + ranges + ',') +
                                           '"alwaysShowCalendars": ' + alwaysShowCalendars + ',' +
-                                          '"showCustomRangeLabel": ' + showCustomRangeLabel +
+                                          '"showCustomRangeLabel": ' + showCustomRangeLabel + ',' +
+                                          '"locale": { "applyLabel": "' + applyLabel + '",' +
+                                              '"cancelLabel": "' + cancelLabel + '"}' +
                                           '}';
 
                                           $wnd.$(node).daterangepicker(JSON.parse(configString),
@@ -86,12 +88,6 @@ public class VDateTimeRangeField extends TextBoxBase {
                                           $wnd.$(node).on('apply.daterangepicker', function(ev, picker) {
                                           $wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
                                           });
-
-                                          configStringButtonLabel = '{' +
-                                              '"locale": { "applyLabel": "' + applyLabel + '",' +
-                                              '"cancelLabel": "' + cancelLabel + '"} }'
-                                          $wnd.$(node).daterangepicker(JSON.parse(configStringButtonLabel));
-
                                           }-*/;
 
     private void onUpdateValue(final JsDate start, final JsDate end) {

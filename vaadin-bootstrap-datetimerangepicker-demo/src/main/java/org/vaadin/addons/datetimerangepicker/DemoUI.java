@@ -164,8 +164,6 @@ public class DemoUI extends UI {
 
                 // Others
                 DemoUI.this.dateRangeField.parentEl(DemoUI.this.textParentEl.getValue())
-                //                .startDate(DemoUI.this.startDateField.getValue())
-                //                .endDate(DemoUI.this.endDateField.getValue())
                 .minDate(DemoUI.this.minDateField.getValue())
                 .maxDate(DemoUI.this.maxDateField.getValue())
                 .applyLabel(DemoUI.this.textApplyLabel.getValue())
