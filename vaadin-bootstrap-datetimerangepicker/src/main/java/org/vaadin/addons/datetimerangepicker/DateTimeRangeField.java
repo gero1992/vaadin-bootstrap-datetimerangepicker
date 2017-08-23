@@ -182,7 +182,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
      * @param cancelLabel Label of cancel button.
      * @return Instance of {@link DateTimeRangeField}
      */
-    public DateTimeRangeField canelLabel(final String cancelLabel) {
+    public DateTimeRangeField cancelLabel(final String cancelLabel) {
         getState().setCancelLabel(cancelLabel);
         return this;
     }

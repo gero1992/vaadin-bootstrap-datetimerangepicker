@@ -45,7 +45,7 @@ public class VDateTimeRangeField extends TextBoxBase {
             boolean showDropdowns, boolean showWeekNumbers, boolean showISOWeekNumbers, boolean singleDatePicker, boolean timePicker, boolean timePicker24Hour,
             int timePickerIncrement, boolean timePickerSeconds, String dateLimit, boolean autoApply, boolean linkedCalendars, boolean autoUpdateInput,
             String opens, String drops, String buttonClasses, String applyClass, String cancelClass, String ranges, boolean alwaysShowCalendars,
-            boolean showCustomRangeLabel) /*-{
+            boolean showCustomRangeLabel, String applyLabel, String cancelLabel) /*-{
                                           var _this = this;
 
                                           $wnd.moment.locale(language);
@@ -86,6 +86,12 @@ public class VDateTimeRangeField extends TextBoxBase {
                                           $wnd.$(node).on('apply.daterangepicker', function(ev, picker) {
                                           $wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
                                           });
+
+                                          configStringButtonLabel = '{' +
+                                              '"locale": { "applyLabel": "' + applyLabel + '",' +
+                                              '"cancelLabel": "' + cancelLabel + '"} }'
+                                          $wnd.$(node).daterangepicker(JSON.parse(configStringButtonLabel));
+
                                           }-*/;
 
     private void onUpdateValue(final JsDate start, final JsDate end) {
@@ -136,6 +142,6 @@ public class VDateTimeRangeField extends TextBoxBase {
         }
         init(this.inputText, language, parentEl, startDate, endDate, minDate, maxDate, showDropdowns, showWeekNumbers, showISOWeekNumbers, singleDatePicker,
              timePicker, timePicker24Hour, timePickerIncrement, timePickerSeconds, dateLimit, autoApply, linkedCalendars, autoUpdateInput, opens, drops,
-             buttonClasses, applyClass, cancelClass, ranges, alwaysShowCalendars, showCustomRangeLabels);
+             buttonClasses, applyClass, cancelClass, ranges, alwaysShowCalendars, showCustomRangeLabels, applyLabel, cancelLabel);
     }
 }

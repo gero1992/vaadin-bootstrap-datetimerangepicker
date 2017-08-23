@@ -125,6 +125,9 @@ public class DemoUI extends UI {
     private CheckBox checkAlwaysShowCalendars;
     private CheckBox checkShowCustomRangeLabel;
 
+    private TextField textApplyLabel;
+    private TextField textCancelLabel;
+
     @Override
     protected void init(final VaadinRequest request) {
 
@@ -165,8 +168,8 @@ public class DemoUI extends UI {
                 //                .endDate(DemoUI.this.endDateField.getValue())
                 .minDate(DemoUI.this.minDateField.getValue())
                 .maxDate(DemoUI.this.maxDateField.getValue())
-                .applyLabel(DemoUI.APPLY_LABEL)
-                .canelLabel(DemoUI.CANCEL_LABEL)
+                .applyLabel(DemoUI.this.textApplyLabel.getValue())
+                .cancelLabel(DemoUI.this.textCancelLabel.getValue())
                 .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue().toString().toUpperCase()))
                 .language(DemoUI.DEFAULT_LANGUAGE)
                 .drops(DateTimeRangeEnums.DROPS.valueOf(DemoUI.this.comboDrops.getValue().toString().toUpperCase()))
@@ -323,6 +326,16 @@ public class DemoUI extends UI {
         this.checkShowCustomRangeLabel.setValue(false);
         this.checkShowCustomRangeLabel.addValueChangeListener(valueChangeListener);
 
+        // Textfield applyLabel
+        this.textApplyLabel = new TextField("applyLabel");
+        this.textApplyLabel.setValue(DemoUI.APPLY_LABEL);
+        this.textApplyLabel.addValueChangeListener(valueChangeListener);
+
+        // Textfield cancelLabel
+        this.textCancelLabel = new TextField("cancelLabel");
+        this.textCancelLabel.setValue(DemoUI.CANCEL_LABEL);
+        this.textCancelLabel.addValueChangeListener(valueChangeListener);
+
         // Button show
 
         final Button button = new Button("Show value");
@@ -370,6 +383,8 @@ public class DemoUI extends UI {
         rightLayout.addComponent(this.checkRanges);
         rightLayout.addComponent(this.checkAlwaysShowCalendars);
         rightLayout.addComponent(this.checkShowCustomRangeLabel);
+        rightLayout.addComponent(this.textApplyLabel);
+        rightLayout.addComponent(this.textCancelLabel);
 
         HorizontalLayout settingsLayout = new HorizontalLayout();
         settingsLayout.setCaption("Settings");
