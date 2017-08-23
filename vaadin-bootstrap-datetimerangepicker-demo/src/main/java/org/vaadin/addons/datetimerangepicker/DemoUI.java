@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 
 import org.vaadin.addons.datetimerangepicker.demo.model.DateTimeRangeBean;
+import org.vaadin.addons.datetimerangepicker.type.DateTimeRange;
 import org.vaadin.addons.datetimerangepicker.type.DateTimeRangeEnums;
 
 import com.vaadin.annotations.Theme;
@@ -130,17 +131,21 @@ public class DemoUI extends UI {
         // Initialize our new UI component
         boolean linkedCalendars = true;
         boolean autoUpdateInput = true;
-        this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput).startDate(this.startDate).endDate(this.endDate).language(DemoUI.DEFAULT_LANGUAGE);
+        this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput).language(DemoUI.DEFAULT_LANGUAGE);
 
         final BeanFieldGroup<DateTimeRangeBean> fieldGroup = new BeanFieldGroup<>(DateTimeRangeBean.class);
         fieldGroup.setBuffered(false);
-        fieldGroup.setItemDataSource(new DateTimeRangeBean());
-        fieldGroup.bind(this.dateRangeField, "dateRange");
+        DateTimeRangeBean bean = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
+
+        fieldGroup.setItemDataSource(bean);
+        fieldGroup.bind(this.dateRangeField, "dateTimeRange");
 
         ValueChangeListener valueChangeListener = new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
+                fieldGroup.unbind(DemoUI.this.dateRangeField);
+
                 DateTimeRangeField.DateLimit dateLimit = null;
                 if (DemoUI.this.checkDateLimit.getValue()) {
                     dateLimit = DemoUI.this.buildDateLimit(DemoUI.DATE_LIMIT_SPAN_MOMENT, DemoUI.DATE_LIMIT_SPAN_VALUE);
@@ -156,8 +161,8 @@ public class DemoUI extends UI {
 
                 // Others
                 DemoUI.this.dateRangeField.parentEl(DemoUI.this.textParentEl.getValue())
-                .startDate(DemoUI.this.startDateField.getValue())
-                .endDate(DemoUI.this.endDateField.getValue())
+                //                .startDate(DemoUI.this.startDateField.getValue())
+                //                .endDate(DemoUI.this.endDateField.getValue())
                 .minDate(DemoUI.this.minDateField.getValue())
                 .maxDate(DemoUI.this.maxDateField.getValue())
                 .applyLabel(DemoUI.APPLY_LABEL)
@@ -183,6 +188,9 @@ public class DemoUI extends UI {
                 .ranges(ranges)
                 .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
                 .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
+
+                bean.setDateTimeRange(new DateTimeRange(DemoUI.this.startDateField.getValue(), DemoUI.this.endDateField.getValue()));
+                fieldGroup.bind(DemoUI.this.dateRangeField, "dateTimeRange");
             }
         };
 
@@ -324,7 +332,7 @@ public class DemoUI extends UI {
             public void buttonClick(final ClickEvent event) {
                 Notification.show(fieldGroup.getItemDataSource()
                                   .getBean()
-                                  .getDateRange()
+                                  .getDateTimeRange()
                                   .toString());
             }
         });

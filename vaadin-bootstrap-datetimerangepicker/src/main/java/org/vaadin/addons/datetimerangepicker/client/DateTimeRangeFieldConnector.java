@@ -6,7 +6,6 @@ import org.vaadin.addons.datetimerangepicker.DateTimeRangeField;
 import org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField.DateRangeFieldClientUpdateValueHandler;
 
 import com.google.gwt.core.client.JsDate;
-import com.google.gwt.user.client.Window;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
@@ -29,9 +28,7 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
         // To receive RPC events from server, we register ClientRpc
         // implementation
         registerRpc(DateTimeRangeFieldClientRpc.class, new DateTimeRangeFieldClientRpc() {
-            public void alert(final String message) {
-                Window.alert(message);
-            }
+            private static final long serialVersionUID = 1L;
         });
 
         getWidget().setUpdateValueHandler(new DateRangeFieldClientUpdateValueHandler() {
@@ -61,20 +58,12 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
     // Whenever the state changes in the server-side, this method is called
     @Override
     public void onStateChanged(final StateChangeEvent stateChangeEvent) {
-        com.google.gwt.core.shared.GWT.log("--- onStateChanged 0");
-
         super.onStateChanged(stateChangeEvent);
-
-        // State is directly readable in the client after it is set in server
-        // final String text = getState().text;
-        // getWidget().setText(text);
-        // if (stateChangeEvent.hasPropertyChanged("autoApply")) {
 
         getWidget().refresh(getState().getLanguage(), getState().getApplyLabel(), getState().getCancelLabel(), getState().getParentEl(), getState().getStartDate(),
                             getState().getEndDate(), getState().getMinDate(), getState().getMaxDate(), getState().isShowDropdowns(),
                             getState().isShowWeekNumbers(), getState().isShowISOWeekNumbers(), getState().isSingleDatePicker(), getState().isTimePicker(),
                             getState().isTimePicker24Hour(), getState().getTimePickerIncrement(), getState().isTimePickerSeconds(), getState().getDateLimitSpanMoment(), getState().getDateLimitSpanValue(), getState().isAutoApply(),
                             getState().isLinkedCalendars(), getState().isAutoUpdateInput(), getState().getOpens(), getState().getDrops(), getState().getButtonClasses(), getState().getApplyClass(), getState().getCancelClass(), getState().getDateRanges(), getState().isAlwaysShowCalendars(), getState().isShowCustomRangeLabel());
-        // }
     }
 }

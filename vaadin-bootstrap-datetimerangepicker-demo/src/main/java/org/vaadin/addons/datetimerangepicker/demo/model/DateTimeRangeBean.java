@@ -8,14 +8,18 @@ public class DateTimeRangeBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private DateTimeRange dateRange = new DateTimeRange();
+    private DateTimeRange dateTimeRange = new DateTimeRange();
 
-    public DateTimeRange getDateRange() {
-        return this.dateRange;
+    public DateTimeRangeBean(DateTimeRange dateTimeRange) {
+        setDateTimeRange(dateTimeRange);
     }
 
-    public void setDateRange(final DateTimeRange dateRange) {
-        this.dateRange = dateRange;
+    public DateTimeRange getDateTimeRange() {
+        return this.dateTimeRange;
+    }
+
+    public void setDateTimeRange(final DateTimeRange dateTimeRange) {
+        this.dateTimeRange = dateTimeRange;
     }
 
 }

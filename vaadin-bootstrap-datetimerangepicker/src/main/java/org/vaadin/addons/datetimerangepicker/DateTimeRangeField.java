@@ -49,6 +49,13 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         }
     }
 
+    @Override
+    protected void setInternalValue(DateTimeRange newValue) {
+        super.setInternalValue(newValue);
+        startDate(getValue().getFrom());
+        endDate(getValue().getTo());
+    }
+
     /**
      * Set predefined date ranges the user can select from. Each key is the label for the range, and its value an array with two dates representing the bounds
      * of the range
@@ -71,7 +78,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     // To process events from the client, we implement ServerRpc
-    private final DateTimeRangeFieldServerRpc rpc = (from, to) -> setValue(new DateTimeRange(from, to));
+    private final DateTimeRangeFieldServerRpc rpc = (from, to) -> setInternalValue(new DateTimeRange(from, to));
 
     /**
      * Constructor

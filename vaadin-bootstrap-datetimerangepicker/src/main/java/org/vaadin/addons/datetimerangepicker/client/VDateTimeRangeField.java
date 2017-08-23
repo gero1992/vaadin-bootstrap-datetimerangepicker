@@ -48,15 +48,7 @@ public class VDateTimeRangeField extends TextBoxBase {
             boolean showCustomRangeLabel) /*-{
                                           var _this = this;
 
-                                          console.log("init language: " + language)
-
                                           $wnd.moment.locale(language);
-
-                                          console.log("init autoApply: " + autoApply)
-                                          console.log("init startDate: " + startDate)
-                                          console.log("init endDate: " + endDate)
-                                          console.log("init dateLimitAsString: " + dateLimit)
-                                          console.log("init rangesAsString: " + ranges)
 
                                           configString = '{' +
                                           '"showDropdowns": ' + showDropdowns + ',' +
@@ -85,9 +77,6 @@ public class VDateTimeRangeField extends TextBoxBase {
                                           '"alwaysShowCalendars": ' + alwaysShowCalendars + ',' +
                                           '"showCustomRangeLabel": ' + showCustomRangeLabel +
                                           '}';
-
-                                          console.log(configString);
-                                          console.log(JSON.parse(configString));
 
                                           $wnd.$(node).daterangepicker(JSON.parse(configString),
                                           function(start, end, label) {
