@@ -9,5 +9,8 @@
 	<stylesheet src="vaadin-bootstrap-datetimerangepicker/daterangepicker.css"/>
 	<stylesheet src="vaadin-bootstrap-datetimerangepicker/styles.css"/>
 	<stylesheet src="vaadin-bootstrap-datetimerangepicker/datetimerangepicker-bootstrap.css"/>
+	
+	<!-- Font Awesome (can be removed maybe in Vaadin8 -> VaadinIcons) -->
+	<stylesheet src="font-awesome-4.7.0/css/font-awesome.min.css"/>
 
 </module>

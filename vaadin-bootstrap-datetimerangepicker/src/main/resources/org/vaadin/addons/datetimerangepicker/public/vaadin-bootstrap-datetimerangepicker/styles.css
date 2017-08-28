@@ -1,30 +1,9 @@
-.bp-datetimerangepicker .glyphicon-calendar:before,
-.daterangepicker_input .glyphicon-calendar:before {
-    font-family: ThemeIcons;
-    content: "\f073";
-}
-
 .bp-datetimerangepicker .glyphicon-calendar {
 	margin-left: -27px;	
 	pointer-events: none;
 }
 
-.prev .glyphicon-chevron-left:before {
-    content: "\f053";
-    font-family: ThemeIcons;
-}
-
-.next .glyphicon-chevron-right:before {
-    content: "\f054";
-    font-family: ThemeIcons;
-}
-
 .bp-datetimerangepicker .v-textfield {
     padding-right: 35px;
     width: 240px;
-}
-
-.daterangepicker .calendar-time .fa-clock-o:before {
-	content: "\f017";	
-    font-family: ThemeIcons;
 }

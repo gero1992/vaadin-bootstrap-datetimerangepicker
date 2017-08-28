@@ -53,8 +53,8 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     @Override
     protected void setInternalValue(DateTimeRange newValue) {
         super.setInternalValue(newValue);
-        startDate(getValue().getFrom());
-        endDate(getValue().getTo());
+        startDate(newValue.getFrom());
+        endDate(newValue.getTo());
     }
 
     /**
@@ -79,7 +79,14 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     // To process events from the client, we implement ServerRpc
-    private final DateTimeRangeFieldServerRpc rpc = (from, to) -> setInternalValue(new DateTimeRange(from, to));
+    private final DateTimeRangeFieldServerRpc rpc = new DateTimeRangeFieldServerRpc() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void valueChanged(Date from, Date to) {
+            setValue(new DateTimeRange(from, to));
+        }
+    };
 
     /**
      * Constructor
