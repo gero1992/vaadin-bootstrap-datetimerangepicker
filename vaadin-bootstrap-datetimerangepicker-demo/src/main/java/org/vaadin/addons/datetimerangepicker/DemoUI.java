@@ -52,17 +52,10 @@ public class DemoUI extends UI {
     public static class Servlet extends VaadinServlet {
     }
 
-    // private static final Locale LOCALE = Locale.ENGLISH;
-    private Locale locale = Locale.GERMANY;
-
-    // private static final String DATE_PATTERN = "MM/dd/YYYY";
-
-    // private String DATE_PATTERN = "dd.MM.YYYY";
+    private static final Locale LOCALE_DEFAULT = Locale.GERMAN;
 
     private static final String APPLY_LABEL = "Apply";
     private static final String CANCEL_LABEL = "Cancel";
-
-    // private static final String DEFAULT_LANGUAGE = "en";
 
     // DateLimit Constants
     private static final String DATE_LIMIT_SPAN_MOMENT = "days";
@@ -139,10 +132,10 @@ public class DemoUI extends UI {
         // Initialize our new UI component
         boolean linkedCalendars = true;
         boolean autoUpdateInput = true;
-        // this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput).language(DemoUI.DEFAULT_LANGUAGE);
-        setLocale(Locale.GERMAN);
-        Format dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
+        setLocale(LOCALE_DEFAULT);
+        Format dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, LOCALE_DEFAULT);
         this.dateRangeField = new DateTimeRangeField(dateFormatter, linkedCalendars, autoUpdateInput).language(getLocale().toString());
+        dateRangeField.setWidth("300px");
         final BeanFieldGroup<DateTimeRangeBean> fieldGroup = new BeanFieldGroup<>(DateTimeRangeBean.class);
         fieldGroup.setBuffered(false);
         DateTimeRangeBean bean = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
@@ -159,15 +152,9 @@ public class DemoUI extends UI {
                     .toString()));
 
                 startDateField.setLocale(getLocale());
-                startDateField.setValue(startDate);
-
                 endDateField.setLocale(getLocale());
-                endDateField.setValue(endDate);
-
                 minDateField.setLocale(getLocale());
-
                 maxDateField.setLocale(getLocale());
-
                 dateRangeField.setLocale(getLocale());
 
                 DateTimeRangeField.DateLimit dateLimit = null;
@@ -193,7 +180,6 @@ public class DemoUI extends UI {
                     .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue()
                         .toString()
                         .toUpperCase()))
-                    // .language(DemoUI.DEFAULT_LANGUAGE)
                     .language(DemoUI.this.cbLanguage.getValue()
                         .toString())
                     .drops(DateTimeRangeEnums.DROPS.valueOf(DemoUI.this.comboDrops.getValue()
@@ -364,13 +350,12 @@ public class DemoUI extends UI {
 
         // ComboBox language
         this.cbLanguage = new ComboBox("language");
-        this.cbLanguage.addItems(Arrays.asList(Locale.ENGLISH.toString(), Locale.GERMAN.toString(), Locale.FRENCH, Locale.ITALIAN));
+        this.cbLanguage.addItems(Arrays.asList(LOCALE_DEFAULT.toString(), Locale.ENGLISH.toString(), Locale.FRENCH, Locale.ITALIAN));
         this.cbLanguage.setNullSelectionAllowed(false);
-        this.cbLanguage.select(Locale.GERMAN.toString());
+        this.cbLanguage.select(LOCALE_DEFAULT.toString());
         this.cbLanguage.addValueChangeListener(valueChangeListener);
 
         // Button show
-
         final Button button = new Button("Show value");
         button.addClickListener(new ClickListener() {
 
