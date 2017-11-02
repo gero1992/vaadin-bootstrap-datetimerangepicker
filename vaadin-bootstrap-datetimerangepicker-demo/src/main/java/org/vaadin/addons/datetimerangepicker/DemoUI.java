@@ -4,6 +4,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -43,23 +44,25 @@ import com.vaadin.ui.VerticalLayout;
 public class DemoUI extends UI {
 
     @WebServlet(
-                value = "/*",
-                asyncSupported = true)
+        value = "/*",
+        asyncSupported = true)
     @VaadinServletConfiguration(
-                                productionMode = false,
-                                ui = DemoUI.class)
+        productionMode = false,
+        ui = DemoUI.class)
     public static class Servlet extends VaadinServlet {
     }
 
-    private static final Locale LOCALE = Locale.ENGLISH;
+    // private static final Locale LOCALE = Locale.ENGLISH;
+    private Locale locale = Locale.GERMANY;
 
-    private static final String DATE_PATTERN = "MM/dd/YYYY";
-    private static final Format DATE_FORMATTER = new SimpleDateFormat(DemoUI.DATE_PATTERN);
+    // private static final String DATE_PATTERN = "MM/dd/YYYY";
+
+    // private String DATE_PATTERN = "dd.MM.YYYY";
 
     private static final String APPLY_LABEL = "Apply";
     private static final String CANCEL_LABEL = "Cancel";
 
-    private static final String DEFAULT_LANGUAGE = "en";
+    // private static final String DEFAULT_LANGUAGE = "en";
 
     // DateLimit Constants
     private static final String DATE_LIMIT_SPAN_MOMENT = "days";
@@ -79,23 +82,23 @@ public class DemoUI extends UI {
     private DateField minDateField;
     private DateField maxDateField;
 
-    private final Date startDate = Date.from(LocalDate.now().minusDays(6)
-                                             .atStartOfDay(ZoneId.systemDefault())
-                                             .toInstant());
+    private final Date startDate = Date.from(LocalDate.now()
+        .minusDays(6)
+        .atStartOfDay(ZoneId.systemDefault())
+        .toInstant());
 
     private final Date endDate = Date.from(LocalDate.now()
-                                           .atStartOfDay(ZoneId.systemDefault())
-                                           .toInstant());
+        .atStartOfDay(ZoneId.systemDefault())
+        .toInstant());
 
     private final Date today = Date.from(LocalDate.now()
-                                         .atStartOfDay(ZoneId.systemDefault())
-                                         .toInstant());
+        .atStartOfDay(ZoneId.systemDefault())
+        .toInstant());
 
     private final Date yesterday = Date.from(LocalDate.now()
-                                             .minusDays(1)
-                                             .atStartOfDay(ZoneId.systemDefault())
-                                             .toInstant());
-
+        .minusDays(1)
+        .atStartOfDay(ZoneId.systemDefault())
+        .toInstant());
 
     private ComboBox comboOpens;
     private ComboBox comboDrops;
@@ -128,14 +131,17 @@ public class DemoUI extends UI {
     private TextField textApplyLabel;
     private TextField textCancelLabel;
 
+    private ComboBox cbLanguage;
+
     @Override
     protected void init(final VaadinRequest request) {
 
         // Initialize our new UI component
         boolean linkedCalendars = true;
         boolean autoUpdateInput = true;
-        this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput).language(DemoUI.DEFAULT_LANGUAGE);
-
+        // this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput).language(DemoUI.DEFAULT_LANGUAGE);
+        setLocale(Locale.GERMAN);
+        this.dateRangeField = new DateTimeRangeField(getDateFormatter(), linkedCalendars, autoUpdateInput).language(getLocale().toString());
         final BeanFieldGroup<DateTimeRangeBean> fieldGroup = new BeanFieldGroup<>(DateTimeRangeBean.class);
         fieldGroup.setBuffered(false);
         DateTimeRangeBean bean = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
@@ -164,31 +170,110 @@ public class DemoUI extends UI {
 
                 // Others
                 DemoUI.this.dateRangeField.parentEl(DemoUI.this.textParentEl.getValue())
-                .minDate(DemoUI.this.minDateField.getValue())
-                .maxDate(DemoUI.this.maxDateField.getValue())
-                .applyLabel(DemoUI.this.textApplyLabel.getValue())
-                .cancelLabel(DemoUI.this.textCancelLabel.getValue())
-                .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue().toString().toUpperCase()))
-                .language(DemoUI.DEFAULT_LANGUAGE)
-                .drops(DateTimeRangeEnums.DROPS.valueOf(DemoUI.this.comboDrops.getValue().toString().toUpperCase()))
-                .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
-                .showWeekNumbers(DemoUI.this.checkShowWeekNumbers.getValue())
-                .showISOWeekNumbers(DemoUI.this.checkShowISOWeekNumbers.getValue())
-                .singleDatePicker(DemoUI.this.checkSingleDatePicker.getValue())
-                .timePicker(DemoUI.this.checkTimePicker.getValue())
-                .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
-                .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
-                .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
-                .dateLimit(dateLimit)
-                .autoApply(DemoUI.this.checkAutoApply.getValue())
-                .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
-                .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
-                .buttonClasses(DemoUI.this.textButtonClasses.getValue())
-                .applyClass(DemoUI.this.textApplyClass.getValue())
-                .cancelClass(DemoUI.this.textCancelClass.getValue())
-                .ranges(ranges)
-                .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
-                .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
+                    .minDate(DemoUI.this.minDateField.getValue())
+                    .maxDate(DemoUI.this.maxDateField.getValue())
+                    .applyLabel(DemoUI.this.textApplyLabel.getValue())
+                    .cancelLabel(DemoUI.this.textCancelLabel.getValue())
+                    .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue()
+                        .toString()
+                        .toUpperCase()))
+                    // .language(DemoUI.DEFAULT_LANGUAGE)
+                    .language(DemoUI.this.cbLanguage.getValue()
+                        .toString())
+                    .drops(DateTimeRangeEnums.DROPS.valueOf(DemoUI.this.comboDrops.getValue()
+                        .toString()
+                        .toUpperCase()))
+                    .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
+                    .showWeekNumbers(DemoUI.this.checkShowWeekNumbers.getValue())
+                    .showISOWeekNumbers(DemoUI.this.checkShowISOWeekNumbers.getValue())
+                    .singleDatePicker(DemoUI.this.checkSingleDatePicker.getValue())
+                    .timePicker(DemoUI.this.checkTimePicker.getValue())
+                    .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
+                    .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
+                    .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
+                    .dateLimit(dateLimit)
+                    .autoApply(DemoUI.this.checkAutoApply.getValue())
+                    .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
+                    .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
+                    .buttonClasses(DemoUI.this.textButtonClasses.getValue())
+                    .applyClass(DemoUI.this.textApplyClass.getValue())
+                    .cancelClass(DemoUI.this.textCancelClass.getValue())
+                    .ranges(ranges)
+                    .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
+                    .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
+
+                bean.setDateTimeRange(new DateTimeRange(DemoUI.this.startDateField.getValue(), DemoUI.this.endDateField.getValue()));
+                fieldGroup.bind(DemoUI.this.dateRangeField, "dateTimeRange");
+            }
+        };
+
+        ValueChangeListener languageChangeListener = new ValueChangeListener() {
+
+            @Override
+            public void valueChange(ValueChangeEvent event) {
+                fieldGroup.unbind(DemoUI.this.dateRangeField);
+                setLocale(new Locale(cbLanguage.getValue()
+                    .toString()));
+
+                startDateField.setLocale(getLocale());
+                startDateField.setValue(startDate);
+
+                endDateField.setLocale(getLocale());
+                endDateField.setValue(endDate);
+
+                minDateField.setLocale(getLocale());
+
+                maxDateField.setLocale(getLocale());
+
+                dateRangeField.setLocale(getLocale());
+
+                DateTimeRangeField.DateLimit dateLimit = null;
+                if (DemoUI.this.checkDateLimit.getValue()) {
+                    dateLimit = DemoUI.this.buildDateLimit(DemoUI.DATE_LIMIT_SPAN_MOMENT, DemoUI.DATE_LIMIT_SPAN_VALUE);
+                }
+
+                // Ranges
+                Map<String, DateTimeRangeField.Range> ranges = new HashMap<>();
+                if (DemoUI.this.checkRanges.getValue()) {
+                    DateTimeRangeField.Range rangeToday = DemoUI.this.buildRange(DemoUI.this.today, DemoUI.this.today);
+                    ranges.put(DemoUI.RANGE_LIMIT_TODAY, rangeToday);
+                    DateTimeRangeField.Range rangeYesterday = DemoUI.this.buildRange(DemoUI.this.yesterday, DemoUI.this.yesterday);
+                    ranges.put(DemoUI.RANGE_LIMIT_YESTERDAY, rangeYesterday);
+                }
+
+                // Others
+                DemoUI.this.dateRangeField.parentEl(DemoUI.this.textParentEl.getValue())
+                    .minDate(DemoUI.this.minDateField.getValue())
+                    .maxDate(DemoUI.this.maxDateField.getValue())
+                    .applyLabel(DemoUI.this.textApplyLabel.getValue())
+                    .cancelLabel(DemoUI.this.textCancelLabel.getValue())
+                    .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue()
+                        .toString()
+                        .toUpperCase()))
+                    // .language(DemoUI.DEFAULT_LANGUAGE)
+                    .language(DemoUI.this.cbLanguage.getValue()
+                        .toString())
+                    .drops(DateTimeRangeEnums.DROPS.valueOf(DemoUI.this.comboDrops.getValue()
+                        .toString()
+                        .toUpperCase()))
+                    .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
+                    .showWeekNumbers(DemoUI.this.checkShowWeekNumbers.getValue())
+                    .showISOWeekNumbers(DemoUI.this.checkShowISOWeekNumbers.getValue())
+                    .singleDatePicker(DemoUI.this.checkSingleDatePicker.getValue())
+                    .timePicker(DemoUI.this.checkTimePicker.getValue())
+                    .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
+                    .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
+                    .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
+                    .dateLimit(dateLimit)
+                    .autoApply(DemoUI.this.checkAutoApply.getValue())
+                    .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
+                    .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
+                    .buttonClasses(DemoUI.this.textButtonClasses.getValue())
+                    .applyClass(DemoUI.this.textApplyClass.getValue())
+                    .cancelClass(DemoUI.this.textCancelClass.getValue())
+                    .ranges(ranges)
+                    .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
+                    .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
 
                 bean.setDateTimeRange(new DateTimeRange(DemoUI.this.startDateField.getValue(), DemoUI.this.endDateField.getValue()));
                 fieldGroup.bind(DemoUI.this.dateRangeField, "dateTimeRange");
@@ -201,24 +286,24 @@ public class DemoUI extends UI {
 
         // StartDate
         this.startDateField = new DateField("startDate");
-        this.startDateField.setLocale(DemoUI.LOCALE);
+        this.startDateField.setLocale(getLocale());
         this.startDateField.setValue(this.startDate);
         this.startDateField.addValueChangeListener(valueChangeListener);
 
         // EndDate
         this.endDateField = new DateField("endDate");
-        this.endDateField.setLocale(DemoUI.LOCALE);
+        this.endDateField.setLocale(getLocale());
         this.endDateField.setValue(this.endDate);
         this.endDateField.addValueChangeListener(valueChangeListener);
 
         // MinDate
         this.minDateField = new DateField("minDate");
-        this.minDateField.setLocale(DemoUI.LOCALE);
+        this.minDateField.setLocale(getLocale());
         this.minDateField.addValueChangeListener(valueChangeListener);
 
         // MaxDate
         this.maxDateField = new DateField("maxDate");
-        this.maxDateField.setLocale(DemoUI.LOCALE);
+        this.maxDateField.setLocale(getLocale());
         this.maxDateField.addValueChangeListener(valueChangeListener);
 
         // Combobox opens
@@ -334,6 +419,13 @@ public class DemoUI extends UI {
         this.textCancelLabel.setValue(DemoUI.CANCEL_LABEL);
         this.textCancelLabel.addValueChangeListener(valueChangeListener);
 
+        // ComboBox language
+        this.cbLanguage = new ComboBox("language");
+        this.cbLanguage.addItems(Arrays.asList(Locale.ENGLISH.toString(), Locale.GERMAN.toString()));
+        this.cbLanguage.setNullSelectionAllowed(false);
+        this.cbLanguage.select(Locale.GERMAN.toString());
+        this.cbLanguage.addValueChangeListener(languageChangeListener);
+
         // Button show
 
         final Button button = new Button("Show value");
@@ -342,9 +434,9 @@ public class DemoUI extends UI {
             @Override
             public void buttonClick(final ClickEvent event) {
                 Notification.show(fieldGroup.getItemDataSource()
-                                  .getBean()
-                                  .getDateTimeRange()
-                                  .toString());
+                    .getBean()
+                    .getDateTimeRange()
+                    .toString());
             }
         });
 
@@ -357,6 +449,7 @@ public class DemoUI extends UI {
         leftLayout.addComponent(this.maxDateField);
         leftLayout.addComponent(this.comboOpens);
         leftLayout.addComponent(this.comboDrops);
+        leftLayout.addComponent(this.cbLanguage);
 
         VerticalLayout middleLayout = new VerticalLayout();
         middleLayout.setSpacing(true);
@@ -435,4 +528,22 @@ public class DemoUI extends UI {
         DateTimeRangeField.Range range = DemoUI.this.dateRangeField.new Range(from, to);
         return range;
     }
+
+    private Format getDateFormatter() {
+        return new SimpleDateFormat(getDatePattern());
+    };
+
+    private String getDatePattern() {
+        switch (getLocale().getLanguage()
+            .toUpperCase()) {
+            case "DE":
+                return "dd.MM.YYYY";
+            case "EN":
+                return "MM/dd/YYYY";
+            default:
+                System.out.println("Unknown language choosen.");
+                return "";
+        }
+    }
+
 }
