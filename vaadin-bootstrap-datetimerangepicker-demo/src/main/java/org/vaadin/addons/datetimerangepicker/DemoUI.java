@@ -1,7 +1,7 @@
 package org.vaadin.addons.datetimerangepicker;
 
+import java.text.DateFormat;
 import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -141,7 +141,8 @@ public class DemoUI extends UI {
         boolean autoUpdateInput = true;
         // this.dateRangeField = new DateTimeRangeField(DemoUI.DATE_FORMATTER, linkedCalendars, autoUpdateInput).language(DemoUI.DEFAULT_LANGUAGE);
         setLocale(Locale.GERMAN);
-        this.dateRangeField = new DateTimeRangeField(getDateFormatter(), linkedCalendars, autoUpdateInput).language(getLocale().toString());
+        Format dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
+        this.dateRangeField = new DateTimeRangeField(dateFormatter, linkedCalendars, autoUpdateInput).language(getLocale().toString());
         final BeanFieldGroup<DateTimeRangeBean> fieldGroup = new BeanFieldGroup<>(DateTimeRangeBean.class);
         fieldGroup.setBuffered(false);
         DateTimeRangeBean bean = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
@@ -530,20 +531,21 @@ public class DemoUI extends UI {
     }
 
     private Format getDateFormatter() {
-        return new SimpleDateFormat(getDatePattern());
+        return dateRangeField.getDateFormatter();
+        // return new SimpleDateFormat(getDatePattern());
     };
 
-    private String getDatePattern() {
-        switch (getLocale().getLanguage()
-            .toUpperCase()) {
-            case "DE":
-                return "dd.MM.YYYY";
-            case "EN":
-                return "MM/dd/YYYY";
-            default:
-                System.out.println("Unknown language choosen.");
-                return "";
-        }
-    }
+    // private String getDatePattern() {
+    // switch (getLocale().getLanguage()
+    // .toUpperCase()) {
+    // case "DE":
+    // return "dd.MM.YYYY";
+    // case "EN":
+    // return "MM/dd/YYYY";
+    // default:
+    // System.out.println("Unknown language choosen.");
+    // return "";
+    // }
+    // }
 
 }

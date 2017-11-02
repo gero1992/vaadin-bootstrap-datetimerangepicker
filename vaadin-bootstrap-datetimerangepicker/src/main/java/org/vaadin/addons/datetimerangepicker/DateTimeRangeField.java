@@ -1,5 +1,6 @@
 package org.vaadin.addons.datetimerangepicker;
 
+import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -103,11 +104,11 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         registerRpc(this.rpc);
 
         getState().setLanguage(UI.getCurrent()
-                               .getLocale()
-                               .getLanguage());
+            .getLocale()
+            .getLanguage());
         getState().setLinkedCalendars(linkedCalendars);
         getState().setAutoUpdateInput(autoUpdateInput);
-        getState().setDatePattern(((SimpleDateFormat)dateFormatter).toPattern());
+        getState().setDatePattern(((SimpleDateFormat) dateFormatter).toPattern());
 
         this.dateFormatter = dateFormatter;
     }
@@ -125,7 +126,11 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     @Override
     public void setLocale(final Locale locale) {
+        super.setLocale(locale);
         getState().setLocale(locale);
+        this.dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+        String datePattern = ((SimpleDateFormat) dateFormatter).toPattern();
+        getState().setDatePattern(datePattern);
     }
 
     /**
@@ -165,9 +170,9 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         for (Entry<String, Range> entry : ranges.entrySet()) {
             String rangeLabel = entry.getKey();
             String dateFromAsString = formatDateToString(entry.getValue()
-                                                         .getFrom());
+                .getFrom());
             String dateToAsString = formatDateToString(entry.getValue()
-                                                       .getTo());
+                .getTo());
 
             List<String> dateRange = new ArrayList<>();
             dateRange.add(dateFromAsString);
