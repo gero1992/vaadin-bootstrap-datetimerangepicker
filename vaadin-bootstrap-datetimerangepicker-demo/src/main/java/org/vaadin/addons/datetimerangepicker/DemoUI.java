@@ -155,64 +155,6 @@ public class DemoUI extends UI {
             @Override
             public void valueChange(ValueChangeEvent event) {
                 fieldGroup.unbind(DemoUI.this.dateRangeField);
-
-                DateTimeRangeField.DateLimit dateLimit = null;
-                if (DemoUI.this.checkDateLimit.getValue()) {
-                    dateLimit = DemoUI.this.buildDateLimit(DemoUI.DATE_LIMIT_SPAN_MOMENT, DemoUI.DATE_LIMIT_SPAN_VALUE);
-                }
-                // Ranges
-                Map<String, DateTimeRangeField.Range> ranges = new HashMap<>();
-                if (DemoUI.this.checkRanges.getValue()) {
-                    DateTimeRangeField.Range rangeToday = DemoUI.this.buildRange(DemoUI.this.today, DemoUI.this.today);
-                    ranges.put(DemoUI.RANGE_LIMIT_TODAY, rangeToday);
-                    DateTimeRangeField.Range rangeYesterday = DemoUI.this.buildRange(DemoUI.this.yesterday, DemoUI.this.yesterday);
-                    ranges.put(DemoUI.RANGE_LIMIT_YESTERDAY, rangeYesterday);
-                }
-
-                // Others
-                DemoUI.this.dateRangeField.parentEl(DemoUI.this.textParentEl.getValue())
-                    .minDate(DemoUI.this.minDateField.getValue())
-                    .maxDate(DemoUI.this.maxDateField.getValue())
-                    .applyLabel(DemoUI.this.textApplyLabel.getValue())
-                    .cancelLabel(DemoUI.this.textCancelLabel.getValue())
-                    .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue()
-                        .toString()
-                        .toUpperCase()))
-                    // .language(DemoUI.DEFAULT_LANGUAGE)
-                    .language(DemoUI.this.cbLanguage.getValue()
-                        .toString())
-                    .drops(DateTimeRangeEnums.DROPS.valueOf(DemoUI.this.comboDrops.getValue()
-                        .toString()
-                        .toUpperCase()))
-                    .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
-                    .showWeekNumbers(DemoUI.this.checkShowWeekNumbers.getValue())
-                    .showISOWeekNumbers(DemoUI.this.checkShowISOWeekNumbers.getValue())
-                    .singleDatePicker(DemoUI.this.checkSingleDatePicker.getValue())
-                    .timePicker(DemoUI.this.checkTimePicker.getValue())
-                    .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
-                    .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
-                    .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
-                    .dateLimit(dateLimit)
-                    .autoApply(DemoUI.this.checkAutoApply.getValue())
-                    .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
-                    .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
-                    .buttonClasses(DemoUI.this.textButtonClasses.getValue())
-                    .applyClass(DemoUI.this.textApplyClass.getValue())
-                    .cancelClass(DemoUI.this.textCancelClass.getValue())
-                    .ranges(ranges)
-                    .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
-                    .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
-
-                bean.setDateTimeRange(new DateTimeRange(DemoUI.this.startDateField.getValue(), DemoUI.this.endDateField.getValue()));
-                fieldGroup.bind(DemoUI.this.dateRangeField, "dateTimeRange");
-            }
-        };
-
-        ValueChangeListener languageChangeListener = new ValueChangeListener() {
-
-            @Override
-            public void valueChange(ValueChangeEvent event) {
-                fieldGroup.unbind(DemoUI.this.dateRangeField);
                 setLocale(new Locale(cbLanguage.getValue()
                     .toString()));
 
@@ -422,10 +364,10 @@ public class DemoUI extends UI {
 
         // ComboBox language
         this.cbLanguage = new ComboBox("language");
-        this.cbLanguage.addItems(Arrays.asList(Locale.ENGLISH.toString(), Locale.GERMAN.toString()));
+        this.cbLanguage.addItems(Arrays.asList(Locale.ENGLISH.toString(), Locale.GERMAN.toString(), Locale.FRENCH, Locale.ITALIAN));
         this.cbLanguage.setNullSelectionAllowed(false);
         this.cbLanguage.select(Locale.GERMAN.toString());
-        this.cbLanguage.addValueChangeListener(languageChangeListener);
+        this.cbLanguage.addValueChangeListener(valueChangeListener);
 
         // Button show
 
@@ -529,23 +471,4 @@ public class DemoUI extends UI {
         DateTimeRangeField.Range range = DemoUI.this.dateRangeField.new Range(from, to);
         return range;
     }
-
-    private Format getDateFormatter() {
-        return dateRangeField.getDateFormatter();
-        // return new SimpleDateFormat(getDatePattern());
-    };
-
-    // private String getDatePattern() {
-    // switch (getLocale().getLanguage()
-    // .toUpperCase()) {
-    // case "DE":
-    // return "dd.MM.YYYY";
-    // case "EN":
-    // return "MM/dd/YYYY";
-    // default:
-    // System.out.println("Unknown language choosen.");
-    // return "";
-    // }
-    // }
-
 }
