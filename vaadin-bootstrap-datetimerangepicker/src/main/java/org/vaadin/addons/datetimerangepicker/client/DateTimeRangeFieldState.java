@@ -44,6 +44,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private boolean singleDatePicker = false;
     private boolean timePicker = false;
     private boolean timePicker24Hour = false;
+    private boolean workable = true; // can't use the name 'enable' because strange inheritance behavior java->javascript.
     //
     private int timePickerIncrement = 1;
     //
@@ -312,4 +313,13 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     public void setDatePattern(String datePattern) {
         this.datePattern = datePattern;
     }
+
+    public boolean isWorkable() {
+        return workable;
+    }
+
+    public void setWorkable(boolean workable) {
+        this.workable = workable;
+    }
+
 }

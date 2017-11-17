@@ -67,6 +67,6 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
                             getState().getDateLimitSpanMoment(), getState().getDateLimitSpanValue(), getState().isAutoApply(), getState().isLinkedCalendars(),
                             getState().isAutoUpdateInput(), getState().getOpens(), getState().getDrops(), getState().getButtonClasses(),
                             getState().getApplyClass(), getState().getCancelClass(), getState().getDateRanges(), getState().isAlwaysShowCalendars(),
-                            getState().isShowCustomRangeLabel(), getState().getDatePattern(), getState().enabled);
+                            getState().isShowCustomRangeLabel(), getState().getDatePattern(), getState().isWorkable());
     }
 }

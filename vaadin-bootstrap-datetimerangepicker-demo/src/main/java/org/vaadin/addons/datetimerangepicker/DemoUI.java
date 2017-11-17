@@ -112,6 +112,7 @@ public class DemoUI extends UI {
     private CheckBox checkAutoApply;
     private CheckBox checkLinkedCalendars;
     private CheckBox checkAutoUpdateInput;
+    private CheckBox checkEnabled;
 
     private TextField textButtonClasses;
     private TextField textApplyClass;
@@ -201,10 +202,11 @@ public class DemoUI extends UI {
                     .applyClass(DemoUI.this.textApplyClass.getValue())
                     .cancelClass(DemoUI.this.textCancelClass.getValue())
                     .ranges(ranges)
+                    .workable(DemoUI.this.checkEnabled.getValue())
                     .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
                     .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
 
-                dateRangeField.setEnabled(false);
+                dateRangeField.setEnabled(DemoUI.this.checkEnabled.getValue());
 
                 bean.setDateTimeRange(new DateTimeRange(DemoUI.this.startDateField.getValue(), DemoUI.this.endDateField.getValue()));
                 fieldGroup.bind(DemoUI.this.dateRangeField, "dateTimeRange");
@@ -310,6 +312,11 @@ public class DemoUI extends UI {
         this.checkAutoUpdateInput.setValue(true);
         this.checkAutoUpdateInput.addValueChangeListener(valueChangeListener);
 
+        // Checkbox enabled
+        this.checkEnabled = new CheckBox("enabled");
+        this.checkEnabled.setValue(true);
+        this.checkEnabled.addValueChangeListener(valueChangeListener);
+
         // Textfield buttonClasses
         this.textButtonClasses = new TextField("buttonClasses");
         this.textButtonClasses.setValue("btn btn-sm");
@@ -395,6 +402,7 @@ public class DemoUI extends UI {
         middleLayout.addComponent(this.checkAutoApply);
         middleLayout.addComponent(this.checkLinkedCalendars);
         middleLayout.addComponent(this.checkAutoUpdateInput);
+        middleLayout.addComponent(this.checkEnabled);
 
         VerticalLayout rightLayout = new VerticalLayout();
         rightLayout.setSpacing(true);
