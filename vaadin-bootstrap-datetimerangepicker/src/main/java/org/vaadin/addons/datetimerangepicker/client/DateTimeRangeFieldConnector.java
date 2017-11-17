@@ -60,10 +60,13 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
     public void onStateChanged(final StateChangeEvent stateChangeEvent) {
         super.onStateChanged(stateChangeEvent);
 
-        getWidget().refresh(getState().getLanguage(), getState().getApplyLabel(), getState().getCancelLabel(), getState().getParentEl(), getState().getStartDate(),
-                            getState().getEndDate(), getState().getMinDate(), getState().getMaxDate(), getState().isShowDropdowns(),
+        getWidget().refresh(getState().getLanguage(), getState().getApplyLabel(), getState().getCancelLabel(), getState().getParentEl(),
+                            getState().getStartDate(), getState().getEndDate(), getState().getMinDate(), getState().getMaxDate(), getState().isShowDropdowns(),
                             getState().isShowWeekNumbers(), getState().isShowISOWeekNumbers(), getState().isSingleDatePicker(), getState().isTimePicker(),
-                            getState().isTimePicker24Hour(), getState().getTimePickerIncrement(), getState().isTimePickerSeconds(), getState().getDateLimitSpanMoment(), getState().getDateLimitSpanValue(), getState().isAutoApply(),
-                            getState().isLinkedCalendars(), getState().isAutoUpdateInput(), getState().getOpens(), getState().getDrops(), getState().getButtonClasses(), getState().getApplyClass(), getState().getCancelClass(), getState().getDateRanges(), getState().isAlwaysShowCalendars(), getState().isShowCustomRangeLabel(), getState().getDatePattern());
+                            getState().isTimePicker24Hour(), getState().getTimePickerIncrement(), getState().isTimePickerSeconds(),
+                            getState().getDateLimitSpanMoment(), getState().getDateLimitSpanValue(), getState().isAutoApply(), getState().isLinkedCalendars(),
+                            getState().isAutoUpdateInput(), getState().getOpens(), getState().getDrops(), getState().getButtonClasses(),
+                            getState().getApplyClass(), getState().getCancelClass(), getState().getDateRanges(), getState().isAlwaysShowCalendars(),
+                            getState().isShowCustomRangeLabel(), getState().getDatePattern(), getState().enabled);
     }
 }
