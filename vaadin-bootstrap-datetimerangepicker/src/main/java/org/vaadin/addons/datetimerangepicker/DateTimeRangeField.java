@@ -369,6 +369,16 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     /**
+     * 
+     * @param workable if the component is enabled or disabled.
+     * @return Instance of {@link DateTimeRangeField}
+     */
+    public DateTimeRangeField workable(final boolean workable) {
+        getState().setWorkable(workable);
+        return this;
+    }
+
+    /**
      * @param timePickerIncrement Increment of the minutes selection list for times (i.e. 30 to allow only selection of times ending in 0 or 30).
      * @return Instance of {@link DateTimeRangeField}
      */
@@ -431,4 +441,5 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         final String result = (date != null ? getDateFormatter().format(date) : DateTimeRangeField.EMPTY_STRING);
         return result;
     }
+
 }
