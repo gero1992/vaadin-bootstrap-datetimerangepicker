@@ -206,8 +206,6 @@ public class DemoUI extends UI {
                     .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
                     .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
 
-                dateRangeField.setEnabled(DemoUI.this.checkEnabled.getValue());
-
                 bean.setDateTimeRange(new DateTimeRange(DemoUI.this.startDateField.getValue(), DemoUI.this.endDateField.getValue()));
                 fieldGroup.bind(DemoUI.this.dateRangeField, "dateTimeRange");
             }
