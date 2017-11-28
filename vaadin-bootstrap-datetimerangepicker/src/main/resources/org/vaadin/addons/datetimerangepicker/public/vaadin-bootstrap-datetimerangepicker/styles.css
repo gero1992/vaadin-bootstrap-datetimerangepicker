@@ -8,3 +8,11 @@
    /* width: 240px; */
    width: 100%;
 }
+
+.bp-datetimerangepicker-v-disabled {
+	opacity: 0.5;
+}
+
+.v-disabled {
+	opacity: 0.5;
+}
