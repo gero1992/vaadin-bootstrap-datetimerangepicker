@@ -152,6 +152,7 @@ public class DemoUI extends UI {
                 setLocale(new Locale(cbLanguage.getValue()
                     .toString()));
 
+                startDateField.setEnabled(checkEnabled.getValue());
                 startDateField.setLocale(getLocale());
                 endDateField.setLocale(getLocale());
                 minDateField.setLocale(getLocale());

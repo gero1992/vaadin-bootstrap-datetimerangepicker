@@ -375,6 +375,13 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
      */
     public DateTimeRangeField workable(final boolean workable) {
         getState().setWorkable(workable);
+        super.setEnabled(workable);
+        if (workable) {
+            this.removeStyleName("v-disabled");
+        }
+        else {
+            this.addStyleName("v-disabled");
+        }
         return this;
     }
 

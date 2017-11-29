@@ -108,7 +108,6 @@ public class VDateTimeRangeField extends TextBoxBase {
                                                                                                                                          // $wnd.alert("Enabled ist: " + workable + "\nwnd: " + $wnd + "\n node: " + $wnd.$(node) + "\nThis" + this + "\nfirstElementChild " + this.firstElementChild + "\nElementId " + elementId + "\ndoc.getElementById(elementId) " + $doc.getElementById(elementId) +  "\ndisabled" +  $doc.getElementById(elementId).disabled);
                                                                                                                                          $doc.getElementById(elementId).disabled=!workable;
                                                                                                                                          
-                                                                                                                                         
                                                                                                                                          }-*/;
 
     private void onUpdateValue(final JsDate start, final JsDate end) {
@@ -163,6 +162,12 @@ public class VDateTimeRangeField extends TextBoxBase {
                 }
             }
             ranges += "}";
+        }
+        if (!workable) {
+            this.setEnabled(false);
+        }
+        else {
+            this.setEnabled(true);
         }
 
         init(this.inputText, language, parentEl, startDate, endDate, minDate, maxDate, showDropdowns, showWeekNumbers, showISOWeekNumbers, singleDatePicker,
