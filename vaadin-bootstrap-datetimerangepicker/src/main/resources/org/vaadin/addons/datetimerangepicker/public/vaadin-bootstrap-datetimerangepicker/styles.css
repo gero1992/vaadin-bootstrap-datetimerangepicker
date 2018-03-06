@@ -1,5 +1,5 @@
 .bp-datetimerangepicker .glyphicon-calendar {
-	margin-left: -27px;	
+	margin-left: -40px;	
 	pointer-events: none;
 }
 
@@ -15,4 +15,22 @@
 
 .v-disabled {
 	opacity: 0.5;
+}
+
+.bp-datetimerangepicker-resetbutton {
+    position: relative;
+    display: inline-block;
+    right: -5px;
+    top: 11.5px;
+    margin-right: -20px;
+    cursor: pointer;
+    width: 16px;
+    height: 24px;
+    background-image: url('resetbutton-default.svg');    
+    background-repeat: no-repeat;    
+}
+
+.bp-datetimerangepicker-resetbutton:hover {
+    background-image: url('resetbutton-hover.svg');
+    cursor: pointer;
 }

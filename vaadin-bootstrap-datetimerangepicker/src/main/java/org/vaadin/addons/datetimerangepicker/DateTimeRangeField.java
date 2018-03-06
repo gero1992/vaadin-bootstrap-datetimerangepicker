@@ -32,6 +32,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     private DateTimeRange dateTimeRange;
 
+
     /**
      * The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
      */
@@ -55,22 +56,16 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
     @Override
     public DateTimeRange getValue() {
-        return null;
+        return this.dateTimeRange;
     }
 
     @Override
     protected void doSetValue(final DateTimeRange newValue) {
-        this.dateTimeRange = newValue;
+        this.setDateTimeRange(newValue);
         startDate(newValue.getFrom());
         endDate(newValue.getTo());
     }
 
-    //    @Override
-    //    protected void setInternalValue(DateTimeRange newValue) {
-    //        super.setInternalValue(newValue);
-    //        startDate(newValue.getFrom());
-    //        endDate(newValue.getTo());
-    //    }
 
     /**
      * Set predefined date ranges the user can select from. Each key is the label for the range, and its value an array with two dates representing the bounds
@@ -99,9 +94,16 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
         @Override
         public void valueChanged(final Date from, final Date to) {
-            setValue(new DateTimeRange(from, to));
+            if (from != null && to != null) {
+                setValue(new DateTimeRange(from, to));
+                DateTimeRangeField.this.dateTimeRange = new DateTimeRange(from, to);
+            }
+            else {
+                DateTimeRangeField.this.dateTimeRange = null;
+            }
         }
     };
+
 
     /**
      * Constructor
@@ -134,9 +136,9 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
 
-    //    public Class<? extends DateTimeRange> getType() {
-    //        return DateTimeRange.class;
-    //    }
+    public Class<? extends DateTimeRange> getType() {
+        return DateTimeRange.class;
+    }
 
     @Override
     public void setLocale(final Locale locale) {
@@ -461,6 +463,14 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     private String formatDateToString(final Date date) {
         final String result = (date != null ? getDateFormatter().format(date) : DateTimeRangeField.EMPTY_STRING);
         return result;
+    }
+
+    public DateTimeRange getDateTimeRange() {
+        return this.dateTimeRange;
+    }
+
+    public void setDateTimeRange(final DateTimeRange dateTimeRange) {
+        this.dateTimeRange = dateTimeRange;
     }
 
 }

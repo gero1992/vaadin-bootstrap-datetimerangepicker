@@ -73,14 +73,14 @@ public class DemoUI extends UI {
     private DateField minDateField;
     private DateField maxDateField;
 
-    private final Date startDate = Date.from(LocalDate.now()
-                                             .minusDays(6)
-                                             .atStartOfDay(ZoneId.systemDefault())
-                                             .toInstant());
+    private Date startDate = Date.from(LocalDate.now()
+                                       .minusDays(6)
+                                       .atStartOfDay(ZoneId.systemDefault())
+                                       .toInstant());
 
-    private final Date endDate = Date.from(LocalDate.now()
-                                           .atStartOfDay(ZoneId.systemDefault())
-                                           .toInstant());
+    private Date endDate = Date.from(LocalDate.now()
+                                     .atStartOfDay(ZoneId.systemDefault())
+                                     .toInstant());
 
     private final Date today = Date.from(LocalDate.now()
                                          .atStartOfDay(ZoneId.systemDefault())
@@ -142,6 +142,15 @@ public class DemoUI extends UI {
         final DateTimeRangeBean bean = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
         binder.setBean(bean);
 
+        this.dateRangeField.addValueChangeListener(e -> {
+            final DateTimeRangeField dateTimeRangeField = (DateTimeRangeField) e.getSource();
+            if (dateTimeRangeField != null && dateTimeRangeField.getDateTimeRange().getFrom() != null) {
+                this.startDate = dateTimeRangeField.getDateTimeRange().getFrom();
+                this.endDate = dateTimeRangeField.getDateTimeRange().getTo();
+                bean.setDateTimeRange(new DateTimeRange(this.startDate, this.endDate));
+            }
+        });
+
         final ValueChangeListener valueChangeListener = event -> {
             binder.removeBinding(DemoUI.this.dateRangeField);
             setLocale(new Locale(this.cbLanguage.getValue()
@@ -202,7 +211,7 @@ public class DemoUI extends UI {
             .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
             .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
 
-            bean.setDateTimeRange(new DateTimeRange(asDate(DemoUI.this.startDateField.getValue()), asDate(DemoUI.this.endDateField.getValue())));
+            bean.setDateTimeRange(new DateTimeRange(this.startDate, this.endDate));
             binder.bind(this.dateRangeField, DateTimeRangeBean::getDateTimeRange, DateTimeRangeBean::setDateTimeRange);
         };
 
@@ -360,7 +369,16 @@ public class DemoUI extends UI {
 
         // Button show
         final Button button = new Button("Show value");
-        button.addClickListener(event -> Notification.show(binder.getBean().getDateTimeRange().toString()));
+        button.addClickListener(event -> {
+            if (this.dateRangeField.getValue() != null) {
+                bean.setDateTimeRange(this.dateRangeField.getValue());
+                Notification.show(binder.getBean().getDateTimeRange().toString());
+            } else {
+                Notification.show("No DateRage is selected!");
+            }
+
+        });
+
 
         final VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.setSpacing(true);
