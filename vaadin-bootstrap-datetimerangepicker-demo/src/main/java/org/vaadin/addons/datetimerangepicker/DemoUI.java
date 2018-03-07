@@ -68,8 +68,8 @@ public class DemoUI extends UI {
     // Initialize our new UI component
     private DateTimeRangeField dateRangeField;
 
-    private DateField startDateField;
-    private DateField endDateField;
+    //    private DateField startDateField;
+    //    private DateField endDateField;
     private DateField minDateField;
     private DateField maxDateField;
 
@@ -156,9 +156,9 @@ public class DemoUI extends UI {
             setLocale(new Locale(this.cbLanguage.getValue()
                                  .toString()));
 
-            this.startDateField.setEnabled(this.checkEnabled.getValue());
-            this.startDateField.setLocale(getLocale());
-            this.endDateField.setLocale(getLocale());
+            //            this.startDateField.setEnabled(this.checkEnabled.getValue());
+            //            this.startDateField.setLocale(getLocale());
+            //            this.endDateField.setLocale(getLocale());
             this.minDateField.setLocale(getLocale());
             this.maxDateField.setLocale(getLocale());
             this.dateRangeField.setLocale(getLocale());
@@ -220,16 +220,16 @@ public class DemoUI extends UI {
         this.textParentEl.addValueChangeListener(valueChangeListener);
 
         // StartDate
-        this.startDateField = new DateField("startDate");
-        this.startDateField.setLocale(getLocale());
-        this.startDateField.setValue(asLocalDate(this.startDate));
-        this.startDateField.addValueChangeListener(valueChangeListener);
-
-        // EndDate
-        this.endDateField = new DateField("endDate");
-        this.endDateField.setLocale(getLocale());
-        this.endDateField.setValue(asLocalDate(this.endDate));
-        this.endDateField.addValueChangeListener(valueChangeListener);
+        //        this.startDateField = new DateField("startDate");
+        //        this.startDateField.setLocale(getLocale());
+        //        this.startDateField.setValue(asLocalDate(this.startDate));
+        //        this.startDateField.addValueChangeListener(valueChangeListener);
+        //
+        //        // EndDate
+        //        this.endDateField = new DateField("endDate");
+        //        this.endDateField.setLocale(getLocale());
+        //        this.endDateField.setValue(asLocalDate(this.endDate));
+        //        this.endDateField.addValueChangeListener(valueChangeListener);
 
         // MinDate
         this.minDateField = new DateField("minDate");
@@ -383,8 +383,8 @@ public class DemoUI extends UI {
         final VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.setSpacing(true);
         leftLayout.addComponent(this.textParentEl);
-        leftLayout.addComponent(this.startDateField);
-        leftLayout.addComponent(this.endDateField);
+        //        leftLayout.addComponent(this.startDateField);
+        //        leftLayout.addComponent(this.endDateField);
         leftLayout.addComponent(this.minDateField);
         leftLayout.addComponent(this.maxDateField);
         leftLayout.addComponent(this.comboOpens);
