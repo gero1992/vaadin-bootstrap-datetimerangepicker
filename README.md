@@ -1,6 +1,8 @@
-# Vaadin Bootstrap DateTimeRangePicker Add-on for Vaadin 7
+# Vaadin Bootstrap DateTimeRangePicker Add-on for Vaadin 8
 
-DateTimeRangeField is a UI component add-on for Vaadin 7 which wraps the bootstrap daterangepicker (https://github.com/dangrossman/bootstrap-daterangepicker)
+DateTimeRangeField is a UI component add-on for Vaadin  which wraps the bootstrap daterangepicker (https://github.com/dangrossman/bootstrap-daterangepicker)
+
+NOTE: Vaadin7 is on branch ... vaadin7 ;-)
 
 ## Online demo
 
