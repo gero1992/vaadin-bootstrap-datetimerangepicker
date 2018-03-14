@@ -3,7 +3,9 @@ package org.vaadin.addons.datetimerangepicker.client;
 import java.util.Date;
 
 import org.vaadin.addons.datetimerangepicker.DateTimeRangeField;
+import org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField.DateRangeFieldClientUpdateValueHandler;
 
+import com.google.gwt.core.client.JsDate;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
@@ -29,18 +31,33 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
             private static final long serialVersionUID = 1L;
         });
 
-        getWidget().setUpdateValueHandler((start, end) -> {
+        getWidget().setUpdateValueHandler(new DateRangeFieldClientUpdateValueHandler() {
 
-            Date startDate = null;
-            Date endDate = null;
+            @Override
+            public void onUpdateValue(final JsDate start, final JsDate end) {
+                Date startDate = null;
+                Date endDate = null;
 
-            if (start != null && end != null) {
-                startDate = new Date((long) start.getTime());
-                endDate = new Date((long) end.getTime());
+                if (start != null && end != null) {
+                    startDate = new Date((long) start.getTime());
+                    endDate = new Date((long) end.getTime());
+                }
+                DateTimeRangeFieldConnector.this.rpc.valueChanged(startDate, endDate);
             }
-            DateTimeRangeFieldConnector.this.rpc.valueChanged(startDate, endDate);
-
         });
+
+        //        getWidget().setUpdateValueHandler((start, end) -> {
+        //
+        //            Date startDate = null;
+        //            Date endDate = null;
+        //
+        //            if (start != null && end != null) {
+        //                startDate = new Date((long) start.getTime());
+        //                endDate = new Date((long) end.getTime());
+        //            }
+        //            DateTimeRangeFieldConnector.this.rpc.valueChanged(startDate, endDate);
+        //
+        //        });
     }
 
     // We must implement getWidget() to cast to correct type

@@ -21,8 +21,8 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
-import com.vaadin.data.Binder;
-import com.vaadin.data.HasValue.ValueChangeListener;
+import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
@@ -68,8 +68,6 @@ public class DemoUI extends UI {
     // Initialize our new UI component
     private DateTimeRangeField dateRangeField;
 
-    //    private DateField startDateField;
-    //    private DateField endDateField;
     private DateField minDateField;
     private DateField maxDateField;
 
@@ -136,32 +134,34 @@ public class DemoUI extends UI {
         this.dateRangeField = new DateTimeRangeField(dateFormatter, linkedCalendars, autoUpdateInput).language(getLocale().toString());
         this.dateRangeField.setWidth("300px");
 
-        final Binder<DateTimeRangeBean> binder = new Binder<>(DateTimeRangeBean.class);
-        binder.bind(this.dateRangeField, DateTimeRangeBean::getDateTimeRange, DateTimeRangeBean::setDateTimeRange);
 
+        final BeanFieldGroup<DateTimeRangeBean> fieldGroup = new BeanFieldGroup<>(DateTimeRangeBean.class);
+        fieldGroup.setBuffered(false);
         final DateTimeRangeBean bean = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
-        binder.setBean(bean);
+
+        fieldGroup.setItemDataSource(bean);
+        fieldGroup.bind(this.dateRangeField, "dateTimeRange");
+
 
         this.dateRangeField.addValueChangeListener(e -> {
-            final DateTimeRangeField dateTimeRangeField = (DateTimeRangeField) e.getSource();
-            if (dateTimeRangeField != null && dateTimeRangeField.getDateTimeRange().getFrom() != null) {
-                this.startDate = dateTimeRangeField.getDateTimeRange().getFrom();
-                this.endDate = dateTimeRangeField.getDateTimeRange().getTo();
+            final DateTimeRange dateTimeRange = (DateTimeRange) e.getProperty().getValue();
+            if (dateTimeRange != null && dateTimeRange.getFrom() != null && dateTimeRange.getTo() != null) {
+                this.startDate = dateTimeRange.getFrom();
+                this.endDate = dateTimeRange.getTo();
                 bean.setDateTimeRange(new DateTimeRange(this.startDate, this.endDate));
             }
         });
 
+
+
         final ValueChangeListener valueChangeListener = event -> {
-            binder.removeBinding(DemoUI.this.dateRangeField);
-            setLocale(new Locale(this.cbLanguage.getValue()
+            fieldGroup.unbind(DemoUI.this.dateRangeField);
+            setLocale(new Locale(DemoUI.this.cbLanguage.getValue()
                                  .toString()));
 
-            //            this.startDateField.setEnabled(this.checkEnabled.getValue());
-            //            this.startDateField.setLocale(getLocale());
-            //            this.endDateField.setLocale(getLocale());
-            this.minDateField.setLocale(getLocale());
-            this.maxDateField.setLocale(getLocale());
-            this.dateRangeField.setLocale(getLocale());
+            DemoUI.this.minDateField.setLocale(getLocale());
+            DemoUI.this.maxDateField.setLocale(getLocale());
+            DemoUI.this.dateRangeField.setLocale(getLocale());
 
             DateTimeRangeField.DateLimit dateLimit = null;
             if (DemoUI.this.checkDateLimit.getValue()) {
@@ -179,8 +179,8 @@ public class DemoUI extends UI {
 
             // Others
             DemoUI.this.dateRangeField.parentEl(DemoUI.this.textParentEl.getValue())
-            .minDate(asDate(DemoUI.this.minDateField.getValue()))
-            .maxDate(asDate(DemoUI.this.maxDateField.getValue()))
+            .minDate(DemoUI.this.minDateField.getValue())
+            .maxDate(DemoUI.this.maxDateField.getValue())
             .applyLabel(DemoUI.this.textApplyLabel.getValue())
             .cancelLabel(DemoUI.this.textCancelLabel.getValue())
             .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue()
@@ -211,25 +211,13 @@ public class DemoUI extends UI {
             .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
             .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
 
-            bean.setDateTimeRange(new DateTimeRange(this.startDate, this.endDate));
-            binder.bind(this.dateRangeField, DateTimeRangeBean::getDateTimeRange, DateTimeRangeBean::setDateTimeRange);
+            bean.setDateTimeRange(new DateTimeRange(DemoUI.this.startDate, DemoUI.this.endDate));
+            fieldGroup.bind(DemoUI.this.dateRangeField, "dateTimeRange");
         };
 
         // ParentEl
         this.textParentEl = new TextField("parentEl");
         this.textParentEl.addValueChangeListener(valueChangeListener);
-
-        // StartDate
-        //        this.startDateField = new DateField("startDate");
-        //        this.startDateField.setLocale(getLocale());
-        //        this.startDateField.setValue(asLocalDate(this.startDate));
-        //        this.startDateField.addValueChangeListener(valueChangeListener);
-        //
-        //        // EndDate
-        //        this.endDateField = new DateField("endDate");
-        //        this.endDateField.setLocale(getLocale());
-        //        this.endDateField.setValue(asLocalDate(this.endDate));
-        //        this.endDateField.addValueChangeListener(valueChangeListener);
 
         // MinDate
         this.minDateField = new DateField("minDate");
@@ -243,15 +231,15 @@ public class DemoUI extends UI {
 
         // Combobox opens
         this.comboOpens = new ComboBox("opens");
-        this.comboOpens.setItems(DateTimeRangeEnums.OPENS.values());
-        this.comboOpens.setEmptySelectionAllowed(false);
+        this.comboOpens.addItems(DateTimeRangeEnums.OPENS.values());
+        this.comboOpens.setNullSelectionAllowed(false);
         this.comboOpens.setValue(DateTimeRangeEnums.OPENS.RIGHT);
         this.comboOpens.addValueChangeListener(valueChangeListener);
 
         // Combobox drops
         this.comboDrops = new ComboBox("drops");
-        this.comboDrops.setItems(DateTimeRangeEnums.DROPS.values());
-        this.comboDrops.setEmptySelectionAllowed(false);
+        this.comboDrops.addItems(DateTimeRangeEnums.DROPS.values());
+        this.comboDrops.setNullSelectionAllowed(false);
         this.comboDrops.setValue(DateTimeRangeEnums.DROPS.DOWN);
         this.comboDrops.addValueChangeListener(valueChangeListener);
 
@@ -359,12 +347,12 @@ public class DemoUI extends UI {
         this.textCancelLabel.setValue(DemoUI.CANCEL_LABEL);
         this.textCancelLabel.addValueChangeListener(valueChangeListener);
 
+
         // ComboBox language
         this.cbLanguage = new ComboBox("language");
-        this.cbLanguage.setItems(Arrays.asList(DemoUI.LOCALE_DEFAULT.toString(), Locale.ENGLISH.toString(), Locale.FRENCH, Locale.ITALIAN));
-        this.cbLanguage.setEmptySelectionAllowed(false);
-        this.cbLanguage.setLocale(DemoUI.LOCALE_DEFAULT);
-        this.cbLanguage.setValue(DemoUI.LOCALE_DEFAULT);
+        this.cbLanguage.addItems(Arrays.asList(DemoUI.LOCALE_DEFAULT.toString(), Locale.ENGLISH.toString(), Locale.FRENCH, Locale.ITALIAN));
+        this.cbLanguage.setNullSelectionAllowed(false);
+        this.cbLanguage.select(DemoUI.LOCALE_DEFAULT.toString());
         this.cbLanguage.addValueChangeListener(valueChangeListener);
 
         // Button show
@@ -372,7 +360,10 @@ public class DemoUI extends UI {
         button.addClickListener(event -> {
             if (this.dateRangeField.getValue() != null) {
                 bean.setDateTimeRange(this.dateRangeField.getValue());
-                Notification.show(binder.getBean().getDateTimeRange().toString());
+                Notification.show(fieldGroup.getItemDataSource()
+                                  .getBean()
+                                  .getDateTimeRange()
+                                  .toString());
             } else {
                 Notification.show("No DateRage is selected!");
             }
@@ -383,8 +374,6 @@ public class DemoUI extends UI {
         final VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.setSpacing(true);
         leftLayout.addComponent(this.textParentEl);
-        //        leftLayout.addComponent(this.startDateField);
-        //        leftLayout.addComponent(this.endDateField);
         leftLayout.addComponent(this.minDateField);
         leftLayout.addComponent(this.maxDateField);
         leftLayout.addComponent(this.comboOpens);
