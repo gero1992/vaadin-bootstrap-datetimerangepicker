@@ -59,12 +59,6 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return this.dateTimeRange;
     }
 
-    //    @Override
-    //    protected void doSetValue(final DateTimeRange newValue) {
-    //        this.setDateTimeRange(newValue);
-    //        startDate(newValue.getFrom());
-    //        endDate(newValue.getTo());
-    //    }
 
     @Override
     protected void setInternalValue(final DateTimeRange newValue) {

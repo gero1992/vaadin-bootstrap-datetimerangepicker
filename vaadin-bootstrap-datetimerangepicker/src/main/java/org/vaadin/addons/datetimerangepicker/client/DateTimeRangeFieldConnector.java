@@ -46,18 +46,6 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
             }
         });
 
-        //        getWidget().setUpdateValueHandler((start, end) -> {
-        //
-        //            Date startDate = null;
-        //            Date endDate = null;
-        //
-        //            if (start != null && end != null) {
-        //                startDate = new Date((long) start.getTime());
-        //                endDate = new Date((long) end.getTime());
-        //            }
-        //            DateTimeRangeFieldConnector.this.rpc.valueChanged(startDate, endDate);
-        //
-        //        });
     }
 
     // We must implement getWidget() to cast to correct type
