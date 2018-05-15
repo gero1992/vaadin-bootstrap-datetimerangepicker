@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.vaadin.addons.datetimerangepicker.DateTimeRangeField;
 
+import com.vaadin.client.annotations.OnStateChange;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
@@ -23,24 +24,11 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
 
     public DateTimeRangeFieldConnector() {
 
-        // To receive RPC events from server, we register ClientRpc
-        // implementation
-        registerRpc(DateTimeRangeFieldClientRpc.class, new DateTimeRangeFieldClientRpc() {
-            private static final long serialVersionUID = 1L;
-        });
-
         getWidget().setUpdateValueHandler((start, end) -> {
-
-            Date startDate = null;
-            Date endDate = null;
-
-            if (start != null && end != null) {
-                startDate = new Date((long) start.getTime());
-                endDate = new Date((long) end.getTime());
-            }
-            DateTimeRangeFieldConnector.this.rpc.valueChanged(startDate, endDate);
-
+            DateTimeRangeFieldConnector.this.rpc.valueChanged(new Date((long) start.getTime()), new Date((long) end.getTime()));
         });
+
+        getWidget().setResetValueHandler(() -> DateTimeRangeFieldConnector.this.rpc.valueReseted());
     }
 
     // We must implement getWidget() to cast to correct type
@@ -70,4 +58,10 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
                             getState().getApplyClass(), getState().getCancelClass(), getState().getDateRanges(), getState().isAlwaysShowCalendars(),
                             getState().isShowCustomRangeLabel(), getState().getDatePattern(), getState().isWorkable());
     }
+
+    @OnStateChange("elementUUID")
+    void updateElementUUID() {
+        getWidget().setElementUUID(getState().getElementUUID());
+    }
+
 }
