@@ -7,6 +7,8 @@ import com.google.gwt.core.client.JsDate;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
 // Extend any GWT Widget
@@ -16,24 +18,15 @@ public class VDateTimeRangeField extends TextBoxBase {
     private static final String CLASSNAME = "bp-datetimerangepicker";
 
     private DateRangeFieldClientUpdateValueHandler updateValueHandler;
+    private DateRangeFieldClientResetValueHandler resetValueHandler;
 
-    private final String elementId;
-
-    private final com.google.gwt.user.client.Element inputText;
-
+    private final com.google.gwt.dom.client.Element inputText;
 
     /*
      * Constructor. Ensures that needed html templates are added and injects a <database-visualizer> element to the page.
      */
     public VDateTimeRangeField() {
         this(DOM.createDiv());
-    }
-
-    private static int idCounter = 0;
-
-    // use element id to access the textinputfield in JavaScript.
-    private static String getElementId() {
-        return "4711ID" + VDateTimeRangeField.idCounter++;
     }
 
     protected VDateTimeRangeField(final Element node) {
@@ -51,15 +44,34 @@ public class VDateTimeRangeField extends TextBoxBase {
         final com.google.gwt.user.client.Element resetbutton = DOM.createElement("i");
         resetbutton.addClassName(VDateTimeRangeField.CLASSNAME + "-resetbutton");
         getElement().appendChild(resetbutton);
-        this.elementId = VDateTimeRangeField.getElementId();
-        this.inputText.setId(this.elementId);
+
+        DOM.sinkEvents(resetbutton, Event.ONCLICK);
+
+        Event.setEventListener(resetbutton, new EventListener( ) {
+
+            @Override
+            public void onBrowserEvent(Event event) {
+                if (Event.ONCLICK == event.getTypeInt()) {
+                    VDateTimeRangeField. this.resetValueHandler.onResetValue();
+                }
+            }
+            
+        });
+
         setStylePrimaryName("bp-datetimerangepicker");
+    }
+
+    public void setElementUUID(final String elementUUID) {
+        this.inputText.setId(elementUUID);
     }
 
     public void setUpdateValueHandler(final DateRangeFieldClientUpdateValueHandler updateValueHandler) {
         this.updateValueHandler = updateValueHandler;
     }
 
+    public void setResetValueHandler(final DateRangeFieldClientResetValueHandler resetValueHandler) {
+        this.resetValueHandler = resetValueHandler;
+    }
 
     private native void init(Element node, String language, String parentEl, String startDate, String endDate, String minDate, String maxDate,
             boolean showDropdowns, boolean showWeekNumbers, boolean showISOWeekNumbers, boolean singleDatePicker, boolean timePicker, boolean timePicker24Hour,
@@ -86,8 +98,8 @@ public class VDateTimeRangeField extends TextBoxBase {
                                                                                                                                          '"opens": "' + opens + '",' +
                                                                                                                                          '"drops": "' + drops + '",' +
                                                                                                                                          '"parentEl": "' + parentEl + '",' +
-                                                                                                                                         (typeof(startDate) === 'undefined' ? '' : '"startDate": "' + startDate + '",') +
-                                                                                                                                         (typeof(endDate) === 'undefined' ? '' : '"endDate": "' + endDate + '",') +
+                                                                                                                                         (typeof(startDate) === 'undefined' || startDate.length == 0 ? '' : '"startDate": "' + startDate + '",') +
+                                                                                                                                         (typeof(endDate) === 'undefined' || endDate.length == 0 ? '' : '"endDate": "' + endDate + '",') +
                                                                                                                                          (typeof(minDate) === 'undefined' || minDate.length == 0 ? '' : '"minDate": "' + minDate + '",') +
                                                                                                                                          (typeof(maxDate) === 'undefined' || maxDate.length == 0 ? '' : '"maxDate": "' + maxDate + '",') +
                                                                                                                                          '"buttonClasses": "' + buttonClasses + '",' +
@@ -110,17 +122,10 @@ public class VDateTimeRangeField extends TextBoxBase {
 
 
                                                                                                                                          $wnd.$(node).on('apply.daterangepicker', function(ev, picker) {
-                                                                                                                                         $wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                                                                                                                                             $wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
                                                                                                                                          });
-
-
-                                                                                                                                         $wnd.$('.bp-datetimerangepicker-resetbutton').on('click', function(ev, picker) {
-                                                                                                                                             $wnd.$('.bp-datetimerangepicker').val('');
-                                                                                                                                             _this.@org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField::onResetButtonClick()();
-                                                                                                                                         });
-
-
-                                                                                                                                         // $wnd.alert("Enabled ist: " + workable + "\nwnd: " + $wnd + "\n node: " + $wnd.$(node) + "\nThis" + this + "\nfirstElementChild " + this.firstElementChild + "\nElementId " + elementId + "\ndoc.getElementById(elementId) " + $doc.getElementById(elementId) +  "\ndisabled" +  $doc.getElementById(elementId).disabled);
+                                                                                                                                         
+                                                                                                                                         
                                                                                                                                          $doc.getElementById(elementId).disabled=!workable;
 
                                                                                                                                          }-*/;
@@ -129,11 +134,9 @@ public class VDateTimeRangeField extends TextBoxBase {
         this.updateValueHandler.onUpdateValue(start, end);
     }
 
-    private void onResetButtonClick() {
-        this.updateValueHandler.onUpdateValue(null, null);
+    public static interface DateRangeFieldClientResetValueHandler extends EventHandler {
+        void onResetValue();
     }
-
-    // _
 
     public static interface DateRangeFieldClientUpdateValueHandler extends EventHandler {
         void onUpdateValue(JsDate start, JsDate end);
@@ -151,12 +154,12 @@ public class VDateTimeRangeField extends TextBoxBase {
         String dateLimit = "";
         if (dateLimitSpanMoment != null && !dateLimitSpanMoment.equals(VDateTimeRangeField.EMPTY_STRING)) {
             dateLimit = new StringBuilder().append("{ \"")
-                    .append(dateLimitSpanMoment)
+                .append(dateLimitSpanMoment)
 
-                    .append("\": ")
-                    .append(dateLimitSpanValue)
-                    .append(" }")
-                    .toString();
+                .append("\": ")
+                .append(dateLimitSpanValue)
+                .append(" }")
+                .toString();
         }
 
         // Ranges Processing
@@ -167,15 +170,15 @@ public class VDateTimeRangeField extends TextBoxBase {
             for (final Map.Entry<String, List<String>> entry : dateRanges.entrySet()) {
                 elementCount++;
                 ranges += new StringBuilder().append(" \"")
-                        .append(entry.getKey())
-                        .append("\": [\"")
-                        .append(entry.getValue()
-                                .get(0))
-                        .append("\", \"")
-                        .append(entry.getValue()
-                                .get(1))
-                        .append("\"]")
-                        .toString();
+                    .append(entry.getKey())
+                    .append("\": [\"")
+                    .append(entry.getValue()
+                        .get(0))
+                    .append("\", \"")
+                    .append(entry.getValue()
+                        .get(1))
+                    .append("\"]")
+                    .toString();
                 if (elementCount < dateRanges.size()) {
                     ranges += ",";
                 }
@@ -192,6 +195,6 @@ public class VDateTimeRangeField extends TextBoxBase {
         init(this.inputText, language, parentEl, startDate, endDate, minDate, maxDate, showDropdowns, showWeekNumbers, showISOWeekNumbers, singleDatePicker,
              timePicker, timePicker24Hour, timePickerIncrement, timePickerSeconds, dateLimit, autoApply, linkedCalendars, autoUpdateInput, opens, drops,
              buttonClasses, applyClass, cancelClass, ranges, alwaysShowCalendars, showCustomRangeLabels, applyLabel, cancelLabel, datePattern, workable,
-             this.elementId);
+             this.inputText.getId());
     }
 }

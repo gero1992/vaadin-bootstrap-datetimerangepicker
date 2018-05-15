@@ -42,11 +42,11 @@ import com.vaadin.ui.VerticalLayout;
 public class DemoUI extends UI {
 
     @WebServlet(
-                value = "/*",
-                asyncSupported = true)
+        value = "/*",
+        asyncSupported = true)
     @VaadinServletConfiguration(
-                                productionMode = false,
-                                ui = DemoUI.class)
+        productionMode = false,
+        ui = DemoUI.class)
     public static class Servlet extends VaadinServlet {
     }
 
@@ -66,28 +66,30 @@ public class DemoUI extends UI {
     // UI Components
 
     // Initialize our new UI component
-    private DateTimeRangeField dateRangeField;
+    private DateTimeRangeField dateRangeFieldPrefilled;
+
+    private DateTimeRangeField dateRangeFieldEmpty;
 
     private DateField minDateField;
     private DateField maxDateField;
 
     private Date startDate = Date.from(LocalDate.now()
-                                       .minusDays(6)
-                                       .atStartOfDay(ZoneId.systemDefault())
-                                       .toInstant());
+        .minusDays(6)
+        .atStartOfDay(ZoneId.systemDefault())
+        .toInstant());
 
     private Date endDate = Date.from(LocalDate.now()
-                                     .atStartOfDay(ZoneId.systemDefault())
-                                     .toInstant());
+        .atStartOfDay(ZoneId.systemDefault())
+        .toInstant());
 
     private final Date today = Date.from(LocalDate.now()
-                                         .atStartOfDay(ZoneId.systemDefault())
-                                         .toInstant());
+        .atStartOfDay(ZoneId.systemDefault())
+        .toInstant());
 
     private final Date yesterday = Date.from(LocalDate.now()
-                                             .minusDays(1)
-                                             .atStartOfDay(ZoneId.systemDefault())
-                                             .toInstant());
+        .minusDays(1)
+        .atStartOfDay(ZoneId.systemDefault())
+        .toInstant());
 
     private ComboBox comboOpens;
     private ComboBox comboDrops;
@@ -107,7 +109,6 @@ public class DemoUI extends UI {
     private CheckBox checkDateLimit;
     private CheckBox checkAutoApply;
     private CheckBox checkLinkedCalendars;
-    private CheckBox checkAutoUpdateInput;
     private CheckBox checkEnabled;
 
     private TextField textButtonClasses;
@@ -128,40 +129,60 @@ public class DemoUI extends UI {
 
         // Initialize our new UI component
         final boolean linkedCalendars = true;
-        final boolean autoUpdateInput = true;
         setLocale(DemoUI.LOCALE_DEFAULT);
         final Format dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, DemoUI.LOCALE_DEFAULT);
-        this.dateRangeField = new DateTimeRangeField(dateFormatter, linkedCalendars, autoUpdateInput).language(getLocale().toString());
-        this.dateRangeField.setWidth("300px");
+        this.dateRangeFieldPrefilled = new DateTimeRangeField(dateFormatter, linkedCalendars, true).language(getLocale().toString());
+        this.dateRangeFieldPrefilled.setWidth("300px");
 
+        final BeanFieldGroup<DateTimeRangeBean> fieldGroupPrefilled = new BeanFieldGroup<>(DateTimeRangeBean.class);
+        fieldGroupPrefilled.setBuffered(false);
+        final DateTimeRangeBean beanPrefilled = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
 
-        final BeanFieldGroup<DateTimeRangeBean> fieldGroup = new BeanFieldGroup<>(DateTimeRangeBean.class);
-        fieldGroup.setBuffered(false);
-        final DateTimeRangeBean bean = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
+        fieldGroupPrefilled.setItemDataSource(beanPrefilled);
+        fieldGroupPrefilled.bind(this.dateRangeFieldPrefilled, "dateTimeRange");
 
-        fieldGroup.setItemDataSource(bean);
-        fieldGroup.bind(this.dateRangeField, "dateTimeRange");
+        this.dateRangeFieldEmpty = new DateTimeRangeField(dateFormatter, linkedCalendars, false).language(getLocale().toString());
+        this.dateRangeFieldEmpty.setWidth("300px");
 
+        final BeanFieldGroup<DateTimeRangeBean> fieldGroupEmpty = new BeanFieldGroup<>(DateTimeRangeBean.class);
+        fieldGroupEmpty.setBuffered(false);
+        final DateTimeRangeBean beanEmpty = new DateTimeRangeBean(null);
+        fieldGroupEmpty.setItemDataSource(beanEmpty);
+        fieldGroupEmpty.bind(this.dateRangeFieldEmpty, "dateTimeRange");
 
-        this.dateRangeField.addValueChangeListener(e -> {
-            final DateTimeRange dateTimeRange = (DateTimeRange) e.getProperty().getValue();
-            if (dateTimeRange != null && dateTimeRange.getFrom() != null && dateTimeRange.getTo() != null) {
+        final Button buttonEmpty = new Button("Show value");
+        buttonEmpty.addClickListener(event -> {
+            if (this.dateRangeFieldEmpty.getValue() != null) {
+                beanEmpty.setDateTimeRange(this.dateRangeFieldEmpty.getValue());
+                Notification.show(fieldGroupEmpty.getItemDataSource()
+                    .getBean()
+                    .getDateTimeRange()
+                    .toString());
+            }
+            else {
+                Notification.show("No DateRage is selected!");
+            }
+
+        });
+
+        this.dateRangeFieldPrefilled.addValueChangeListener(e -> {
+            final DateTimeRange dateTimeRange = (DateTimeRange) e.getProperty()
+                .getValue();
+            if (dateTimeRange != null) {
                 this.startDate = dateTimeRange.getFrom();
                 this.endDate = dateTimeRange.getTo();
-                bean.setDateTimeRange(new DateTimeRange(this.startDate, this.endDate));
+                beanEmpty.setDateTimeRange(new DateTimeRange(this.startDate, this.endDate));
             }
         });
 
-
-
         final ValueChangeListener valueChangeListener = event -> {
-            fieldGroup.unbind(DemoUI.this.dateRangeField);
-            setLocale(new Locale(DemoUI.this.cbLanguage.getValue()
-                                 .toString()));
+            fieldGroupPrefilled.unbind(DemoUI.this.dateRangeFieldPrefilled);
+            setLocale(new Locale(this.cbLanguage.getValue()
+                .toString()));
 
-            DemoUI.this.minDateField.setLocale(getLocale());
-            DemoUI.this.maxDateField.setLocale(getLocale());
-            DemoUI.this.dateRangeField.setLocale(getLocale());
+            this.minDateField.setLocale(getLocale());
+            this.maxDateField.setLocale(getLocale());
+            this.dateRangeFieldPrefilled.setLocale(getLocale());
 
             DateTimeRangeField.DateLimit dateLimit = null;
             if (DemoUI.this.checkDateLimit.getValue()) {
@@ -178,41 +199,40 @@ public class DemoUI extends UI {
             }
 
             // Others
-            DemoUI.this.dateRangeField.parentEl(DemoUI.this.textParentEl.getValue())
-            .minDate(DemoUI.this.minDateField.getValue())
-            .maxDate(DemoUI.this.maxDateField.getValue())
-            .applyLabel(DemoUI.this.textApplyLabel.getValue())
-            .cancelLabel(DemoUI.this.textCancelLabel.getValue())
-            .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue()
-                                                    .toString()
-                                                    .toUpperCase()))
-            .language(DemoUI.this.cbLanguage.getValue()
-                      .toString())
-            .drops(DateTimeRangeEnums.DROPS.valueOf(DemoUI.this.comboDrops.getValue()
-                                                    .toString()
-                                                    .toUpperCase()))
-            .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
-            .showWeekNumbers(DemoUI.this.checkShowWeekNumbers.getValue())
-            .showISOWeekNumbers(DemoUI.this.checkShowISOWeekNumbers.getValue())
-            .singleDatePicker(DemoUI.this.checkSingleDatePicker.getValue())
-            .timePicker(DemoUI.this.checkTimePicker.getValue())
-            .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
-            .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
-            .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
-            .dateLimit(dateLimit)
-            .autoApply(DemoUI.this.checkAutoApply.getValue())
-            .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
-            .autoUpdateInput(DemoUI.this.checkAutoUpdateInput.getValue())
-            .buttonClasses(DemoUI.this.textButtonClasses.getValue())
-            .applyClass(DemoUI.this.textApplyClass.getValue())
-            .cancelClass(DemoUI.this.textCancelClass.getValue())
-            .ranges(ranges)
-            .workable(DemoUI.this.checkEnabled.getValue())
-            .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
-            .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
+            DemoUI.this.dateRangeFieldPrefilled.parentEl(DemoUI.this.textParentEl.getValue())
+                .minDate(DemoUI.this.minDateField.getValue())
+                .maxDate(DemoUI.this.maxDateField.getValue())
+                .applyLabel(DemoUI.this.textApplyLabel.getValue())
+                .cancelLabel(DemoUI.this.textCancelLabel.getValue())
+                .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue()
+                    .toString()
+                    .toUpperCase()))
+                .language(DemoUI.this.cbLanguage.getValue()
+                    .toString())
+                .drops(DateTimeRangeEnums.DROPS.valueOf(DemoUI.this.comboDrops.getValue()
+                    .toString()
+                    .toUpperCase()))
+                .showDropdowns(DemoUI.this.checkShowDropDowns.getValue())
+                .showWeekNumbers(DemoUI.this.checkShowWeekNumbers.getValue())
+                .showISOWeekNumbers(DemoUI.this.checkShowISOWeekNumbers.getValue())
+                .singleDatePicker(DemoUI.this.checkSingleDatePicker.getValue())
+                .timePicker(DemoUI.this.checkTimePicker.getValue())
+                .timePicker24Hour(DemoUI.this.checkTimePicker24Hour.getValue())
+                .timePickerIncrement(Integer.valueOf(DemoUI.this.textTimePickerIncrement.getValue()))
+                .timePickerSeconds(DemoUI.this.checkTimePickerSeconds.getValue())
+                .dateLimit(dateLimit)
+                .autoApply(DemoUI.this.checkAutoApply.getValue())
+                .linkedCalendars(DemoUI.this.checkLinkedCalendars.getValue())
+                .buttonClasses(DemoUI.this.textButtonClasses.getValue())
+                .applyClass(DemoUI.this.textApplyClass.getValue())
+                .cancelClass(DemoUI.this.textCancelClass.getValue())
+                .ranges(ranges)
+                .workable(DemoUI.this.checkEnabled.getValue())
+                .alwaysShowCalendars(DemoUI.this.checkAlwaysShowCalendars.getValue())
+                .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
 
-            bean.setDateTimeRange(new DateTimeRange(DemoUI.this.startDate, DemoUI.this.endDate));
-            fieldGroup.bind(DemoUI.this.dateRangeField, "dateTimeRange");
+            beanEmpty.setDateTimeRange(new DateTimeRange(this.startDate, this.endDate));
+            fieldGroupPrefilled.bind(DemoUI.this.dateRangeFieldPrefilled, "dateTimeRange");
         };
 
         // ParentEl
@@ -297,11 +317,6 @@ public class DemoUI extends UI {
         this.checkLinkedCalendars.setValue(true);
         this.checkLinkedCalendars.addValueChangeListener(valueChangeListener);
 
-        // Checkbox autoUpdateInput
-        this.checkAutoUpdateInput = new CheckBox("autoUpdateInput");
-        this.checkAutoUpdateInput.setValue(true);
-        this.checkAutoUpdateInput.addValueChangeListener(valueChangeListener);
-
         // Checkbox enabled
         this.checkEnabled = new CheckBox("enabled");
         this.checkEnabled.setValue(true);
@@ -347,7 +362,6 @@ public class DemoUI extends UI {
         this.textCancelLabel.setValue(DemoUI.CANCEL_LABEL);
         this.textCancelLabel.addValueChangeListener(valueChangeListener);
 
-
         // ComboBox language
         this.cbLanguage = new ComboBox("language");
         this.cbLanguage.addItems(Arrays.asList(DemoUI.LOCALE_DEFAULT.toString(), Locale.ENGLISH.toString(), Locale.FRENCH, Locale.ITALIAN));
@@ -356,20 +370,20 @@ public class DemoUI extends UI {
         this.cbLanguage.addValueChangeListener(valueChangeListener);
 
         // Button show
-        final Button button = new Button("Show value");
-        button.addClickListener(event -> {
-            if (this.dateRangeField.getValue() != null) {
-                bean.setDateTimeRange(this.dateRangeField.getValue());
-                Notification.show(fieldGroup.getItemDataSource()
-                                  .getBean()
-                                  .getDateTimeRange()
-                                  .toString());
-            } else {
+        final Button buttonPrefilled = new Button("Show value");
+        buttonPrefilled.addClickListener(event -> {
+            if (this.dateRangeFieldPrefilled.getValue() != null) {
+                beanPrefilled.setDateTimeRange(this.dateRangeFieldPrefilled.getValue());
+                Notification.show(fieldGroupPrefilled.getItemDataSource()
+                    .getBean()
+                    .getDateTimeRange()
+                    .toString());
+            }
+            else {
                 Notification.show("No DateRage is selected!");
             }
 
         });
-
 
         final VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.setSpacing(true);
@@ -393,7 +407,6 @@ public class DemoUI extends UI {
         middleLayout.addComponent(this.checkDateLimit);
         middleLayout.addComponent(this.checkAutoApply);
         middleLayout.addComponent(this.checkLinkedCalendars);
-        middleLayout.addComponent(this.checkAutoUpdateInput);
         middleLayout.addComponent(this.checkEnabled);
 
         final VerticalLayout rightLayout = new VerticalLayout();
@@ -415,21 +428,29 @@ public class DemoUI extends UI {
         settingsLayout.addComponent(middleLayout);
         settingsLayout.addComponent(rightLayout);
 
-        final VerticalLayout componentLayout = new VerticalLayout();
-        componentLayout.setCaption("DateTimeRangeField");
-        componentLayout.setSpacing(true);
-        componentLayout.setMargin(true);
-        componentLayout.addComponent(this.dateRangeField);
-        componentLayout.addComponent(button);
+        final VerticalLayout componentLayoutPrefilled = new VerticalLayout();
+        componentLayoutPrefilled.setCaption("DateTimeRangeField with prefilled initial value");
+        componentLayoutPrefilled.setSpacing(true);
+        componentLayoutPrefilled.setMargin(true);
+        componentLayoutPrefilled.addComponent(this.dateRangeFieldPrefilled);
+        componentLayoutPrefilled.addComponent(buttonPrefilled);
+        componentLayoutPrefilled.addComponent(settingsLayout);
 
-        final VerticalLayout mainLayout = new VerticalLayout();
+        final VerticalLayout componentLayoutEmpty = new VerticalLayout();
+        componentLayoutEmpty.setCaption("DateTimeRangeField with empty initial value");
+        componentLayoutEmpty.setSpacing(true);
+        componentLayoutEmpty.setMargin(true);
+        componentLayoutEmpty.addComponent(this.dateRangeFieldEmpty);
+        componentLayoutEmpty.addComponent(buttonEmpty);
+
+        final HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.setStyleName("demoContentLayout");
         mainLayout.setSizeFull();
         mainLayout.setMargin(true);
-        mainLayout.addComponent(componentLayout);
-        mainLayout.addComponent(settingsLayout);
-        mainLayout.setExpandRatio(componentLayout, 0.2f);
-        mainLayout.setExpandRatio(settingsLayout, 0.8f);
+        mainLayout.addComponent(componentLayoutPrefilled);
+        mainLayout.addComponent(componentLayoutEmpty);
+        mainLayout.setExpandRatio(componentLayoutPrefilled, 0.8f);
+        mainLayout.setExpandRatio(componentLayoutEmpty, 0.2f);
 
         setContent(mainLayout);
     }
@@ -442,7 +463,7 @@ public class DemoUI extends UI {
      * @return {@link DateTimeRangeField.DateLimit}
      */
     private DateTimeRangeField.DateLimit buildDateLimit(final String dateLimitSpanMoment, final int dateLimitSpanValue) {
-        final DateTimeRangeField.DateLimit dateLimit = DemoUI.this.dateRangeField.new DateLimit(dateLimitSpanMoment, dateLimitSpanValue);
+        final DateTimeRangeField.DateLimit dateLimit = DemoUI.this.dateRangeFieldPrefilled.new DateLimit(dateLimitSpanMoment, dateLimitSpanValue);
         return dateLimit;
     }
 
@@ -455,18 +476,21 @@ public class DemoUI extends UI {
      * @return {@link DateTimeRangeField.Range}
      */
     private DateTimeRangeField.Range buildRange(final Date from, final Date to) {
-        final DateTimeRangeField.Range range = DemoUI.this.dateRangeField.new Range(from, to);
+        final DateTimeRangeField.Range range = DemoUI.this.dateRangeFieldPrefilled.new Range(from, to);
         return range;
     }
 
-
     // Transform LocalDate to Date
     private Date asDate(final LocalDate localDate) {
-        return (localDate != null) ? Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()) : null;
+        return (localDate != null) ? Date.from(localDate.atStartOfDay()
+            .atZone(ZoneId.systemDefault())
+            .toInstant()) : null;
     }
 
     // Transform Date to LocalDate
     private LocalDate asLocalDate(final Date date) {
-        return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        return Instant.ofEpochMilli(date.getTime())
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate();
     }
 }

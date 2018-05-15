@@ -9,4 +9,6 @@ public interface DateTimeRangeFieldServerRpc extends ServerRpc {
 
     public void valueChanged(Date from, Date to);
 
+    public void valueReseted();
+
 }
