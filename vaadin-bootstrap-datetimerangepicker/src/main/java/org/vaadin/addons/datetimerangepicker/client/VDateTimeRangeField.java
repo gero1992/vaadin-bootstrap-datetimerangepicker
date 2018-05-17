@@ -34,6 +34,8 @@ public class VDateTimeRangeField extends TextBoxBase {
         this.inputText = DOM.createInputText();
         this.inputText.addClassName("v-textfield");
         this.inputText.addClassName(VDateTimeRangeField.CLASSNAME);
+        this.inputText.getStyle()
+            .setProperty("width", "100%");
         getElement().appendChild(this.inputText);
         // add Date Select Icon
         final com.google.gwt.user.client.Element i = DOM.createElement("i");
@@ -47,15 +49,15 @@ public class VDateTimeRangeField extends TextBoxBase {
 
         DOM.sinkEvents(resetbutton, Event.ONCLICK);
 
-        Event.setEventListener(resetbutton, new EventListener( ) {
+        Event.setEventListener(resetbutton, new EventListener() {
 
             @Override
-            public void onBrowserEvent(Event event) {
+            public void onBrowserEvent(final Event event) {
                 if (Event.ONCLICK == event.getTypeInt()) {
-                    VDateTimeRangeField. this.resetValueHandler.onResetValue();
+                    VDateTimeRangeField.this.resetValueHandler.onResetValue();
                 }
             }
-            
+
         });
 
         setStylePrimaryName("bp-datetimerangepicker");
