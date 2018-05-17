@@ -63,7 +63,9 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
     private String dateLimitSpanMoment = DateTimeRangeFieldState.EMPTY_STRING;
     private int dateLimitSpanValue = 0;
 
-    private Map<String, List<String>> dateRanges = new HashMap<String, List<String>>();
+    private String elementUUID;
+
+    private Map<String, List<String>> dateRanges = new HashMap<>();
 
     public String getLanguage() {
         return this.language;
@@ -117,7 +119,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.alwaysShowCalendars;
     }
 
-    public void setAlwaysShowCalendars(boolean alwaysShowCalendars) {
+    public void setAlwaysShowCalendars(final boolean alwaysShowCalendars) {
         this.alwaysShowCalendars = alwaysShowCalendars;
     }
 
@@ -125,7 +127,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.showCustomRangeLabel;
     }
 
-    public void setShowCustomRangeLabel(boolean showCustomRangeLabel) {
+    public void setShowCustomRangeLabel(final boolean showCustomRangeLabel) {
         this.showCustomRangeLabel = showCustomRangeLabel;
     }
 
@@ -278,11 +280,11 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.parentEl;
     }
 
-    public void setParentEl(String parentEl) {
+    public void setParentEl(final String parentEl) {
         this.parentEl = parentEl;
     }
 
-    public void setDateLimitSpanMoment(String dateLimitSpanMoment) {
+    public void setDateLimitSpanMoment(final String dateLimitSpanMoment) {
         this.dateLimitSpanMoment = dateLimitSpanMoment;
     }
 
@@ -294,7 +296,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.dateLimitSpanValue;
     }
 
-    public void setDateLimitSpanValue(int dateLimitSpanValue) {
+    public void setDateLimitSpanValue(final int dateLimitSpanValue) {
         this.dateLimitSpanValue = dateLimitSpanValue;
     }
 
@@ -302,7 +304,7 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.dateRanges;
     }
 
-    public void setDateRanges(Map<String, List<String>> dateRanges) {
+    public void setDateRanges(final Map<String, List<String>> dateRanges) {
         this.dateRanges = dateRanges;
     }
 
@@ -310,16 +312,24 @@ public class DateTimeRangeFieldState extends AbstractFieldState {
         return this.datePattern;
     }
 
-    public void setDatePattern(String datePattern) {
+    public void setDatePattern(final String datePattern) {
         this.datePattern = datePattern;
     }
 
     public boolean isWorkable() {
-        return workable;
+        return this.workable;
     }
 
-    public void setWorkable(boolean workable) {
+    public void setWorkable(final boolean workable) {
         this.workable = workable;
+    }
+
+    public String getElementUUID() {
+        return this.elementUUID;
+    }
+
+    public void setElementUUID(final String elementUUID) {
+        this.elementUUID = elementUUID;
     }
 
 }
