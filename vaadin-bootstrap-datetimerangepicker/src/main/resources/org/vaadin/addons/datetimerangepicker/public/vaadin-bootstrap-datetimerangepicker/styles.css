@@ -3,12 +3,6 @@
 	pointer-events: none;
 }
 
-.bp-datetimerangepicker .v-textfield {
-    padding-right: 35px;
-   /* width: 240px; */
-   width: 100%;
-}
-
 .bp-datetimerangepicker-v-disabled {
 	opacity: 0.5;
 }
@@ -18,16 +12,15 @@
 }
 
 .bp-datetimerangepicker-resetbutton {
-    position: relative;
+    position: absolute;
     display: inline-block;
-    right: -5px;
-    top: 11.5px;
-    margin-right: -20px;
     cursor: pointer;
     width: 16px;
-    height: 24px;
-    background-image: url('resetbutton-default.svg');    
-    background-repeat: no-repeat;    
+    height: 16px;
+    background-image: url(resetbutton-default.svg);
+    background-repeat: no-repeat;
+    margin-left: 6px;
+	margin-top: 4px;
 }
 
 .bp-datetimerangepicker-resetbutton:hover {

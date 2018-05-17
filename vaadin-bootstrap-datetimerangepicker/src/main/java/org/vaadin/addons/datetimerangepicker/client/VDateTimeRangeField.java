@@ -34,6 +34,8 @@ public class VDateTimeRangeField extends TextBoxBase {
         this.inputText.addClassName("v-textfield");
         this.inputText.addClassName(VDateTimeRangeField.CLASSNAME);
         getElement().appendChild(this.inputText);
+        this.inputText.getStyle()
+            .setProperty("width", "100%");
         // add Date Select Icon
         final com.google.gwt.user.client.Element i = DOM.createElement("i");
         i.addClassName("glyphicon glyphicon-calendar fa fa-calendar");
@@ -73,9 +75,9 @@ public class VDateTimeRangeField extends TextBoxBase {
             String opens, String drops, String buttonClasses, String applyClass, String cancelClass, String ranges, boolean alwaysShowCalendars,
             boolean showCustomRangeLabel, String applyLabel, String cancelLabel, String datePattern, boolean workable, String elementId) /*-{
                                                                                                                                          var _this = this;
-                                                                                                                                         
+
                                                                                                                                          $wnd.moment.locale(language);
-                                                                                                                                         
+
                                                                                                                                           configString = '{' +
                                                                                                                                          '"showDropdowns": ' + showDropdowns + ',' +
                                                                                                                                          '"showWeekNumbers": ' + showWeekNumbers + ',' +
@@ -106,22 +108,22 @@ public class VDateTimeRangeField extends TextBoxBase {
                                                                                                                                          '"cancelLabel": "' + cancelLabel + '"}' + ',' +
                                                                                                                                          '"format": "' + datePattern + '"' +
                                                                                                                                          '}';
-                                                                                                                                         
+
                                                                                                                                          $wnd.console.log(configString);
-                                                                                                                                         
+
                                                                                                                                          $wnd.$(node).daterangepicker(JSON.parse(configString),
                                                                                                                                          function(start, end, label) {
                                                                                                                                          _this.@org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField::onUpdateValue(Lcom/google/gwt/core/client/JsDate;Lcom/google/gwt/core/client/JsDate;)(start.toDate(),end.toDate());
                                                                                                                                          });
-                                                                                                                                         
-                                                                                                                                         
+
+
                                                                                                                                          $wnd.$(node).on('apply.daterangepicker', function(ev, picker) {
                                                                                                                                              $wnd.$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
                                                                                                                                          });
-
-
-                                                                                                                                         $doc.getElementById(elementId).disabled=!workable;
                                                                                                                                          
+                                                                                                                                         
+                                                                                                                                         $doc.getElementById(elementId).disabled=!workable;
+
                                                                                                                                          }-*/;
 
     private void onUpdateValue(final JsDate start, final JsDate end) {
