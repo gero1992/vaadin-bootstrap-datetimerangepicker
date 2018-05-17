@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.vaadin.addons.datetimerangepicker.client.DateTimeRangeFieldServerRpc;
 import org.vaadin.addons.datetimerangepicker.client.DateTimeRangeFieldState;
@@ -31,7 +32,6 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     private Format dateFormatter = null;
 
     private DateTimeRange dateTimeRange;
-
 
     /**
      * The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.e. days, months)
@@ -60,12 +60,20 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     @Override
-    protected void doSetValue(final DateTimeRange newValue) {
+    protected void setInternalValue(final DateTimeRange newValue) {
+        super.setInternalValue(newValue);
         this.setDateTimeRange(newValue);
-        startDate(newValue.getFrom());
-        endDate(newValue.getTo());
+        if (newValue != null) {
+            getState().setAutoUpdateInput(true);
+            startDate(newValue.getFrom());
+            endDate(newValue.getTo());
+        }
+        else {
+            getState().setAutoUpdateInput(false);
+            startDate(null);
+            endDate(null);
+        }
     }
-
 
     /**
      * Set predefined date ranges the user can select from. Each key is the label for the range, and its value an array with two dates representing the bounds
@@ -94,16 +102,18 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
 
         @Override
         public void valueChanged(final Date from, final Date to) {
-            if (from != null && to != null) {
-                setValue(new DateTimeRange(from, to));
-                DateTimeRangeField.this.dateTimeRange = new DateTimeRange(from, to);
-            }
-            else {
-                DateTimeRangeField.this.dateTimeRange = null;
-            }
+            final DateTimeRange range = new DateTimeRange(from, to);
+            setValue(range);
+            DateTimeRangeField.this.dateTimeRange = range;
+
+        }
+
+        @Override
+        public void valueReseted() {
+            setValue(null);
+            DateTimeRangeField.this.dateTimeRange = null;
         }
     };
-
 
     /**
      * Constructor
@@ -120,11 +130,17 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         registerRpc(this.rpc);
 
         getState().setLanguage(UI.getCurrent()
-                               .getLocale()
-                               .getLanguage());
+            .getLocale()
+            .getLanguage());
         getState().setLinkedCalendars(linkedCalendars);
         getState().setAutoUpdateInput(autoUpdateInput);
         getState().setDatePattern(((SimpleDateFormat) dateFormatter).toPattern());
+        getState().setElementUUID(UUID.randomUUID()
+            .toString());
+
+        if (!autoUpdateInput) {
+            DateTimeRangeField.this.dateTimeRange = null;
+        }
 
         this.dateFormatter = dateFormatter;
     }
@@ -135,7 +151,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return (DateTimeRangeFieldState) super.getState();
     }
 
-
+    @Override
     public Class<? extends DateTimeRange> getType() {
         return DateTimeRange.class;
     }
@@ -186,9 +202,9 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         for (final Entry<String, Range> entry : ranges.entrySet()) {
             final String rangeLabel = entry.getKey();
             final String dateFromAsString = formatDateToString(entry.getValue()
-                                                               .getFrom());
+                .getFrom());
             final String dateToAsString = formatDateToString(entry.getValue()
-                                                             .getTo());
+                .getTo());
 
             final List<String> dateRange = new ArrayList<>();
             dateRange.add(dateFromAsString);

@@ -3,7 +3,11 @@ package org.vaadin.addons.datetimerangepicker.client;
 import java.util.Date;
 
 import org.vaadin.addons.datetimerangepicker.DateTimeRangeField;
+import org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField.DateRangeFieldClientResetValueHandler;
+import org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField.DateRangeFieldClientUpdateValueHandler;
 
+import com.google.gwt.core.client.JsDate;
+import com.vaadin.client.annotations.OnStateChange;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
@@ -23,24 +27,24 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
 
     public DateTimeRangeFieldConnector() {
 
-        // To receive RPC events from server, we register ClientRpc
-        // implementation
-        registerRpc(DateTimeRangeFieldClientRpc.class, new DateTimeRangeFieldClientRpc() {
-            private static final long serialVersionUID = 1L;
-        });
+        getWidget().setUpdateValueHandler(new DateRangeFieldClientUpdateValueHandler() {
 
-        getWidget().setUpdateValueHandler((start, end) -> {
-
-            Date startDate = null;
-            Date endDate = null;
-
-            if (start != null && end != null) {
-                startDate = new Date((long) start.getTime());
-                endDate = new Date((long) end.getTime());
+            @Override
+            public void onUpdateValue(JsDate start, JsDate end) {
+                DateTimeRangeFieldConnector.this.rpc.valueChanged(new Date((long) start.getTime()), new Date((long) end.getTime()));
             }
-            DateTimeRangeFieldConnector.this.rpc.valueChanged(startDate, endDate);
-
+            
         });
+        
+        getWidget().setResetValueHandler(new DateRangeFieldClientResetValueHandler() {
+
+            @Override
+            public void onResetValue() {
+                DateTimeRangeFieldConnector.this.rpc.valueReseted();
+            }
+            
+        });
+        
     }
 
     // We must implement getWidget() to cast to correct type
@@ -70,4 +74,10 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
                             getState().getApplyClass(), getState().getCancelClass(), getState().getDateRanges(), getState().isAlwaysShowCalendars(),
                             getState().isShowCustomRangeLabel(), getState().getDatePattern(), getState().isWorkable());
     }
+
+    @OnStateChange("elementUUID")
+    void updateElementUUID() {
+        getWidget().setElementUUID(getState().getElementUUID());
+    }
+
 }
