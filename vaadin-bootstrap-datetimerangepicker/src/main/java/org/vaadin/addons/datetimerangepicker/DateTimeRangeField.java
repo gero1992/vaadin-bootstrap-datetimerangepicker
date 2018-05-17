@@ -60,8 +60,7 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
     }
 
     @Override
-    protected void setInternalValue(final DateTimeRange newValue) {
-        super.setInternalValue(newValue);
+    protected void doSetValue(final DateTimeRange newValue) {
         this.setDateTimeRange(newValue);
         if (newValue != null) {
             getState().setAutoUpdateInput(true);
@@ -151,7 +150,6 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         return (DateTimeRangeFieldState) super.getState();
     }
 
-    @Override
     public Class<? extends DateTimeRange> getType() {
         return DateTimeRange.class;
     }

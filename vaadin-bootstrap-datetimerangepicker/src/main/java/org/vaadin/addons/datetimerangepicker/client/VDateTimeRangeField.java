@@ -8,7 +8,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
 // Extend any GWT Widget
@@ -34,9 +33,9 @@ public class VDateTimeRangeField extends TextBoxBase {
         this.inputText = DOM.createInputText();
         this.inputText.addClassName("v-textfield");
         this.inputText.addClassName(VDateTimeRangeField.CLASSNAME);
+        getElement().appendChild(this.inputText);
         this.inputText.getStyle()
             .setProperty("width", "100%");
-        getElement().appendChild(this.inputText);
         // add Date Select Icon
         final com.google.gwt.user.client.Element i = DOM.createElement("i");
         i.addClassName("glyphicon glyphicon-calendar fa fa-calendar");
@@ -49,15 +48,10 @@ public class VDateTimeRangeField extends TextBoxBase {
 
         DOM.sinkEvents(resetbutton, Event.ONCLICK);
 
-        Event.setEventListener(resetbutton, new EventListener() {
-
-            @Override
-            public void onBrowserEvent(final Event event) {
-                if (Event.ONCLICK == event.getTypeInt()) {
-                    VDateTimeRangeField.this.resetValueHandler.onResetValue();
-                }
+        Event.setEventListener(resetbutton, event -> {
+            if (Event.ONCLICK == event.getTypeInt()) {
+                this.resetValueHandler.onResetValue();
             }
-
         });
 
         setStylePrimaryName("bp-datetimerangepicker");

@@ -3,10 +3,7 @@ package org.vaadin.addons.datetimerangepicker.client;
 import java.util.Date;
 
 import org.vaadin.addons.datetimerangepicker.DateTimeRangeField;
-import org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField.DateRangeFieldClientResetValueHandler;
-import org.vaadin.addons.datetimerangepicker.client.VDateTimeRangeField.DateRangeFieldClientUpdateValueHandler;
 
-import com.google.gwt.core.client.JsDate;
 import com.vaadin.client.annotations.OnStateChange;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
@@ -27,24 +24,11 @@ public class DateTimeRangeFieldConnector extends AbstractComponentConnector {
 
     public DateTimeRangeFieldConnector() {
 
-        getWidget().setUpdateValueHandler(new DateRangeFieldClientUpdateValueHandler() {
-
-            @Override
-            public void onUpdateValue(JsDate start, JsDate end) {
-                DateTimeRangeFieldConnector.this.rpc.valueChanged(new Date((long) start.getTime()), new Date((long) end.getTime()));
-            }
-            
+        getWidget().setUpdateValueHandler((start, end) -> {
+            DateTimeRangeFieldConnector.this.rpc.valueChanged(new Date((long) start.getTime()), new Date((long) end.getTime()));
         });
-        
-        getWidget().setResetValueHandler(new DateRangeFieldClientResetValueHandler() {
 
-            @Override
-            public void onResetValue() {
-                DateTimeRangeFieldConnector.this.rpc.valueReseted();
-            }
-            
-        });
-        
+        getWidget().setResetValueHandler(() -> DateTimeRangeFieldConnector.this.rpc.valueReseted());
     }
 
     // We must implement getWidget() to cast to correct type

@@ -21,8 +21,8 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.Binder;
+import com.vaadin.data.HasValue.ValueChangeListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
@@ -134,28 +134,24 @@ public class DemoUI extends UI {
         this.dateRangeFieldPrefilled = new DateTimeRangeField(dateFormatter, linkedCalendars, true).language(getLocale().toString());
         this.dateRangeFieldPrefilled.setWidth("300px");
 
-        final BeanFieldGroup<DateTimeRangeBean> fieldGroupPrefilled = new BeanFieldGroup<>(DateTimeRangeBean.class);
-        fieldGroupPrefilled.setBuffered(false);
-        final DateTimeRangeBean beanPrefilled = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
+        final Binder<DateTimeRangeBean> binderPrefilled = new Binder<>(DateTimeRangeBean.class);
+        binderPrefilled.bind(this.dateRangeFieldPrefilled, DateTimeRangeBean::getDateTimeRange, DateTimeRangeBean::setDateTimeRange);
 
-        fieldGroupPrefilled.setItemDataSource(beanPrefilled);
-        fieldGroupPrefilled.bind(this.dateRangeFieldPrefilled, "dateTimeRange");
+        final DateTimeRangeBean beanPrefilled = new DateTimeRangeBean(new DateTimeRange(this.startDate, this.endDate));
+        binderPrefilled.setBean(beanPrefilled);
 
         this.dateRangeFieldEmpty = new DateTimeRangeField(dateFormatter, linkedCalendars, false).language(getLocale().toString());
         this.dateRangeFieldEmpty.setWidth("300px");
-
-        final BeanFieldGroup<DateTimeRangeBean> fieldGroupEmpty = new BeanFieldGroup<>(DateTimeRangeBean.class);
-        fieldGroupEmpty.setBuffered(false);
+        final Binder<DateTimeRangeBean> binderEmpty = new Binder<>(DateTimeRangeBean.class);
+        binderEmpty.bind(this.dateRangeFieldEmpty, DateTimeRangeBean::getDateTimeRange, DateTimeRangeBean::setDateTimeRange);
         final DateTimeRangeBean beanEmpty = new DateTimeRangeBean(null);
-        fieldGroupEmpty.setItemDataSource(beanEmpty);
-        fieldGroupEmpty.bind(this.dateRangeFieldEmpty, "dateTimeRange");
+        binderEmpty.setBean(beanEmpty);
 
         final Button buttonEmpty = new Button("Show value");
         buttonEmpty.addClickListener(event -> {
             if (this.dateRangeFieldEmpty.getValue() != null) {
                 beanEmpty.setDateTimeRange(this.dateRangeFieldEmpty.getValue());
-                Notification.show(fieldGroupEmpty.getItemDataSource()
-                    .getBean()
+                Notification.show(binderEmpty.getBean()
                     .getDateTimeRange()
                     .toString());
             }
@@ -166,17 +162,18 @@ public class DemoUI extends UI {
         });
 
         this.dateRangeFieldPrefilled.addValueChangeListener(e -> {
-            final DateTimeRange dateTimeRange = (DateTimeRange) e.getProperty()
-                .getValue();
-            if (dateTimeRange != null) {
-                this.startDate = dateTimeRange.getFrom();
-                this.endDate = dateTimeRange.getTo();
+            final DateTimeRangeField dateTimeRangeField = (DateTimeRangeField) e.getSource();
+            if (dateTimeRangeField != null && dateTimeRangeField.getDateTimeRange() != null) {
+                this.startDate = dateTimeRangeField.getDateTimeRange()
+                    .getFrom();
+                this.endDate = dateTimeRangeField.getDateTimeRange()
+                    .getTo();
                 beanEmpty.setDateTimeRange(new DateTimeRange(this.startDate, this.endDate));
             }
         });
 
         final ValueChangeListener valueChangeListener = event -> {
-            fieldGroupPrefilled.unbind(DemoUI.this.dateRangeFieldPrefilled);
+            binderPrefilled.removeBinding(DemoUI.this.dateRangeFieldPrefilled);
             setLocale(new Locale(this.cbLanguage.getValue()
                 .toString()));
 
@@ -200,8 +197,8 @@ public class DemoUI extends UI {
 
             // Others
             DemoUI.this.dateRangeFieldPrefilled.parentEl(DemoUI.this.textParentEl.getValue())
-                .minDate(DemoUI.this.minDateField.getValue())
-                .maxDate(DemoUI.this.maxDateField.getValue())
+                .minDate(asDate(DemoUI.this.minDateField.getValue()))
+                .maxDate(asDate(DemoUI.this.maxDateField.getValue()))
                 .applyLabel(DemoUI.this.textApplyLabel.getValue())
                 .cancelLabel(DemoUI.this.textCancelLabel.getValue())
                 .opens(DateTimeRangeEnums.OPENS.valueOf(DemoUI.this.comboOpens.getValue()
@@ -232,7 +229,7 @@ public class DemoUI extends UI {
                 .showCustomRangeLabel(DemoUI.this.checkShowCustomRangeLabel.getValue());
 
             beanEmpty.setDateTimeRange(new DateTimeRange(this.startDate, this.endDate));
-            fieldGroupPrefilled.bind(DemoUI.this.dateRangeFieldPrefilled, "dateTimeRange");
+            binderPrefilled.bind(this.dateRangeFieldPrefilled, DateTimeRangeBean::getDateTimeRange, DateTimeRangeBean::setDateTimeRange);
         };
 
         // ParentEl
@@ -251,15 +248,15 @@ public class DemoUI extends UI {
 
         // Combobox opens
         this.comboOpens = new ComboBox("opens");
-        this.comboOpens.addItems(DateTimeRangeEnums.OPENS.values());
-        this.comboOpens.setNullSelectionAllowed(false);
+        this.comboOpens.setItems(DateTimeRangeEnums.OPENS.values());
+        this.comboOpens.setEmptySelectionAllowed(false);
         this.comboOpens.setValue(DateTimeRangeEnums.OPENS.RIGHT);
         this.comboOpens.addValueChangeListener(valueChangeListener);
 
         // Combobox drops
         this.comboDrops = new ComboBox("drops");
-        this.comboDrops.addItems(DateTimeRangeEnums.DROPS.values());
-        this.comboDrops.setNullSelectionAllowed(false);
+        this.comboDrops.setItems(DateTimeRangeEnums.DROPS.values());
+        this.comboDrops.setEmptySelectionAllowed(false);
         this.comboDrops.setValue(DateTimeRangeEnums.DROPS.DOWN);
         this.comboDrops.addValueChangeListener(valueChangeListener);
 
@@ -364,9 +361,10 @@ public class DemoUI extends UI {
 
         // ComboBox language
         this.cbLanguage = new ComboBox("language");
-        this.cbLanguage.addItems(Arrays.asList(DemoUI.LOCALE_DEFAULT.toString(), Locale.ENGLISH.toString(), Locale.FRENCH, Locale.ITALIAN));
-        this.cbLanguage.setNullSelectionAllowed(false);
-        this.cbLanguage.select(DemoUI.LOCALE_DEFAULT.toString());
+        this.cbLanguage.setItems(Arrays.asList(DemoUI.LOCALE_DEFAULT.toString(), Locale.ENGLISH.toString(), Locale.FRENCH, Locale.ITALIAN));
+        this.cbLanguage.setEmptySelectionAllowed(false);
+        this.cbLanguage.setLocale(DemoUI.LOCALE_DEFAULT);
+        this.cbLanguage.setValue(DemoUI.LOCALE_DEFAULT);
         this.cbLanguage.addValueChangeListener(valueChangeListener);
 
         // Button show
@@ -374,8 +372,7 @@ public class DemoUI extends UI {
         buttonPrefilled.addClickListener(event -> {
             if (this.dateRangeFieldPrefilled.getValue() != null) {
                 beanPrefilled.setDateTimeRange(this.dateRangeFieldPrefilled.getValue());
-                Notification.show(fieldGroupPrefilled.getItemDataSource()
-                    .getBean()
+                Notification.show(binderPrefilled.getBean()
                     .getDateTimeRange()
                     .toString());
             }
