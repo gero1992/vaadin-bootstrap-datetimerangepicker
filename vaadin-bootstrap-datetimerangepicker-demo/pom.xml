@@ -5,7 +5,7 @@
 	<groupId>org.vaadin.addons</groupId>
 	<artifactId>vaadin-bootstrap-datetimerangepicker-demo</artifactId>
 	<packaging>war</packaging>
-	<version>2.3-SNAPSHOT</version>
+	<version>2.4-SNAPSHOT</version>
 	<name>Bootstrap DateTimeRangePicker Add-on Demo</name>
 
 	<prerequisites>
