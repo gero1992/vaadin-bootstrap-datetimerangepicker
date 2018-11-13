@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import org.vaadin.addons.datetimerangepicker.demo.model.DateTimeRangeBean;
 import org.vaadin.addons.datetimerangepicker.type.DateTimeRange;
 import org.vaadin.addons.datetimerangepicker.type.DateTimeRangeEnums;
+import org.vaadin.alump.gridstack.GridStackLayout;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -123,6 +124,8 @@ public class DemoUI extends UI {
     private TextField textCancelLabel;
 
     private ComboBox cbLanguage;
+
+    private GridStackLayout gridStackLayout;
 
     @Override
     protected void init(final VaadinRequest request) {
@@ -425,6 +428,8 @@ public class DemoUI extends UI {
         settingsLayout.addComponent(middleLayout);
         settingsLayout.addComponent(rightLayout);
 
+        this.gridStackLayout = new GridStackLayout();
+
         final VerticalLayout componentLayoutPrefilled = new VerticalLayout();
         componentLayoutPrefilled.setCaption("DateTimeRangeField with prefilled initial value");
         componentLayoutPrefilled.setSpacing(true);
@@ -432,6 +437,7 @@ public class DemoUI extends UI {
         componentLayoutPrefilled.addComponent(this.dateRangeFieldPrefilled);
         componentLayoutPrefilled.addComponent(buttonPrefilled);
         componentLayoutPrefilled.addComponent(settingsLayout);
+        componentLayoutPrefilled.addComponent(this.gridStackLayout);
 
         final VerticalLayout componentLayoutEmpty = new VerticalLayout();
         componentLayoutEmpty.setCaption("DateTimeRangeField with empty initial value");
