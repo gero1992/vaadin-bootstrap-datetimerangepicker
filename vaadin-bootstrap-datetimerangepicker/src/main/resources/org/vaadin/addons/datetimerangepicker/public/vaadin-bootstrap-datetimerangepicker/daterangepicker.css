@@ -80,7 +80,8 @@
     background-color: #fff; }
   .daterangepicker table {
     width: 100%;
-    margin: 0; }
+    margin: 0; 
+    border-spacing: 0px}
   .daterangepicker td, .daterangepicker th {
     text-align: center;
     width: 20px;
@@ -101,7 +102,8 @@
     border-color: transparent;
     color: #999; }
   .daterangepicker td.in-range {
-    background-color: #ebf4f8;
+    /* background-color: #ebf4f8; */
+    background-color: #D1DCE3;
     border-color: transparent;
     color: #000;
     border-radius: 0; }
@@ -267,3 +269,7 @@
     float: right; }
   .daterangepicker .calendar.left {
     clear: none !important; } }
+    
+body .daterangepicker .calendar-table td.in-range, body .daterangepicker.ltr .calendar-table td.in-range {
+	background-color: #D1DCE3;
+}

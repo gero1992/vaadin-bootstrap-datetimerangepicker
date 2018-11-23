@@ -6,6 +6,7 @@
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 
+/* mbr */
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('../fonts/glyphicons-halflings-regular.eot');
@@ -860,6 +861,7 @@ figure {
 img {
   vertical-align: middle;
 }
+
 .img-responsive,
 .thumbnail > img,
 .thumbnail a > img,
@@ -912,6 +914,7 @@ img {
   cursor: pointer;
 }
 
+/*
 .h1,
 .h2,
 .h3,
@@ -1002,6 +1005,7 @@ img {
   padding: .2em;
   background-color: #fcf8e3;
 }
+
 .text-left {
   text-align: left;
 }
@@ -1788,7 +1792,7 @@ a.bg-danger:focus {
     margin-left: 0;
   }
 }
-
+*/
 .table {
   width: 100%;
   max-width: 100%;
@@ -2428,6 +2432,8 @@ fieldset[disabled] .checkbox label {
     font-size: 12px;
   }
 }
+
+
 .btn {
   display: inline-block;
   padding: 6px 12px;
@@ -2889,6 +2895,7 @@ input[type="reset"].btn-block,
 input[type="button"].btn-block {
   width: 100%;
 }
+
 .fade {
   opacity: 0;
   -webkit-transition: opacity .15s linear;
@@ -3057,6 +3064,7 @@ tbody.collapse.in {
   bottom: 100%;
   margin-bottom: 2px;
 }
+/*
 @media (min-width: 768px) {
   .navbar-right .dropdown-menu {
     right: 0;
@@ -4423,6 +4431,7 @@ a.badge:focus {
     font-size: 63px;
   }
 }
+*/
 .thumbnail {
   display: block;
   padding: 4px;
@@ -4524,6 +4533,7 @@ a.thumbnail.active {
 .alert-danger .alert-link {
   color: #843534;
 }
+/*
 @-webkit-keyframes progress-bar-stripes {
   from {
     background-position: 40px 0;
@@ -5281,7 +5291,7 @@ button.list-group-item-danger.active:focus {
   filter: alpha(opacity=50);
   opacity: .5;
 }
-
+*/
 .modal-open {
   overflow: hidden;
 }
@@ -5672,6 +5682,7 @@ button.list-group-item-danger.active:focus {
 .carousel-inner > .item > a > img {
   line-height: 1;
 }
+/*
 @media all and (transform-3d), (-webkit-transform-3d) {
   .carousel-inner > .item {
     -webkit-transition: -webkit-transform .6s ease-in-out;
@@ -6173,4 +6184,5 @@ button.list-group-item-danger.active:focus {
     display: none !important;
   }
 }
+*/
 /*# sourceMappingURL=bootstrap.css.map */
