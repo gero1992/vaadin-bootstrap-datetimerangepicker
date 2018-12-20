@@ -409,10 +409,10 @@ public class DateTimeRangeField extends AbstractField<DateTimeRange> {
         getState().setWorkable(workable);
         super.setEnabled(workable);
         if (workable) {
-            this.removeStyleName("v-disabled");
+            this.removeStyleName("bp-datetimerangepicker-v-disabled");
         }
         else {
-            this.addStyleName("v-disabled");
+            this.addStyleName("bp-datetimerangepicker-v-disabled");
         }
         return this;
     }
