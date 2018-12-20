@@ -7,10 +7,6 @@
 	opacity: 0.5;
 }
 
-.v-disabled {
-	opacity: 0.5;
-}
-
 .bp-datetimerangepicker-resetbutton {
     position: absolute;
     display: inline-block;
